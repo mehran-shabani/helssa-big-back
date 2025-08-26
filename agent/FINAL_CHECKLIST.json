@@ -1,0 +1,126 @@
+{
+  "title": "HELSSA Agent Instructions - Final QA Checklist",
+  "version": "1.0.0",
+  "created_at": "2024-01-20T14:00:00Z",
+  "created_by": "Mother Agent",
+  "apps": [
+    {
+      "name": "patient_chatbot",
+      "status": "instructions_ready",
+      "checklist": {
+        "plan_created": true,
+        "checklist_created": true,
+        "progress_tracking": true,
+        "log_system": true,
+        "readme_complete": true,
+        "architecture_aligned": true,
+        "core_integration_documented": true,
+        "auth_otp_compliance": true,
+        "openai_agents_specified": true,
+        "test_strategy_defined": true
+      }
+    },
+    {
+      "name": "doctor_chatbot",
+      "status": "instructions_ready",
+      "checklist": {
+        "plan_created": true,
+        "checklist_created": true,
+        "progress_tracking": true,
+        "log_system": true,
+        "readme_complete": true,
+        "architecture_aligned": true,
+        "hipaa_compliance_addressed": true,
+        "drug_safety_emphasized": true,
+        "clinical_validation_included": true,
+        "medical_disclaimer_present": true
+      }
+    },
+    {
+      "name": "soapify",
+      "status": "instructions_ready",
+      "checklist": {
+        "plan_created": true,
+        "checklist_created": true,
+        "progress_tracking": true,
+        "log_system": true,
+        "readme_complete": true,
+        "realtime_architecture": true,
+        "websocket_documented": true,
+        "performance_targets_set": true,
+        "streaming_pipeline_defined": true,
+        "latency_requirements_clear": true
+      }
+    },
+    {
+      "name": "doctor_dashboard",
+      "status": "instructions_ready",
+      "checklist": {
+        "plan_created": true,
+        "checklist_created": true,
+        "progress_tracking": true,
+        "log_system": true,
+        "readme_complete": true,
+        "frontend_architecture": true,
+        "ui_ux_guidelines": true,
+        "responsive_design_planned": true,
+        "rtl_support_included": true,
+        "performance_metrics_defined": true
+      }
+    }
+  ],
+  "global_compliance": {
+    "architecture_conventions": {
+      "status": "documented",
+      "file": "ARCHITECTURE_CONVENTIONS.md",
+      "key_points": [
+        "نام‌گذاری استاندارد",
+        "ساختار پوشه‌ها",
+        "قالب پاسخ API",
+        "احراز هویت OTP",
+        "سیستم پرداخت",
+        "کاوه‌نگار SMS"
+      ]
+    },
+    "security_requirements": {
+      "otp_authentication": true,
+      "jwt_implementation": true,
+      "role_separation": true,
+      "hipaa_compliance": true,
+      "audit_logging": true
+    },
+    "core_integrations": {
+      "api_ingress_core": true,
+      "text_processing_core": true,
+      "speech_processing_core": true,
+      "central_orchestration_core": true
+    },
+    "external_services": {
+      "openai_gpt4": true,
+      "whisper_api": true,
+      "kavenegar_sms": true,
+      "payment_gateways": true
+    }
+  },
+  "quality_metrics": {
+    "documentation_completeness": 100,
+    "instruction_clarity": "high",
+    "architecture_alignment": "complete",
+    "test_coverage_requirement": 80,
+    "performance_targets_defined": true
+  },
+  "delivery_requirements": {
+    "all_files_in_agent_folder": true,
+    "no_external_modifications": true,
+    "self_contained_packages": true,
+    "ready_for_transfer": true,
+    "target_destination": "helssa-big_back/docs/"
+  },
+  "final_notes": [
+    "همه دستورالعمل‌ها کامل و آماده اجرا هستند",
+    "هیچ اقدام سلیقه‌ای در دستورالعمل‌ها وجود ندارد",
+    "تمام الزامات معماری و امنیتی لحاظ شده است",
+    "ایجنت‌های فرعی باید دقیقاً طبق این دستورالعمل‌ها عمل کنند",
+    "هرگونه انحراف باید در LOG.md ثبت شود"
+  ]
+}
