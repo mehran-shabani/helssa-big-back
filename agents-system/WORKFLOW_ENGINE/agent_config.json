@@ -1,0 +1,312 @@
+{
+  "agent_system": {
+    "name": "HELSSA Agent System",
+    "version": "1.0.0",
+    "description": "سیستم ایجنت‌های هوشمند برای ساخت اپلیکیشن‌های پلتفرم هلسا",
+    "created_at": "2024-01-01T00:00:00Z"
+  },
+  "target_applications": {
+    "high_priority": [
+      {
+        "name": "patient_chatbot",
+        "description": "چت‌بات هوشمند بیماران",
+        "core_modules": ["api_ingress", "text_processing", "orchestration"],
+        "dependencies": ["unified_auth", "unified_ai"],
+        "features": ["chat", "medical_qa", "appointment_booking"],
+        "models": ["ChatSession", "ChatMessage", "MedicalQuestion"],
+        "api_endpoints": [
+          "/api/patient_chatbot/chat/",
+          "/api/patient_chatbot/questions/",
+          "/api/patient_chatbot/appointments/"
+        ]
+      },
+      {
+        "name": "doctor_chatbot",
+        "description": "ابزار کمک تشخیص برای پزشکان",
+        "core_modules": ["api_ingress", "text_processing", "orchestration"],
+        "dependencies": ["unified_auth", "unified_ai"],
+        "features": ["diagnostic_help", "medical_resources", "case_discussion"],
+        "models": ["DoctorChat", "MedicalCase", "DiagnosticSession"],
+        "api_endpoints": [
+          "/api/doctor_chatbot/chat/",
+          "/api/doctor_chatbot/cases/",
+          "/api/doctor_chatbot/resources/"
+        ]
+      },
+      {
+        "name": "soapify_v2",
+        "description": "تولید خودکار گزارش‌های پزشکی استاندارد SOAP",
+        "core_modules": ["api_ingress", "text_processing", "speech_processing", "orchestration"],
+        "dependencies": ["unified_auth", "unified_ai", "unified_billing"],
+        "features": ["soap_generation", "audio_processing", "report_export"],
+        "models": ["SOAPReport", "MedicalNote", "AudioRecording"],
+        "api_endpoints": [
+          "/api/soapify_v2/reports/",
+          "/api/soapify_v2/audio/",
+          "/api/soapify_v2/export/"
+        ]
+      },
+      {
+        "name": "prescription_system",
+        "description": "سیستم نسخه‌نویسی دیجیتال",
+        "core_modules": ["api_ingress", "text_processing", "orchestration"],
+        "dependencies": ["unified_auth", "unified_billing"],
+        "features": ["prescription_creation", "medication_management", "dosage_calculation"],
+        "models": ["Prescription", "Medication", "DosageSchedule"],
+        "api_endpoints": [
+          "/api/prescription_system/prescriptions/",
+          "/api/prescription_system/medications/",
+          "/api/prescription_system/dosages/"
+        ]
+      },
+      {
+        "name": "patient_records",
+        "description": "سیستم جامع مدیریت پرونده‌های پزشکی",
+        "core_modules": ["api_ingress", "orchestration"],
+        "dependencies": ["unified_auth", "unified_billing"],
+        "features": ["record_management", "file_upload", "history_tracking"],
+        "models": ["PatientRecord", "MedicalHistory", "MedicalFile"],
+        "api_endpoints": [
+          "/api/patient_records/records/",
+          "/api/patient_records/history/",
+          "/api/patient_records/files/"
+        ]
+      }
+    ],
+    "medium_priority": [
+      {
+        "name": "visit_management",
+        "description": "سیستم رزرو و مدیریت ویزیت‌های آنلاین",
+        "core_modules": ["api_ingress", "orchestration"],
+        "dependencies": ["unified_auth", "unified_billing"],
+        "features": ["appointment_booking", "visit_scheduling", "reporting"],
+        "models": ["Visit", "Appointment", "Schedule"],
+        "api_endpoints": [
+          "/api/visit_management/visits/",
+          "/api/visit_management/appointments/",
+          "/api/visit_management/schedules/"
+        ]
+      },
+      {
+        "name": "telemedicine_core",
+        "description": "هسته طب از راه دور با ارتباط ویدئویی و صوتی",
+        "core_modules": ["api_ingress", "speech_processing", "orchestration"],
+        "dependencies": ["unified_auth", "unified_billing"],
+        "features": ["video_calls", "audio_sessions", "chat_integration"],
+        "models": ["VideoCall", "AudioSession", "TelemedicineSession"],
+        "api_endpoints": [
+          "/api/telemedicine_core/calls/",
+          "/api/telemedicine_core/sessions/",
+          "/api/telemedicine_core/chat/"
+        ]
+      },
+      {
+        "name": "appointment_scheduler",
+        "description": "سیستم رزرو نوبت پیشرفته با تقویم هوشمند",
+        "core_modules": ["api_ingress", "orchestration"],
+        "dependencies": ["unified_auth", "unified_billing"],
+        "features": ["calendar_management", "smart_scheduling", "reminders"],
+        "models": ["Schedule", "TimeSlot", "Appointment"],
+        "api_endpoints": [
+          "/api/appointment_scheduler/schedules/",
+          "/api/appointment_scheduler/slots/",
+          "/api/appointment_scheduler/appointments/"
+        ]
+      }
+    ]
+  },
+  "core_architecture": {
+    "four_core_system": {
+      "api_ingress_core": {
+        "responsibility": "مدیریت HTTP requests و responses",
+        "features": [
+          "request_validation",
+          "authentication",
+          "authorization",
+          "rate_limiting",
+          "cors_handling",
+          "api_versioning",
+          "request_logging"
+        ],
+        "implementation_pattern": "Django REST Framework with custom middleware"
+      },
+      "text_processing_core": {
+        "responsibility": "پردازش زبان طبیعی و تولید متن",
+        "features": [
+          "nlp_processing",
+          "text_generation",
+          "conversation_summarization",
+          "entity_extraction",
+          "sentiment_analysis"
+        ],
+        "implementation_pattern": "Integration with unified_ai service"
+      },
+      "speech_processing_core": {
+        "responsibility": "پردازش صوت و تبدیل گفتار به متن",
+        "features": [
+          "speech_to_text",
+          "text_to_speech",
+          "audio_analysis",
+          "voice_recognition"
+        ],
+        "implementation_pattern": "Integration with unified_ai service"
+      },
+      "orchestration_core": {
+        "responsibility": "هماهنگی بین هسته‌ها و مدیریت فرآیندها",
+        "features": [
+          "workflow_management",
+          "service_coordination",
+          "error_handling",
+          "performance_monitoring"
+        ],
+        "implementation_pattern": "Custom service layer with Celery tasks"
+      }
+    }
+  },
+  "unified_services": {
+    "unified_auth": {
+      "description": "سیستم احراز هویت یکپارچه",
+      "models": ["UnifiedUser", "UserRole", "UserSession"],
+      "features": ["jwt_authentication", "role_based_access", "session_management"],
+      "integration": "Import from unified_auth package"
+    },
+    "unified_billing": {
+      "description": "سیستم مالی یکپارچه",
+      "models": ["Billing", "Subscription", "Payment"],
+      "features": ["invoice_generation", "payment_processing", "subscription_management"],
+      "integration": "Import from unified_billing package"
+    },
+    "unified_ai": {
+      "description": "هوش مصنوعی مرکزی",
+      "services": ["UnifiedAIService"],
+      "features": ["text_processing", "speech_processing", "ai_integration"],
+      "integration": "Import from unified_ai package"
+    },
+    "unified_access": {
+      "description": "کنترل دسترسی یکپارچه",
+      "features": ["permission_management", "access_control", "audit_logging"],
+      "integration": "Import from unified_access package"
+    }
+  },
+  "development_standards": {
+    "code_quality": {
+      "python_version": "3.9+",
+      "django_version": "4.2+",
+      "coding_style": "PEP 8",
+      "documentation": "Docstrings in Persian and English",
+      "testing_coverage": "Minimum 80%"
+    },
+    "security_requirements": {
+      "authentication": "Required for all endpoints",
+      "authorization": "Role-based access control",
+      "input_validation": "All inputs must be validated",
+      "data_encryption": "Sensitive data encryption",
+      "audit_logging": "All operations logged"
+    },
+    "api_standards": {
+      "versioning": "API version 1",
+      "response_format": "JSON with consistent structure",
+      "error_handling": "Standardized error responses",
+      "rate_limiting": "Configurable rate limits",
+      "cors": "Proper CORS configuration"
+    }
+  },
+  "testing_requirements": {
+    "test_types": [
+      "unit_tests",
+      "integration_tests",
+      "api_tests",
+      "security_tests"
+    ],
+    "test_coverage": {
+      "models": "100%",
+      "views": "100%",
+      "services": "100%",
+      "serializers": "100%"
+    },
+    "test_data": {
+      "fixtures": "Required",
+      "factories": "Recommended",
+      "mocking": "For external services"
+    }
+  },
+  "documentation_requirements": {
+    "required_docs": [
+      "README.md",
+      "API.md",
+      "USER_GUIDE.md",
+      "TECHNICAL.md"
+    ],
+    "languages": ["Persian", "English"],
+    "content": {
+      "overview": "Application description and features",
+      "installation": "Setup and installation instructions",
+      "usage": "How to use the application",
+      "api_reference": "Complete API documentation",
+      "examples": "Code examples and use cases"
+    }
+  },
+  "deployment_requirements": {
+    "environments": ["development", "staging", "production"],
+    "containers": "Docker support required",
+    "orchestration": "Kubernetes manifests",
+    "monitoring": "Health checks and metrics",
+    "logging": "Structured logging with ELK stack"
+  },
+  "workflow_steps": {
+    "step_1": {
+      "name": "آماده‌سازی",
+      "tasks": [
+        "خواندن مستندات معماری",
+        "بررسی قوانین امنیتی",
+        "تعیین وابستگی‌ها",
+        "ایجاد پوشه اپلیکیشن"
+      ]
+    },
+    "step_2": {
+      "name": "طراحی",
+      "tasks": [
+        "تکمیل PLAN.md",
+        "تعریف API endpoints",
+        "طراحی مدل‌های داده",
+        "تعیین dependencies"
+      ]
+    },
+    "step_3": {
+      "name": "پیاده‌سازی",
+      "tasks": [
+        "ایجاد Django app",
+        "نوشتن models و migrations",
+        "پیاده‌سازی چهار هسته",
+        "ایجاد serializers و views",
+        "پیکربندی URLs"
+      ]
+    },
+    "step_4": {
+      "name": "یکپارچه‌سازی",
+      "tasks": [
+        "ادغام با unified_auth",
+        "ادغام با unified_billing",
+        "ادغام با unified_access",
+        "پیکربندی Kavenegar"
+      ]
+    },
+    "step_5": {
+      "name": "تست و مستندسازی",
+      "tasks": [
+        "نوشتن تست‌ها",
+        "تکمیل مستندات",
+        "به‌روزرسانی پیشرفت",
+        "ثبت در لاگ"
+      ]
+    }
+  },
+  "success_criteria": {
+    "code_quality": "All linting checks pass",
+    "test_coverage": "Minimum 80% coverage",
+    "documentation": "All required docs completed",
+    "security": "All security requirements met",
+    "integration": "Successfully integrated with unified services",
+    "deployment": "Ready for production deployment"
+  }
+}

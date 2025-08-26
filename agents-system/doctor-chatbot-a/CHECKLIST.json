@@ -1,0 +1,238 @@
+{
+  "app": "doctor_chatbot",
+  "version": "1.0.0",
+  "created_at": "2024-01-20T11:00:00Z",
+  "items": [
+    {
+      "id": "plan_review",
+      "title": "مطالعه و درک کامل PLAN.md",
+      "done": false,
+      "priority": "critical"
+    },
+    {
+      "id": "models_creation",
+      "title": "ایجاد مدل‌های ClinicalSession, Diagnosis, Prescription, ClinicalNote",
+      "done": false,
+      "priority": "high",
+      "subtasks": [
+        "clinical_session.py",
+        "diagnosis.py",
+        "prescription.py",
+        "clinical_note.py"
+      ]
+    },
+    {
+      "id": "services_implementation",
+      "title": "پیاده‌سازی سرویس‌های اصلی",
+      "done": false,
+      "priority": "high",
+      "subtasks": [
+        "clinical_assistant.py",
+        "soap_generator.py",
+        "drug_checker.py",
+        "guideline_service.py",
+        "patient_manager.py"
+      ]
+    },
+    {
+      "id": "openai_agents",
+      "title": "پیاده‌سازی OpenAI Agents برای پزشکان",
+      "done": false,
+      "priority": "critical",
+      "subtasks": [
+        "diagnosis_agent.py - تشخیص بالینی",
+        "treatment_agent.py - پیشنهاد درمان",
+        "documentation_agent.py - مستندسازی SOAP"
+      ]
+    },
+    {
+      "id": "api_endpoints",
+      "title": "ایجاد API endpoints طبق مستندات",
+      "done": false,
+      "priority": "high",
+      "subtasks": [
+        "Clinical session endpoints",
+        "Diagnosis endpoints",
+        "Prescription endpoints",
+        "Documentation endpoints",
+        "Dashboard endpoints"
+      ]
+    },
+    {
+      "id": "core_integration",
+      "title": "اتصال به هسته‌های مرکزی",
+      "done": false,
+      "priority": "critical",
+      "subtasks": [
+        "اتصال به API Ingress Core",
+        "اتصال به Text Processing Core",
+        "اتصال به Speech Processing Core",
+        "اتصال به Central Orchestration Core"
+      ]
+    },
+    {
+      "id": "auth_integration",
+      "title": "یکپارچه‌سازی احراز هویت پزشکان",
+      "done": false,
+      "priority": "critical",
+      "subtasks": [
+        "بررسی نقش doctor",
+        "Medical license verification",
+        "Session management",
+        "Rate limiting"
+      ]
+    },
+    {
+      "id": "external_integrations",
+      "title": "اتصال به سرویس‌های خارجی",
+      "done": false,
+      "priority": "high",
+      "subtasks": [
+        "Drug database integration",
+        "Clinical guidelines API",
+        "ICD-10/CPT codes API",
+        "EHR connector setup"
+      ]
+    },
+    {
+      "id": "hipaa_compliance",
+      "title": "پیاده‌سازی الزامات HIPAA",
+      "done": false,
+      "priority": "critical",
+      "subtasks": [
+        "Data encryption",
+        "Audit logging",
+        "Access control",
+        "Data retention policies"
+      ]
+    },
+    {
+      "id": "drug_interaction_system",
+      "title": "سیستم بررسی تداخلات دارویی",
+      "done": false,
+      "priority": "critical",
+      "subtasks": [
+        "Drug database schema",
+        "Interaction checker algorithm",
+        "Warning system",
+        "Alternative suggestions"
+      ]
+    },
+    {
+      "id": "soap_generator",
+      "title": "پیاده‌سازی تولید گزارش SOAP",
+      "done": false,
+      "priority": "high",
+      "subtasks": [
+        "SOAP template system",
+        "Auto-population logic",
+        "Export formats (PDF, Word)",
+        "Customization options"
+      ]
+    },
+    {
+      "id": "dashboard_apis",
+      "title": "ایجاد APIهای داشبورد پزشک",
+      "done": false,
+      "priority": "high",
+      "subtasks": [
+        "Summary statistics",
+        "Patient list with filters",
+        "Appointment management",
+        "Report generation"
+      ]
+    },
+    {
+      "id": "tests_writing",
+      "title": "نوشتن تست‌های واحد و یکپارچگی",
+      "done": false,
+      "priority": "high",
+      "subtasks": [
+        "test_models.py",
+        "test_services.py",
+        "test_api.py",
+        "test_agents.py",
+        "test_integrations.py"
+      ]
+    },
+    {
+      "id": "clinical_validation",
+      "title": "اعتبارسنجی بالینی",
+      "done": false,
+      "priority": "critical",
+      "subtasks": [
+        "Medical accuracy tests",
+        "Drug dosage validation",
+        "Guideline compliance",
+        "Clinical scenario tests"
+      ]
+    },
+    {
+      "id": "settings_config",
+      "title": "افزودن تنظیمات به settings.py",
+      "done": false,
+      "priority": "high",
+      "subtasks": [
+        "افزودن به INSTALLED_APPS",
+        "تنظیمات OpenAI",
+        "External API configs",
+        "HIPAA settings"
+      ]
+    },
+    {
+      "id": "url_routing",
+      "title": "افزودن مسیرها به urls.py اصلی",
+      "done": false,
+      "priority": "high"
+    },
+    {
+      "id": "celery_tasks",
+      "title": "پیاده‌سازی Celery tasks",
+      "done": false,
+      "priority": "medium",
+      "subtasks": [
+        "Report generation tasks",
+        "Guideline sync tasks",
+        "Drug database update tasks",
+        "Analytics tasks"
+      ]
+    },
+    {
+      "id": "monitoring_setup",
+      "title": "راه‌اندازی monitoring پزشکی",
+      "done": false,
+      "priority": "high",
+      "subtasks": [
+        "Clinical decision tracking",
+        "Error monitoring",
+        "Performance metrics",
+        "Compliance reporting"
+      ]
+    },
+    {
+      "id": "documentation",
+      "title": "تکمیل مستندات",
+      "done": false,
+      "priority": "high",
+      "subtasks": [
+        "README.md برای اپ",
+        "Clinical API documentation",
+        "Integration guides",
+        "Deployment guide"
+      ]
+    },
+    {
+      "id": "final_review",
+      "title": "بررسی نهایی و آماده‌سازی برای QA",
+      "done": false,
+      "priority": "critical"
+    }
+  ],
+  "notes": [
+    "تمام موارد باید دقیقاً طبق PLAN.md و ARCHITECTURE_CONVENTIONS.md انجام شود",
+    "رعایت HIPAA و قوانین پزشکی الزامی است",
+    "هیچ تصمیم بالینی نباید بدون تأیید پزشک اتخاذ شود",
+    "تست‌های بالینی باید توسط پزشک واقعی بررسی شوند",
+    "Drug interactions باید 100% coverage داشته باشد"
+  ]
+}
