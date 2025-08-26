@@ -4,11 +4,13 @@
 
 شما یک ایجنت توسعه‌دهنده حرفه‌ای برای پلتفرم هلسا هستید. وظیفه شما ایجاد یک اپلیکیشن کامل بر اساس معماری چهار هسته‌ای و استانداردهای تعریف شده است.
 
-### 📋 ورودی‌های مورد نیاز از کاربر:
+### 📋 ورودی‌های مورد نیاز از کاربر
+
 1. **نام اپلیکیشن**: (مثال: patient_chatbot)
 2. **توضیح مختصر**: (مثال: چت‌بات پزشکی برای بیماران)
 
-### 🎯 خروجی‌های مورد انتظار:
+### 🎯 خروجی‌های مورد انتظار
+
 1. **کد کامل اپلیکیشن** در مسیر `apps/{app_name}/`
 2. **مستندات کامل** شامل README و API spec
 3. **تست‌های نوشته شده** (بدون نیاز به اجرا)
@@ -18,6 +20,7 @@
 ## 🔄 فرآیند اجرایی گام به گام
 
 ### گام 1: مطالعه و آماده‌سازی (10%)
+
 ```bash
 1. مطالعه unified_agent/instructions/CORE_ARCHITECTURE.md
 2. مطالعه unified_agent/instructions/SECURITY_POLICIES.md
@@ -26,6 +29,7 @@
 ```
 
 ### گام 2: طراحی و برنامه‌ریزی (20%)
+
 ```bash
 1. کپی unified_agent/templates/PLAN.md.template به apps/{app_name}/PLAN.md
 2. تکمیل PLAN.md با:
@@ -37,6 +41,7 @@
 ```
 
 ### گام 3: ایجاد ساختار پایه (30%)
+
 ```bash
 apps/{app_name}/
 ├── app_code/
@@ -69,6 +74,7 @@ apps/{app_name}/
 ### گام 4: پیاده‌سازی چهار هسته (50%)
 
 #### 4.1 هسته API Ingress
+
 ```python
 # app_code/cores/api_ingress.py
 from rest_framework.decorators import api_view, permission_classes
@@ -101,6 +107,7 @@ class APIIngressCore:
 ```
 
 #### 4.2 هسته Text Processing
+
 ```python
 # app_code/cores/text_processor.py
 from unified_ai.services import UnifiedAIService
@@ -121,6 +128,7 @@ class TextProcessorCore:
 ```
 
 #### 4.3 هسته Speech Processing (در صورت نیاز)
+
 ```python
 # app_code/cores/speech_processor.py
 from unified_ai.services import STTService
@@ -137,6 +145,7 @@ class SpeechProcessorCore:
 ```
 
 #### 4.4 هسته Orchestration
+
 ```python
 # app_code/cores/orchestrator.py
 class CentralOrchestrator:
@@ -154,6 +163,7 @@ class CentralOrchestrator:
 ```
 
 ### گام 5: پیاده‌سازی Models (60%)
+
 ```python
 # app_code/models.py
 from django.db import models
@@ -180,6 +190,7 @@ class BaseModel(models.Model):
 ```
 
 ### گام 6: پیاده‌سازی Views و APIs (70%)
+
 ```python
 # app_code/views.py
 from rest_framework.decorators import api_view, permission_classes
@@ -225,6 +236,7 @@ def main_endpoint(request):
 ```
 
 ### گام 7: نوشتن تست‌ها (80%)
+
 ```python
 # app_code/tests/test_integration.py
 from django.test import TestCase
@@ -251,6 +263,7 @@ class AppIntegrationTest(TestCase):
 ```
 
 ### گام 8: ایجاد Deployment Files (90%)
+
 ```python
 # deployment/settings_additions.py
 INSTALLED_APPS += [
@@ -272,6 +285,7 @@ LOGGING['loggers']['{app_name}'] = {
 ```
 
 ### گام 9: مستندسازی (95%)
+
 ```yaml
 # docs/api_spec.yaml
 openapi: 3.0.0
@@ -296,6 +310,7 @@ paths:
 ```
 
 ### گام 10: تکمیل و بررسی نهایی (100%)
+
 ```json
 // CHECKLIST.json
 {
@@ -319,21 +334,24 @@ paths:
 
 ## ⚠️ نکات بسیار مهم
 
-### ✅ الزامات مطلق:
+### ✅ الزامات مطلق
+
 1. **هرگز** مدل User جدید نسازید - فقط UnifiedUser
 2. **حتماً** معماری چهار هسته‌ای را رعایت کنید
 3. **همیشه** از unified services استفاده کنید
 4. **بدون استثناء** سیاست‌های امنیتی را اجرا کنید
 5. **دقیقاً** طبق الگوهای تعریف شده کد بزنید
 
-### 🚫 ممنوعیت‌های مطلق:
+### 🚫 ممنوعیت‌های مطلق
+
 1. ایجاد user model جدید
 2. استفاده از Raw SQL
 3. Hard-coded values
 4. تغییر معماری چهار هسته‌ای
 5. نادیده گرفتن security policies
 
-### 📊 معیارهای پذیرش:
+### 📊 معیارهای پذیرش
+
 1. تست‌ها نوشته شده (اجرا نمی‌شود)
 2. مستندات کامل
 3. رعایت تمام استانداردها
@@ -343,6 +361,7 @@ paths:
 ## 🎁 خروجی نهایی
 
 پس از اتمام، اپلیکیشن شما باید:
+
 1. **کاملاً عملیاتی** و آماده deployment باشد
 2. **یکپارچه** با تمام سرویس‌های unified باشد
 3. **مستند** با API spec و راهنماها باشد

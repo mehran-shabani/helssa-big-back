@@ -2,17 +2,17 @@
 
 ## 📋 فهرست مطالب
 
-- [ساختار کلی پروژه](#ساختار-کلی-پروژه)
-- [شرح دقیق پوشه‌ها](#شرح-دقیق-پوشه‌ها)
-- [نقشه‌برداری مراکز به پوشه‌ها](#نقشه‌برداری-مراکز-به-پوشه‌ها)
-- [فایل‌های کلیدی پروژه](#فایل‌های-کلیدی-پروژه)
-- [ساختار پیشنهادی برای توسعه](#ساختار-پیشنهادی-برای-توسعه)
+- [ساختار کلی پروژه](## 🏗️ ساختار کلی پروژه)
+- [شرح دقیق پوشه‌ها](## 📁 شرح دقیق پوشه‌ها)
+- [نقشه‌برداری مراکز به پوشه‌ها](## 🗺️ نقشه‌برداری مراکز به پوشه‌ها)
+- [فایل‌های کلیدی پروژه](## 📄 فایل‌های کلیدی پروژه)
+- [ساختار پیشنهادی برای توسعه](## 🚀 ساختار پیشنهادی برای توسعه)
 
 ---
 
 ## 🏗️ ساختار کلی پروژه
 
-```
+```python
 HELSSA/
 ├── 📁 unified_services/          # سرویس‌های یکپارچه و مشترک
 │   ├── unified_auth/            # احراز هویت یکپارچه
@@ -95,7 +95,8 @@ HELSSA/
 ### 🔐 unified_services/ - سرویس‌های یکپارچه
 
 #### unified_auth/ - احراز هویت یکپارچه
-```
+
+```python
 unified_auth/
 ├── models.py               # UnifiedUser, UserRole, UserSession
 ├── serializers.py          # DRF Serializers
@@ -114,7 +115,8 @@ unified_auth/
 ```
 
 #### unified_billing/ - سیستم مالی یکپارچه
-```
+
+```python
 unified_billing/
 ├── models.py               # Wallet, Transaction, Subscription
 ├── services/
@@ -130,7 +132,8 @@ unified_billing/
 ```
 
 #### unified_ai/ - هوش مصنوعی مرکزی
-```
+
+```python
 unified_ai/
 ├── models.py              # AIChat, AIConfig, UsageLog
 ├── services/
@@ -151,7 +154,8 @@ unified_ai/
 ### 👤 patient_apps/ - اپلیکیشن‌های بیمار
 
 #### telemedicine/ - پزشکی از راه دور
-```
+
+```python
 telemedicine/
 ├── models.py              # Visit, Payment, Order
 ├── views/
@@ -165,7 +169,8 @@ telemedicine/
 ```
 
 #### chatbot/ - چت‌بات پزشکی
-```
+
+```python
 chatbot/
 ├── models.py              # ChatSession, ChatMessage
 ├── views.py               # Chat API endpoints
@@ -179,7 +184,8 @@ chatbot/
 ### 👨‍⚕️ doctor_apps/ - اپلیکیشن‌های پزشک
 
 #### encounters/ - ملاقات‌های پزشکی
-```
+
+```python
 encounters/
 ├── models.py              # Encounter, AudioChunk, Transcript
 ├── views/
@@ -193,7 +199,8 @@ encounters/
 ```
 
 #### stt/ - تبدیل گفتار به متن
-```
+
+```python
 stt/
 ├── models.py              # STTJob, STTResult
 ├── services/
@@ -207,7 +214,8 @@ stt/
 ### 🛠️ core_infrastructure/ - زیرساخت اصلی
 
 #### infra/ - ابزارهای زیرساختی
-```
+
+```python
 infra/
 ├── middleware/
 │   ├── rate_limit.py      # Rate limiting
@@ -222,7 +230,7 @@ infra/
 
 ## 🗺️ نقشه‌برداری مراکز به پوشه‌ها
 
-```mermaid
+```python
 graph LR
     subgraph "Control Centers"
         ACC[Account Center]
@@ -264,7 +272,8 @@ graph LR
 ### فایل‌های پیکربندی اصلی
 
 #### docker-compose.yml
-```yaml
+
+```python
 version: '3.8'
 
 services:
@@ -346,7 +355,8 @@ volumes:
 ```
 
 #### requirements.txt (مهم‌ترین‌ها)
-```txt
+
+```python
 # Django Core
 Django==4.2.7
 djangorestframework==3.14.0
@@ -391,7 +401,8 @@ python-magic==0.4.27
 ## 🚀 ساختار پیشنهادی برای توسعه
 
 ### اضافه کردن مرکز جدید
-```
+
+```python
 new_center/
 ├── __init__.py
 ├── apps.py                # Django app config
@@ -412,12 +423,14 @@ new_center/
 ```
 
 ### قوانین نام‌گذاری
+
 - **Models**: PascalCase (e.g., `UserProfile`)
 - **Functions**: snake_case (e.g., `get_user_profile`)
 - **Constants**: UPPER_SNAKE_CASE (e.g., `MAX_FILE_SIZE`)
 - **URLs**: kebab-case (e.g., `/api/user-profile/`)
 
 ### بهترین شیوه‌ها
+
 1. **هر مرکز = یک Django App**
 2. **Business Logic در services/**
 3. **API Views نازک، Services چاق**
@@ -426,7 +439,7 @@ new_center/
 
 ---
 
-<div align="center">
+[ELEMENT: div align="center"]
 
 [→ قبلی: معماری متمرکز](02-centralized-architecture.md) | [بعدی: تکنولوژی و وابستگی‌ها ←](04-technology-stack.md)
 

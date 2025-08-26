@@ -15,7 +15,7 @@
 
 ### ساختار پوشه‌ها
 
-```
+```bash
 app_name/
 ├── models/
 │   ├── __init__.py
@@ -37,6 +37,7 @@ app_name/
 ### API Response Format
 
 #### موفقیت (200 OK)
+
 ```json
 {
   "data": {
@@ -50,6 +51,7 @@ app_name/
 ```
 
 #### خطا
+
 ```json
 {
   "error": {

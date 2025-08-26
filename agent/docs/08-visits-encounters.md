@@ -2,14 +2,14 @@
 
 ## 📋 فهرست مطالب
 
-- [معرفی سیستم ویزیت](#معرفی-سیستم-ویزیت)
-- [معماری سیستم ملاقات](#معماری-سیستم-ملاقات)
-- [مدل‌های داده](#مدل‌های-داده)
-- [جریان ویزیت آنلاین](#جریان-ویزیت-آنلاین)
-- [پردازش صوت ویزیت](#پردازش-صوت-ویزیت)
-- [تولید گزارش SOAP](#تولید-گزارش-soap)
-- [مدیریت فایل‌ها](#مدیریت-فایل‌ها)
-- [امنیت و حریم خصوصی](#امنیت-و-حریم-خصوصی)
+- [معرفی سیستم ویزیت](## 🎯 معرفی سیستم ویزیت)
+- [معماری سیستم ملاقات](## 🏗️ معماری سیستم ملاقات)
+- [مدل‌های داده](## 📊 مدل‌های داده)
+- [جریان ویزیت آنلاین](## 🔄 جریان ویزیت آنلاین)
+- [پردازش صوت ویزیت](## 🎙️ پردازش صوت ویزیت)
+- [تولید گزارش SOAP](## 📝 تولید گزارش SOAP)
+- [مدیریت فایل‌ها](## 📂 مدیریت فایل‌ها)
+- [امنیت و حریم خصوصی](## 🔒 امنیت و حریم خصوصی)
 
 ---
 
@@ -18,6 +18,7 @@
 سیستم ویزیت HELSSA یک پلتفرم جامع برای مدیریت ملاقات‌های پزشکی است که امکان ویزیت حضوری، آنلاین، ضبط صوت، رونویسی خودکار و تولید گزارش‌های SOAP را فراهم می‌کند.
 
 ### ویژگی‌های کلیدی
+
 - 🎥 **ویزیت ویدیویی** با کیفیت HD
 - 🎙️ **ضبط خودکار صوت** ملاقات‌ها
 - 📝 **رونویسی هوشمند** با Whisper
@@ -93,7 +94,8 @@ graph TB
 ```
 
 ### ساختار پروژه Encounters
-```
+
+```python
 encounters/
 ├── models/
 │   ├── encounter.py            # مدل ملاقات
@@ -125,6 +127,7 @@ encounters/
 ## 📊 مدل‌های داده
 
 ### Encounter Model
+
 ```python
 # encounters/models/encounter.py
 from django.db import models
@@ -264,6 +267,7 @@ class Encounter(models.Model):
 ```
 
 ### AudioChunk Model
+
 ```python
 # encounters/models/audio_chunk.py
 
@@ -336,6 +340,7 @@ class AudioChunk(models.Model):
 ```
 
 ### Transcript Model
+
 ```python
 # encounters/models/transcript.py
 
@@ -407,6 +412,7 @@ class Transcript(models.Model):
 ```
 
 ### SOAPReport Model
+
 ```python
 # encounters/models/soap_report.py
 
@@ -505,6 +511,7 @@ class SOAPReport(models.Model):
 ## 🔄 جریان ویزیت آنلاین
 
 ### Visit Scheduling Service
+
 ```python
 # encounters/services/scheduling_service.py
 from datetime import datetime, timedelta
@@ -732,6 +739,7 @@ class VisitSchedulingService:
 ```
 
 ### Video Conference Service
+
 ```python
 # encounters/services/video_service.py
 import jwt
@@ -868,6 +876,7 @@ class VideoConferenceService:
 ## 🎙️ پردازش صوت ویزیت
 
 ### Audio Processing Service
+
 ```python
 # encounters/services/audio_processor.py
 from pydub import AudioSegment
@@ -1034,6 +1043,7 @@ class AudioProcessingService:
 ```
 
 ### STT Processing Pipeline
+
 ```python
 # encounters/tasks.py
 from celery import shared_task, chain, group
@@ -1161,6 +1171,7 @@ def extract_medical_entities(transcript_id: str) -> Dict:
 ## 📝 تولید گزارش SOAP
 
 ### SOAP Generation Service
+
 ```python
 # encounters/services/soap_generator.py
 from typing import Dict, List, Optional
@@ -1427,6 +1438,7 @@ Plan باید شامل موارد زیر به صورت شماره‌گذاری �
 ```
 
 ### SOAP Output Generator
+
 ```python
 # encounters/services/output_generator.py
 from reportlab.lib import colors
@@ -1600,6 +1612,7 @@ class SOAPOutputGenerator:
 ## 📁 مدیریت فایل‌ها
 
 ### File Management Service
+
 ```python
 # encounters/services/file_manager.py
 from typing import List, Dict, Optional
@@ -1760,6 +1773,7 @@ class EncounterFileManager:
 ## 🔐 امنیت و حریم خصوصی
 
 ### Encounter Security Service
+
 ```python
 # encounters/services/security_service.py
 from cryptography.fernet import Fernet
@@ -1924,7 +1938,7 @@ class EncounterSecurityService:
 
 ---
 
-<div align="center">
+[ELEMENT: div align="center"]
 
 [→ قبلی: سیستم مالی و اشتراک](07-billing-system.md) | [بعدی: دسترسی پزشک به بیمار ←](09-doctor-access.md)
 

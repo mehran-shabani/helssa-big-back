@@ -2,14 +2,14 @@
 
 ## 📋 فهرست مطالب
 
-- [معرفی سیستم مالی](#معرفی-سیستم-مالی)
-- [معماری سیستم مالی](#معماری-سیستم-مالی)
-- [مدیریت کیف پول](#مدیریت-کیف-پول)
-- [سیستم اشتراک](#سیستم-اشتراک)
-- [درگاه‌های پرداخت](#درگاه‌های-پرداخت)
-- [مدیریت تراکنش‌ها](#مدیریت-تراکنش‌ها)
-- [گزارش‌های مالی](#گزارش‌های-مالی)
-- [امنیت مالی](#امنیت-مالی)
+- [معرفی سیستم مالی](## 🎯 معرفی سیستم مالی)
+- [معماری سیستم مالی](## 🏗️ معماری سیستم مالی)
+- [مدیریت کیف پول](## 💳 مدیریت کیف پول)
+- [سیستم اشتراک](## 💳 سیستم اشتراک)
+- [درگاه‌های پرداخت](## 💳 درگاه‌های پرداخت)
+- [مدیریت تراکنش‌ها](## 💳 مدیریت تراکنش‌ها)
+- [گزارش‌های مالی](## 💳 گزارش‌های مالی)
+- [امنیت مالی](## 🔒 امنیت مالی)
 
 ---
 
@@ -18,6 +18,7 @@
 سیستم مالی HELSSA یک پلتفرم جامع و یکپارچه برای مدیریت تمام جنبه‌های مالی پلتفرم است که شامل کیف پول دیجیتال، اشتراک‌ها، پرداخت‌ها و تراکنش‌های مالی می‌شود.
 
 ### ویژگی‌های کلیدی
+
 - 💳 **کیف پول دیجیتال** برای هر کاربر
 - 📊 **پلن‌های اشتراک متنوع** با قابلیت سفارشی‌سازی
 - 🏦 **درگاه‌های پرداخت متعدد** (ایرانی و بین‌المللی)
@@ -85,7 +86,8 @@ graph TB
 ```
 
 ### ساختار پروژه مالی
-```
+
+```python
 unified_billing/
 ├── models/
 │   ├── wallet.py               # مدل کیف پول
@@ -121,6 +123,7 @@ unified_billing/
 ## 💳 مدیریت کیف پول
 
 ### Wallet Model
+
 ```python
 # unified_billing/models/wallet.py
 from decimal import Decimal
@@ -198,6 +201,7 @@ class Wallet(models.Model):
 ```
 
 ### Wallet Service
+
 ```python
 # unified_billing/services/wallet_service.py
 from decimal import Decimal
@@ -403,6 +407,7 @@ class WalletService:
 ## 📊 سیستم اشتراک
 
 ### Subscription Plans
+
 ```python
 # unified_billing/models/plan.py
 
@@ -479,6 +484,7 @@ class SubscriptionPlan(models.Model):
 ```
 
 ### Subscription Model
+
 ```python
 # unified_billing/models/subscription.py
 
@@ -562,6 +568,7 @@ class Subscription(models.Model):
 ```
 
 ### Subscription Service
+
 ```python
 # unified_billing/services/subscription_service.py
 
@@ -781,6 +788,7 @@ class SubscriptionService:
 ## 🏦 درگاه‌های پرداخت
 
 ### Base Gateway Interface
+
 ```python
 # unified_billing/gateways/base_gateway.py
 from abc import ABC, abstractmethod
@@ -833,6 +841,7 @@ class BasePaymentGateway(ABC):
 ```
 
 ### BitPay.ir Gateway
+
 ```python
 # unified_billing/gateways/bitpay_gateway.py
 import aiohttp
@@ -969,6 +978,7 @@ class BitPayGateway(BasePaymentGateway):
 ```
 
 ### ZarinPal Gateway
+
 ```python
 # unified_billing/gateways/zarinpal_gateway.py
 import aiohttp
@@ -1089,6 +1099,7 @@ class ZarinPalGateway(BasePaymentGateway):
 ## 💸 مدیریت تراکنش‌ها
 
 ### Transaction Model
+
 ```python
 # unified_billing/models/transaction.py
 
@@ -1201,6 +1212,7 @@ class Transaction(models.Model):
 ```
 
 ### Transaction Service
+
 ```python
 # unified_billing/services/transaction_service.py
 
@@ -1347,6 +1359,7 @@ class TransactionService:
 ## 📈 گزارش‌های مالی
 
 ### Financial Report Service
+
 ```python
 # unified_billing/services/report_service.py
 
@@ -1506,6 +1519,7 @@ class FinancialReportService:
 ```
 
 ### Dashboard Service
+
 ```python
 # unified_billing/services/dashboard_service.py
 
@@ -1621,6 +1635,7 @@ class FinancialDashboardService:
 ## 🔐 امنیت مالی
 
 ### Payment Security Service
+
 ```python
 # unified_billing/services/security_service.py
 
@@ -1698,6 +1713,7 @@ class PaymentSecurityService:
 ```
 
 ### Fraud Detection
+
 ```python
 # unified_billing/services/fraud_detector.py
 
@@ -1784,7 +1800,7 @@ class FraudDetector:
 
 ---
 
-<div align="center">
+[ELEMENT: div align="center"]
 
 [→ قبلی: سیستم‌های هوش مصنوعی](06-ai-systems.md) | [بعدی: ویزیت و ملاقات‌ها ←](08-visits-encounters.md)
 

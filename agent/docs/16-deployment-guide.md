@@ -2,20 +2,21 @@
 
 ## 📋 فهرست مطالب
 
-- [پیش‌نیازها](#پیش‌نیازها)
-- [آماده‌سازی محیط](#آماده‌سازی-محیط)
-- [Deployment محلی](#deployment-محلی)
-- [Deployment در Production](#deployment-در-production)
-- [پیکربندی سرور](#پیکربندی-سرور)
-- [مدیریت SSL و دامنه](#مدیریت-ssl-و-دامنه)
-- [مانیتورینگ و نگهداری](#مانیتورینگ-و-نگهداری)
-- [Scaling و بهینه‌سازی](#scaling-و-بهینه‌سازی)
+- [پیش‌نیازها](## 📦 پیش‌نیازها)
+- [آماده‌سازی محیط](## 📦 آماده‌سازی محیط)
+- [Deployment محلی](## 📦 Deployment محلی)
+- [Deployment در Production](## 📦 Deployment در production)
+- [پیکربندی سرور](## 📦 پیکربندی سرور)
+- [مدیریت SSL و دامنه](## 📦 مدیریت ssl و دامنه)
+- [مانیتورینگ و نگهداری](## 📦 مانیتورینگ و نگهداری)
+- [Scaling و بهینه‌سازی](## 📦 Scaling و بهینه‌سازی)
 
 ---
 
 ## 📦 پیش‌نیازها
 
 ### سیستم عامل و نرم‌افزارها
+
 - **OS**: Ubuntu 20.04 LTS یا بالاتر
 - **Docker**: نسخه 20.10.0+
 - **Docker Compose**: نسخه 1.29.0+
@@ -26,6 +27,7 @@
 ### منابع سخت‌افزاری
 
 #### حداقل منابع (Development)
+
 ```yaml
 CPU: 2 cores
 RAM: 4 GB
@@ -34,6 +36,7 @@ Network: 100 Mbps
 ```
 
 #### منابع توصیه شده (Production)
+
 ```yaml
 CPU: 8 cores
 RAM: 16 GB
@@ -44,6 +47,7 @@ Cache: Dedicated Redis server
 ```
 
 ### دسترسی‌ها و کلیدها
+
 ```bash
 # فایل‌های مورد نیاز
 .env                    # متغیرهای محیطی
@@ -55,6 +59,7 @@ secrets/               # کلیدهای API و رمزنگاری
 ## 🔧 آماده‌سازی محیط
 
 ### 1. نصب Dependencies سیستم
+
 ```bash
 #!/bin/bash
 # install-dependencies.sh
@@ -102,6 +107,7 @@ python3 --version
 ```
 
 ### 2. تنظیمات Firewall
+
 ```bash
 # Configure UFW firewall
 sudo ufw default deny incoming
@@ -125,6 +131,7 @@ sudo ufw status
 ```
 
 ### 3. ایجاد ساختار دایرکتوری
+
 ```bash
 # Create project structure
 mkdir -p /opt/helssa
@@ -152,6 +159,7 @@ chmod -R 700 /opt/helssa/secrets
 ```
 
 ### 4. پیکربندی Environment Variables
+
 ```bash
 # Copy example env file
 cp .env.example .env
@@ -222,6 +230,7 @@ GRAFANA_ADMIN_PASSWORD=strong-grafana-password
 ## 🏠 Deployment محلی
 
 ### 1. Build و راه‌اندازی
+
 ```bash
 # Build images
 docker-compose -f docker-compose.yml build
@@ -246,6 +255,7 @@ docker-compose exec web python manage.py collectstatic --noinput
 ```
 
 ### 2. تست‌های اولیه
+
 ```bash
 # Health check
 curl http://localhost:8000/health/
@@ -266,6 +276,7 @@ curl http://localhost:9000/minio/health/live
 ## 🌐 Deployment در Production
 
 ### 1. آماده‌سازی Production
+
 ```bash
 #!/bin/bash
 # production-setup.sh
@@ -387,6 +398,7 @@ EOF
 ```
 
 ### 2. CI/CD Pipeline
+
 ```yaml
 # .github/workflows/deploy.yml
 name: Deploy to Production
@@ -459,6 +471,7 @@ jobs:
 ```
 
 ### 3. Database Migration Strategy
+
 ```bash
 #!/bin/bash
 # migrate-production.sh
@@ -488,6 +501,7 @@ echo "Migration completed successfully!"
 ## ⚙️ پیکربندی سرور
 
 ### 1. Nginx Production Config
+
 ```nginx
 # /etc/nginx/sites-available/helssa
 upstream helssa_backend {
@@ -624,6 +638,7 @@ server {
 ```
 
 ### 2. Systemd Services
+
 ```ini
 # /etc/systemd/system/helssa-web.service
 [Unit]
@@ -665,6 +680,7 @@ WantedBy=multi-user.target
 ```
 
 ### 3. Backup Configuration
+
 ```bash
 #!/bin/bash
 # /opt/helssa/scripts/backup.sh
@@ -720,6 +736,7 @@ echo "Backup completed successfully!"
 ## 🔒 مدیریت SSL و دامنه
 
 ### 1. تنظیم SSL با Let's Encrypt
+
 ```bash
 # Install certbot
 sudo apt install certbot python3-certbot-nginx
@@ -737,6 +754,7 @@ sudo crontab -e
 ```
 
 ### 2. تنظیمات DNS
+
 ```bash
 # DNS Records needed:
 A     @          1.2.3.4         # Main domain
@@ -750,6 +768,7 @@ TXT   _dmarc     "v=DMARC1..."   # DMARC record
 ```
 
 ### 3. CDN Configuration
+
 ```javascript
 // Cloudflare settings
 {
@@ -783,6 +802,7 @@ TXT   _dmarc     "v=DMARC1..."   # DMARC record
 ## 📊 مانیتورینگ و نگهداری
 
 ### 1. Prometheus Configuration
+
 ```yaml
 # prometheus/prometheus.yml
 global:
@@ -821,6 +841,7 @@ rule_files:
 ```
 
 ### 2. Alert Rules
+
 ```yaml
 # prometheus/alerts/helssa.yml
 groups:
@@ -862,6 +883,7 @@ groups:
 ```
 
 ### 3. Health Check Script
+
 ```bash
 #!/bin/bash
 # health-check.sh
@@ -950,6 +972,7 @@ echo "======================"
 ## 📈 Scaling و بهینه‌سازی
 
 ### 1. Horizontal Scaling
+
 ```yaml
 # docker-compose.scale.yml
 version: '3.9'
@@ -986,6 +1009,7 @@ services:
 ```
 
 ### 2. Performance Optimization
+
 ```python
 # helssa/settings/production.py
 
@@ -1035,6 +1059,7 @@ SESSION_CACHE_ALIAS = 'default'
 ```
 
 ### 3. Database Optimization
+
 ```sql
 -- Optimize MySQL for production
 -- /opt/helssa/mysql-init/optimize.sql
@@ -1071,7 +1096,7 @@ ALTER TABLE audit_logs PARTITION BY RANGE (YEAR(created_at)) (
 
 ---
 
-<div align="center">
+[ELEMENT: div align="center"]  
 
 [→ قبلی: امنیت و Compliance](15-security-compliance.md) | [بعدی: راهنمای شروع سریع ←](17-quick-start.md)
 

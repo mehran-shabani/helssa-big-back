@@ -7,6 +7,7 @@
 ## 1. احراز هویت یکپارچه (Unified Authentication)
 
 ### 1.1 مدل کاربر
+
 - **الزامی**: استفاده از `unified_auth.UnifiedUser`
 - **منع**: ایجاد مدل کاربر جدید
 - **نوع کاربران**: patient, doctor, admin
@@ -23,6 +24,7 @@ from django.contrib.auth.models import User  # منع
 ```
 
 ### 1.2 JWT Authentication
+
 - **Access Token**: 5 دقیقه اعتبار
 - **Refresh Token**: 7 روز اعتبار
 - **Blacklist**: امکان باطل کردن توکن‌ها
@@ -40,6 +42,7 @@ SIMPLE_JWT = {
 ## 2. سیستم OTP و کاوه‌نگار
 
 ### 2.1 تولید OTP
+
 - **طول کد**: 6 رقم عددی
 - **الگوریتم**: Random number generation
 - **منع**: کدهای متوالی یا قابل حدس
@@ -52,11 +55,13 @@ def generate_otp():
 ```
 
 ### 2.2 اعتبار OTP
+
 - **مدت زمان**: 3 دقیقه دقیقاً
 - **تعداد تلاش**: حداکثر 3 بار
 - **منع**: استفاده مجدد کد استفاده شده
 
 ### 2.3 Rate Limiting OTP
+
 - **ارسال**: حداکثر 1 درخواست در دقیقه
 - **روزانه**: حداکثر 5 درخواست در ساعت  
 - **مسدودسازی**: 24 ساعت پس از 10 تلاش ناموفق
@@ -81,6 +86,7 @@ def check_otp_rate_limit(phone_number):
 ```
 
 ### 2.4 یکپارچگی با کاوه‌نگار
+
 - **API Key**: در متغیر محیطی `KAVENEGAR_API_KEY`
 - **Template**: استفاده از template مشخص
 - **خطاها**: لاگ تمام خطاهای ارسال
@@ -101,11 +107,13 @@ result = api.sms_send({
 ## 3. تفکیک نقش‌ها (Role-Based Access Control)
 
 ### 3.1 نقش‌های تعریف شده
+
 - **patient**: بیمار عادی
 - **doctor**: پزشک معالج
 - **admin**: مدیر سیستم
 
 ### 3.2 دسترسی‌های بیمار
+
 ```python
 PATIENT_PERMISSIONS = [
     'view_own_profile',
@@ -120,6 +128,7 @@ PATIENT_PERMISSIONS = [
 ```
 
 ### 3.3 دسترسی‌های پزشک
+
 ```python
 DOCTOR_PERMISSIONS = [
     'view_own_profile',
@@ -134,6 +143,7 @@ DOCTOR_PERMISSIONS = [
 ```
 
 ### 3.4 الگوی بررسی دسترسی
+
 ```python
 from rest_framework.permissions import BasePermission
 
@@ -155,16 +165,19 @@ class DoctorOnlyPermission(BasePermission):
 ## 4. دسترسی موقت پزشک (Unified Access)
 
 ### 4.1 تولید کد دسترسی
+
 - **فقط بیمار**: می‌تواند کد تولید کند
 - **محدودیت**: حداکثر 3 کد فعال همزمان
 - **QR Code**: برای راحتی استفاده
 
 ### 4.2 تایید کد توسط پزشک
+
 - **بررسی**: کد معتبر و منقضی نشده
 - **Session**: ایجاد session با UUID منحصر به فرد
 - **محدودیت زمانی**: حداکثر 24 ساعت
 
 ### 4.3 مدیریت Session
+
 ```python
 class AccessSession:
     # خصوصیات الزامی
@@ -181,6 +194,7 @@ class AccessSession:
 ```
 
 ### 4.4 Audit Logging
+
 ```python
 # ثبت اجباری تمام دسترسی‌ها
 class AccessLog:
@@ -194,6 +208,7 @@ class AccessLog:
 ## 5. اعتبارسنجی و Validation
 
 ### 5.1 ورودی‌های API
+
 ```python
 # الگوی استاندارد
 from rest_framework import serializers
@@ -208,6 +223,7 @@ class StandardAPISerializer(serializers.Serializer):
 ```
 
 ### 5.2 SQL Injection Prevention
+
 - **الزامی**: استفاده از Django ORM
 - **منع**: Raw SQL queries
 - **استثناء**: فقط با Prepared Statements
@@ -221,6 +237,7 @@ cursor.execute(f"SELECT * FROM users WHERE phone='{phone}'")
 ```
 
 ### 5.3 XSS Prevention
+
 - **Template**: auto-escape فعال
 - **JSON**: استفاده از safe serializers
 - **Headers**: CSP headers
@@ -235,6 +252,7 @@ X_FRAME_OPTIONS = 'DENY'
 ## 6. رمزنگاری داده‌ها
 
 ### 6.1 داده‌های حساس
+
 - **فیلدهای پزشکی**: رمزنگاری در دیتابیس
 - **شماره موبایل**: هش شده ذخیره
 - **پیام‌ها**: End-to-End encryption
@@ -255,6 +273,7 @@ class EncryptedField(models.TextField):
 ```
 
 ### 6.2 API Communications
+
 - **HTTPS**: اجباری در production
 - **TLS 1.3**: حداقل نسخه
 - **Certificate Pinning**: برای mobile apps
@@ -262,6 +281,7 @@ class EncryptedField(models.TextField):
 ## 7. Rate Limiting و DDoS Protection
 
 ### 7.1 API Rate Limits
+
 ```python
 # تنظیمات rate limiting
 RATE_LIMITS = {
@@ -274,6 +294,7 @@ RATE_LIMITS = {
 ```
 
 ### 7.2 IP-based Protection
+
 - **Failed Login**: مسدودسازی IP پس از 10 تلاش ناموفق
 - **Suspicious Activity**: تشخیص الگوهای مشکوک
 - **Whitelist**: IP های مجاز برای admin
@@ -281,11 +302,13 @@ RATE_LIMITS = {
 ## 8. Session Management
 
 ### 8.1 خصوصیات Session
+
 - **Timeout**: 30 دقیقه عدم فعالیت
 - **Concurrent Sessions**: حداکثر 3 session همزمان
 - **Device Tracking**: ثبت device و location
 
 ### 8.2 Logout Policies
+
 - **Manual Logout**: باطل کردن همه sessions
 - **Automatic**: logout در تغییر password
 - **Remote Logout**: امکان logout از دستگاه‌های دیگر
@@ -293,6 +316,7 @@ RATE_LIMITS = {
 ## 9. File Upload Security
 
 ### 9.1 محدودیت‌های فایل
+
 ```python
 ALLOWED_FILE_TYPES = {
     'image': ['jpg', 'jpeg', 'png'],
@@ -308,6 +332,7 @@ MAX_FILE_SIZE = {
 ```
 
 ### 9.2 Virus Scanning
+
 - **اجباری**: اسکن تمام فایل‌های آپلود شده
 - **Quarantine**: فایل‌های مشکوک
 - **Cleanup**: حذف خودکار فایل‌های قدیمی
@@ -315,12 +340,14 @@ MAX_FILE_SIZE = {
 ## 10. Compliance و Standards
 
 ### 10.1 HIPAA Compliance
+
 - **Data Encryption**: At rest and in transit
 - **Access Controls**: Role-based access
 - **Audit Logs**: تمام دسترسی‌ها ثبت شود
 - **Backup**: رمزنگاری شده
 
 ### 10.2 GDPR Compliance
+
 - **Right to Delete**: حذف کامل داده‌ها
 - **Data Portability**: امکان export داده‌ها
 - **Consent Management**: ثبت رضایت‌ها
@@ -328,6 +355,7 @@ MAX_FILE_SIZE = {
 ## 11. Monitoring و Incident Response
 
 ### 11.1 Security Monitoring
+
 ```python
 # Events قابل نظارت
 SECURITY_EVENTS = [
@@ -340,6 +368,7 @@ SECURITY_EVENTS = [
 ```
 
 ### 11.2 Incident Response
+
 1. **Detection**: تشخیص خودکار
 2. **Alert**: اطلاع‌رسانی فوری
 3. **Isolation**: جداسازی سیستم آلوده
@@ -350,6 +379,7 @@ SECURITY_EVENTS = [
 ## 12. Security Headers
 
 ### 12.1 الزامی برای تمام responses
+
 ```python
 SECURE_HEADERS = {
     'X-Content-Type-Options': 'nosniff',
@@ -364,6 +394,7 @@ SECURE_HEADERS = {
 ## 13. Password Policies (فقط برای admin users)
 
 ### 13.1 الزامات رمز عبور
+
 - **طول**: حداقل 12 کاراکتر
 - **پیچیدگی**: ترکیب حروف، اعداد، نمادها
 - **History**: عدم تکرار 5 رمز قبلی
@@ -372,6 +403,7 @@ SECURE_HEADERS = {
 ## اجرای سیاست‌ها
 
 ### چک‌لیست اجرا
+
 - [ ] تمام endpoints از unified_auth استفاده می‌کنند
 - [ ] OTP rate limiting پیاده‌سازی شده
 - [ ] Role-based permissions تعریف شده
@@ -382,6 +414,7 @@ SECURE_HEADERS = {
 - [ ] Error handling امن است
 
 ### نکات مهم
+
 1. **عدم انحراف**: هیچ انحراف از این سیاست‌ها مجاز نیست
 2. **ثبت تغییرات**: هر تغیری در LOG.md ثبت شود
 3. **Security Review**: کد قبل از deploy بررسی شود

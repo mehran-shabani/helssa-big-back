@@ -2,14 +2,14 @@
 
 ## 📋 فهرست مطالب
 
-- [معرفی سیستم احراز هویت](#معرفی-سیستم-احراز-هویت)
-- [معماری احراز هویت](#معماری-احراز-هویت)
-- [مدل‌های داده](#مدل‌های-داده)
-- [جریان احراز هویت](#جریان-احراز-هویت)
-- [پیاده‌سازی JWT](#پیاده‌سازی-jwt)
-- [سیستم OTP](#سیستم-otp)
-- [مدیریت نقش‌ها (RBAC)](#مدیریت-نقش‌ها-rbac)
-- [امنیت و بهترین شیوه‌ها](#امنیت-و-بهترین-شیوه‌ها)
+- [معرفی سیستم احراز هویت](## 🎯 معرفی سیستم احراز هویت)
+- [معماری احراز هویت](## 🏗️ معماری احراز هویت)
+- [مدل‌های داده](## 📊 مدل‌های داده)
+- [جریان احراز هویت](## 🔄 جریان احراز هویت)
+- [پیاده‌سازی JWT](## 🔒 پیاده‌سازی JWT)
+- [سیستم OTP](## 🔒 سیستم OTP)
+- [مدیریت نقش‌ها (RBAC)](## 🔒 مدیریت نقش‌ها (RBAC))
+- [امنیت و بهترین شیوه‌ها](## 🔒 امنیت و بهترین شیوه‌ها)
 
 ---
 
@@ -18,6 +18,7 @@
 سیستم احراز هویت یکپارچه HELSSA یک راهکار امن و مقیاس‌پذیر برای مدیریت هویت کاربران در تمام سرویس‌های پلتفرم است.
 
 ### ویژگی‌های کلیدی
+
 - ✅ **ورود یکپارچه** برای بیماران و پزشکان
 - ✅ **احراز هویت دو مرحله‌ای** با OTP
 - ✅ **مدیریت نقش‌ها** (RBAC) پیشرفته
@@ -28,7 +29,7 @@
 
 ## 🏗️ معماری احراز هویت
 
-```mermaid
+```python
 graph TB
     subgraph "Client Layer"
         WEB[Web App]
@@ -79,6 +80,7 @@ graph TB
 ## 📊 مدل‌های داده
 
 ### UnifiedUser Model
+
 ```python
 # unified_auth/models.py
 from django.contrib.auth.models import AbstractBaseUser, PermissionsMixin
@@ -142,6 +144,7 @@ class UnifiedUser(AbstractBaseUser, PermissionsMixin):
 ```
 
 ### UserProfile Models
+
 ```python
 # unified_auth/models.py
 
@@ -171,6 +174,7 @@ class DoctorProfile(models.Model):
 ```
 
 ### Session & Token Models
+
 ```python
 class UserSession(models.Model):
     """مدیریت نشست‌های کاربر"""
@@ -366,6 +370,7 @@ class LoginService:
 ## 🎫 پیاده‌سازی JWT
 
 ### JWT Service
+
 ```python
 # unified_auth/services/jwt_service.py
 from datetime import datetime, timedelta
@@ -473,6 +478,7 @@ class JWTService:
 ```
 
 ### JWT Middleware
+
 ```python
 # unified_auth/middleware/jwt_middleware.py
 from django.utils.deprecation import MiddlewareMixin
@@ -535,6 +541,7 @@ class JWTAuthenticationMiddleware(MiddlewareMixin):
 ## 📱 سیستم OTP
 
 ### OTP Service
+
 ```python
 # unified_auth/services/otp_service.py
 import random
@@ -620,6 +627,7 @@ class OTPService:
 ```
 
 ### SMS Integration
+
 ```python
 # unified_auth/services/sms_service.py
 from kavenegar import KavenegarAPI
@@ -665,6 +673,7 @@ class SMSService:
 ## 👥 مدیریت نقش‌ها (RBAC)
 
 ### Role & Permission Models
+
 ```python
 # unified_auth/models.py
 
@@ -711,6 +720,7 @@ class UserRole(models.Model):
 ```
 
 ### RBAC Service
+
 ```python
 # unified_auth/services/rbac_service.py
 
@@ -797,6 +807,7 @@ class RBACService:
 ```
 
 ### Permission Decorators
+
 ```python
 # unified_auth/decorators.py
 
@@ -842,6 +853,7 @@ async def view_patient_record(request, patient_id):
 ## 🔒 امنیت و بهترین شیوه‌ها
 
 ### 1. Rate Limiting
+
 ```python
 # unified_auth/middleware/rate_limiter.py
 from django.core.cache import cache
@@ -887,6 +899,7 @@ class RateLimitMiddleware:
 ```
 
 ### 2. Session Security
+
 ```python
 # unified_auth/services/session_service.py
 
@@ -962,6 +975,7 @@ class SessionService:
 ```
 
 ### 3. Audit Logging
+
 ```python
 # unified_auth/models.py
 
@@ -1008,6 +1022,7 @@ class AuthAuditLog(models.Model):
 ```
 
 ### 4. Security Headers
+
 ```python
 # unified_auth/middleware/security_headers.py
 
@@ -1036,7 +1051,7 @@ class SecurityHeadersMiddleware:
 
 ---
 
-<div align="center">
+[ELEMENT: div align="center"]
 
 [→ قبلی: تکنولوژی و وابستگی‌ها](04-technology-stack.md) | [بعدی: سیستم‌های هوش مصنوعی ←](06-ai-systems.md)
 

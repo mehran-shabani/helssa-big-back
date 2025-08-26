@@ -2,14 +2,14 @@
 
 ## 📋 فهرست مطالب
 
-- [معرفی سیستم پردازش صوت](#معرفی-سیستم-پردازش-صوت)
-- [معماری پردازش صوت](#معماری-پردازش-صوت)
-- [مدیریت فایل‌های صوتی](#مدیریت-فایل‌های-صوتی)
-- [سرویس Whisper STT](#سرویس-whisper-stt)
-- [پردازش قطعه‌بندی صوت](#پردازش-قطعه‌بندی-صوت)
-- [ادغام رونویسی‌ها](#ادغام-رونویسی‌ها)
-- [بهینه‌سازی و کیفیت](#بهینه‌سازی-و-کیفیت)
-- [مانیتورینگ و گزارش‌دهی](#مانیتورینگ-و-گزارش‌دهی)
+- [معرفی سیستم پردازش صوت](## 🎯 معرفی سیستم پردازش صوت)
+- [معماری پردازش صوت](## 🏗️ معماری پردازش صوت)
+- [مدیریت فایل‌های صوتی](## 📁 مدیریت فایل‌های صوتی)
+- [سرویس Whisper STT](## 📝 سرویس Whisper STT)
+- [پردازش قطعه‌بندی صوت](## 📝 پردازش قطعه‌بندی صوت)
+- [ادغام رونویسی‌ها](## 📝 ادغام رونویسی‌ها)
+- [بهینه‌سازی و کیفیت](## 📝 بهینه‌سازی و کیفیت)
+- [مانیتورینگ و گزارش‌دهی](## 📝 مانیتورینگ و گزارش‌دهی)
 
 ---
 
@@ -18,6 +18,7 @@
 سیستم پردازش صوت HELSSA یک پلتفرم قدرتمند برای ضبط، پردازش و رونویسی مکالمات پزشکی است که از جدیدترین تکنولوژی‌های AI استفاده می‌کند.
 
 ### ویژگی‌های کلیدی
+
 - 🎙️ **ضبط با کیفیت بالا** مکالمات پزشکی
 - 🔄 **پردازش Real-time** صوت در حین ضبط
 - 📝 **رونویسی دقیق** با Whisper OpenAI
@@ -120,7 +121,8 @@ sequenceDiagram
 ```
 
 ### ساختار پروژه STT
-```
+
+```python
 stt/
 ├── models/
 │   ├── stt_job.py              # مدل کار STT
@@ -152,6 +154,7 @@ stt/
 ## 📁 مدیریت فایل‌های صوتی
 
 ### Audio File Model
+
 ```python
 # stt/models/audio_file.py
 from django.db import models
@@ -254,6 +257,7 @@ class AudioFile(models.Model):
 ```
 
 ### Audio Receiver Service
+
 ```python
 # stt/services/audio_receiver.py
 from typing import Dict, Optional
@@ -382,6 +386,7 @@ class AudioReceiverService:
 ```
 
 ### Audio Validator
+
 ```python
 # stt/services/audio_validator.py
 import magic
@@ -473,6 +478,7 @@ class AudioValidator:
 ## 🎤 سرویس Whisper STT
 
 ### Whisper Service Implementation
+
 ```python
 # stt/services/whisper_service.py
 import asyncio
@@ -604,6 +610,7 @@ class WhisperSTTService:
 ```
 
 ### STT Job Manager
+
 ```python
 # stt/services/stt_job_manager.py
 
@@ -698,6 +705,7 @@ class STTJobManager:
 ## 🔄 پردازش قطعه‌بندی صوت
 
 ### Audio Chunker Service
+
 ```python
 # stt/services/audio_chunker.py
 from pydub import AudioSegment
@@ -792,6 +800,7 @@ class AudioChunker:
 ```
 
 ### Chunk Processing Task
+
 ```python
 # stt/tasks.py
 from celery import shared_task
@@ -872,6 +881,7 @@ def process_audio_chunk(self, job_id: str, chunk_id: str):
 ## 🔀 ادغام رونویسی‌ها
 
 ### Transcript Merger Service
+
 ```python
 # stt/services/transcript_merger.py
 from typing import List, Dict
@@ -1013,6 +1023,7 @@ class TranscriptMerger:
 ```
 
 ### Speaker Diarization
+
 ```python
 # stt/services/speaker_diarization.py
 
@@ -1096,6 +1107,7 @@ class SpeakerDiarization:
 ## ⚡ بهینه‌سازی و کیفیت
 
 ### Audio Quality Enhancement
+
 ```python
 # stt/processors/quality_enhancer.py
 import numpy as np
@@ -1168,6 +1180,7 @@ class AudioQualityEnhancer:
 ```
 
 ### STT Quality Metrics
+
 ```python
 # stt/utils/metrics.py
 
@@ -1226,6 +1239,7 @@ class STTQualityMetrics:
 ## 📊 مانیتورینگ و گزارش‌دهی
 
 ### STT Monitoring Service
+
 ```python
 # stt/services/monitoring.py
 
@@ -1316,6 +1330,7 @@ class STTMonitoringService:
 ```
 
 ### STT Analytics Dashboard
+
 ```python
 # stt/api/views.py
 
@@ -1384,7 +1399,7 @@ class STTAnalyticsViewSet(viewsets.ViewSet):
 
 ---
 
-<div align="center">
+[ELEMENT: div align="center"]
 
 [→ قبلی: چت‌بات پزشکی](10-chatbot-system.md) | [بعدی: تولید گزارش‌ها ←](12-output-generation.md)
 

@@ -2,19 +2,20 @@
 
 ## 📋 فهرست مطالب
 
-- [معرفی](#معرفی)
-- [ساختار پروژه](#ساختار-پروژه)
-- [نحوه استفاده](#نحوه-استفاده)
-- [اپلیکیشن‌های سیستم](#اپلیکیشن‌های-سیستم)
-- [معماری چهار هسته‌ای](#معماری-چهار-هسته‌ای)
-- [دستورالعمل ایجنت‌ها](#دستورالعمل-ایجنت‌ها)
-- [استانداردها و الگوها](#استانداردها-و-الگوها)
+- [معرفی](## 🎯 معرفی)
+- [ساختار پروژه](## 📁 ساختار پروژه)
+- [نحوه استفاده](## 🚀 نحوه استفاده)
+- [اپلیکیشن‌های سیستم](## 📱 اپلیکیشن‌های سیستم)
+- [معماری چهار هسته‌ای](## 🏗️ معماری چهار هسته‌ای)
+- [دستورالعمل ایجنت‌ها](## 📋 دستورالعمل ایجنت‌ها)
+- [استانداردها و الگوها](## 🔧 استانداردها و الگوها)
 
 ## 🎯 معرفی
 
 این مخزن حاوی ساختار یکپارچه و استاندارد برای ایجنت‌های توسعه‌دهنده پلتفرم هلسا است. هر ایجنت می‌تواند با استفاده از این ساختار، یک اپلیکیشن کامل و استاندارد برای پلتفرم ایجاد کند.
 
-### ویژگی‌های کلیدی:
+### ویژگی‌های کلیدی
+
 - 🏗️ **معماری چهار هسته‌ای**: API Ingress, Text Processing, Speech Processing, Orchestration
 - 🔐 **امنیت یکپارچه**: احراز هویت JWT، OTP، و کنترل دسترسی
 - 🤖 **AI یکپارچه**: پردازش متن و صوت با OpenAI/Whisper
@@ -23,7 +24,7 @@
 
 ## 📁 ساختار پروژه
 
-```
+```bash
 unified_agent/
 ├── 📚 docs/                      # مستندات کامل سیستم (18 فایل)
 ├── 📋 instructions/              # دستورالعمل‌های ایجنت‌ها
@@ -41,9 +42,10 @@ unified_agent/
 
 ## 🚀 نحوه استفاده
 
-### برای ایجنت‌های توسعه:
+### برای ایجنت‌های توسعه
 
 1. **مطالعه مستندات اصلی**:
+
    ```bash
    # مطالعه معماری
    cat instructions/CORE_ARCHITECTURE.md
@@ -66,6 +68,7 @@ unified_agent/
    - appointment_scheduler
 
 3. **ایجاد ساختار اپ**:
+
    ```bash
    # ایجاد پوشه اپ
    mkdir -p apps/{app_name}
@@ -82,26 +85,31 @@ unified_agent/
 ## 📱 اپلیکیشن‌های سیستم
 
 ### 1. patient_chatbot - چت‌بات بیمار
+
 - **هدف**: سیستم چت هوشمند برای بیماران
 - **APIs**: /chat/start, /chat/message, /chat/history
 - **هسته‌های فعال**: API Ingress + Text Processing + Orchestration
 
 ### 2. doctor_chatbot - چت‌بات پزشک
+
 - **هدف**: ابزار کمک تشخیص برای پزشکان
 - **APIs**: /consult/start, /consult/query, /knowledge/search
 - **هسته‌های فعال**: API Ingress + Text Processing + Orchestration
 
 ### 3. soapify_v2 - تولید گزارش SOAP
+
 - **هدف**: تولید خودکار گزارش‌های پزشکی
 - **APIs**: /encounter/create, /encounter/audio, /encounter/soap
 - **هسته‌های فعال**: همه چهار هسته
 
 ### 4. visit_management - مدیریت ویزیت
+
 - **هدف**: سیستم رزرو و مدیریت ویزیت‌ها
 - **APIs**: /visit/book, /visit/available-times, /visit/reschedule
 - **هسته‌های فعال**: API Ingress + Orchestration
 
 ### 5. prescription_system - سیستم نسخه‌نویسی
+
 - **هدف**: ایجاد و مدیریت نسخه‌های دیجیتال
 - **APIs**: /prescription/create, /drug/search, /drug/interaction-check
 - **هسته‌های فعال**: API Ingress + Text Processing + Orchestration
@@ -109,6 +117,7 @@ unified_agent/
 ## 🏗️ معماری چهار هسته‌ای
 
 ### 1. API Ingress Core
+
 ```python
 from app_standards.four_cores import APIIngressCore
 
@@ -120,6 +129,7 @@ allowed = ingress.check_rate_limit(user_id, endpoint)
 ```
 
 ### 2. Text Processing Core
+
 ```python
 from app_standards.four_cores import TextProcessorCore
 
@@ -129,6 +139,7 @@ result = processor.process_medical_text(text, context)
 ```
 
 ### 3. Speech Processing Core
+
 ```python
 from app_standards.four_cores import SpeechProcessorCore
 
@@ -138,6 +149,7 @@ result = processor.transcribe_audio(audio_file, language='fa')
 ```
 
 ### 4. Central Orchestrator
+
 ```python
 from app_standards.four_cores import CentralOrchestrator
 
@@ -148,7 +160,7 @@ result = orchestrator.execute_workflow('medical_chat', data, user)
 
 ## 📋 دستورالعمل ایجنت‌ها
 
-### گام‌های اجرایی:
+### گام‌های اجرایی
 
 1. **مطالعه (10%)**
    - خواندن CORE_ARCHITECTURE.md
@@ -177,7 +189,8 @@ result = orchestrator.execute_workflow('medical_chat', data, user)
 
 ## 🔧 استانداردها و الگوها
 
-### الگوی Model:
+### الگوی Model
+
 ```python
 from app_standards.models.base_models import BaseModel
 
@@ -186,7 +199,8 @@ class MyModel(BaseModel):
     pass
 ```
 
-### الگوی View:
+### الگوی View
+
 ```python
 from app_standards.views.api_views import BaseAPIView
 
@@ -198,7 +212,8 @@ class MyView(BaseAPIView):
         pass
 ```
 
-### الگوی Serializer:
+### الگوی Serializer
+
 ```python
 from app_standards.serializers.base_serializers import BaseModelSerializer
 
@@ -210,14 +225,16 @@ class MySerializer(BaseModelSerializer):
 
 ## ⚠️ نکات مهم
 
-### ✅ الزامات:
+### ✅ الزامات
+
 - استفاده از UnifiedUser (هرگز User جدید نسازید)
 - رعایت معماری چهار هسته‌ای
 - پیاده‌سازی OTP با Kavenegar
 - استفاده از JWT برای احراز هویت
 - تفکیک دسترسی patient/doctor
 
-### 🚫 ممنوعیت‌ها:
+### 🚫 ممنوعیت‌ها
+
 - ایجاد user model جدید
 - استفاده از Raw SQL
 - Hard-coded values

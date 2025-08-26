@@ -2,14 +2,14 @@
 
 ## 📋 فهرست مطالب
 
-- [معرفی سیستم دسترسی](#معرفی-سیستم-دسترسی)
-- [معماری دسترسی موقت](#معماری-دسترسی-موقت)
-- [کد دسترسی 6 رقمی](#کد-دسترسی-6-رقمی)
-- [مدیریت جلسات دسترسی](#مدیریت-جلسات-دسترسی)
-- [سطوح دسترسی](#سطوح-دسترسی)
-- [Audit و گزارش‌دهی](#audit-و-گزارش‌دهی)
-- [رابط کاربری](#رابط-کاربری)
-- [امنیت و محدودیت‌ها](#امنیت-و-محدودیت‌ها)
+- [معرفی سیستم دسترسی](## 🎯 معرفی سیستم دسترسی)
+- [معماری دسترسی موقت](## 🏗️ معماری دسترسی موقت)
+- [کد دسترسی 6 رقمی](## 🔢 کد دسترسی 6 رقمی)
+- [مدیریت جلسات دسترسی](## 🔢 مدیریت جلسات دسترسی)
+- [سطوح دسترسی](## 🔢 سطوح دسترسی)
+- [Audit و گزارش‌دهی](## 🔢 Audit و گزارش‌دهی)
+- [رابط کاربری](## 🔢 رابط کاربری)
+- [امنیت و محدودیت‌ها](## 🔢 امنیت و محدودیت‌ها)
 
 ---
 
@@ -18,6 +18,7 @@
 سیستم دسترسی پزشک به بیمار در HELSSA یک مکانیزم امن و موقت برای اشتراک‌گذاری اطلاعات پزشکی است که به بیماران کنترل کامل بر داده‌های خود را می‌دهد.
 
 ### ویژگی‌های کلیدی
+
 - 🔢 **کد دسترسی 6 رقمی** ساده و امن
 - ⏱️ **دسترسی موقت** با زمان انقضا
 - 🎚️ **سطوح دسترسی** قابل تنظیم
@@ -69,7 +70,8 @@ graph TB
 ```
 
 ### ساختار پروژه
-```
+
+```python
 unified_access/
 ├── models/
 │   ├── access_code.py          # مدل کد دسترسی
@@ -98,6 +100,7 @@ unified_access/
 ## 🔢 کد دسترسی 6 رقمی
 
 ### Access Code Model
+
 ```python
 # unified_access/models/access_code.py
 from django.db import models
@@ -205,6 +208,7 @@ class AccessCode(models.Model):
 ```
 
 ### Code Generator Service
+
 ```python
 # unified_access/services/code_generator.py
 import secrets
@@ -350,6 +354,7 @@ class AccessCodeGenerator:
 ```
 
 ### Code Validator Service
+
 ```python
 # unified_access/services/code_validator.py
 
@@ -499,6 +504,7 @@ class AccessCodeValidator:
 ## 🔐 مدیریت جلسات دسترسی
 
 ### Access Session Model
+
 ```python
 # unified_access/models/access_session.py
 
@@ -583,6 +589,7 @@ class AccessSession(models.Model):
 ```
 
 ### Session Manager Service
+
 ```python
 # unified_access/services/session_manager.py
 import jwt
@@ -773,6 +780,7 @@ class AccessSessionManager:
 ## 🎚️ سطوح دسترسی
 
 ### Permission Types
+
 ```python
 # unified_access/models/permissions.py
 
@@ -819,6 +827,7 @@ class AccessPermission:
 ```
 
 ### Permission Checker Service
+
 ```python
 # unified_access/services/permission_checker.py
 
@@ -940,6 +949,7 @@ class PermissionChecker:
 ## 📝 Audit و گزارش‌دهی
 
 ### Access Log Model
+
 ```python
 # unified_access/models/access_log.py
 
@@ -1025,6 +1035,7 @@ class AccessLog(models.Model):
 ```
 
 ### Audit Service
+
 ```python
 # unified_access/services/audit_service.py
 
@@ -1190,6 +1201,7 @@ class AccessAuditService:
 ## 🖥️ رابط کاربری
 
 ### Patient Access Management UI
+
 ```python
 # unified_access/api/views/patient_views.py
 from rest_framework import viewsets, status
@@ -1329,6 +1341,7 @@ class PatientAccessViewSet(viewsets.ModelViewSet):
 ```
 
 ### Doctor Access UI
+
 ```python
 # unified_access/api/views/doctor_views.py
 
@@ -1423,6 +1436,7 @@ class DoctorAccessViewSet(viewsets.ViewSet):
 ## 🔒 امنیت و محدودیت‌ها
 
 ### Security Measures
+
 ```python
 # unified_access/utils/security.py
 
@@ -1509,6 +1523,7 @@ class AccessSecurityManager:
 ```
 
 ### Access Restrictions
+
 ```python
 # unified_access/middleware/access_middleware.py
 
@@ -1569,7 +1584,7 @@ class AccessControlMiddleware:
 
 ---
 
-<div align="center">
+[ELEMENT: div align="center"]
 
 [→ قبلی: ویزیت و ملاقات‌ها](08-visits-encounters.md) | [بعدی: چت‌بات پزشکی ←](10-chatbot-system.md)
 

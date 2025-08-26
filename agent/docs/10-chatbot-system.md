@@ -2,14 +2,14 @@
 
 ## 📋 فهرست مطالب
 
-- [معرفی چت‌بات پزشکی](#معرفی-چت‌بات-پزشکی)
-- [معماری سیستم چت](#معماری-سیستم-چت)
-- [مدل‌های داده](#مدل‌های-داده)
-- [پردازش پیام‌ها](#پردازش-پیام‌ها)
-- [مدیریت مکالمات](#مدیریت-مکالمات)
-- [خلاصه‌سازی و تحلیل](#خلاصه‌سازی-و-تحلیل)
-- [اشتراک‌گذاری با پزشک](#اشتراک‌گذاری-با-پزشک)
-- [رابط کاربری چت](#رابط-کاربری-چت)
+- [معرفی چت‌بات پزشکی](## 🎯 معرفی چت‌بات پزشکی)
+- [معماری سیستم چت](## 🏗️ معماری سیستم چت)
+- [مدل‌های داده](## 📊 مدل‌های داده)
+- [پردازش پیام‌ها](## 📝 پردازش پیام‌ها)
+- [مدیریت مکالمات](## 📝 مدیریت مکالمات)
+- [خلاصه‌سازی و تحلیل](## 📝 خلاصه‌سازی و تحلیل)
+- [اشتراک‌گذاری با پزشک](## 📝 اشتراک‌گذاری با پزشک)
+- [رابط کاربری چت](## 📝 رابط کاربری چت)
 
 ---
 
@@ -18,6 +18,7 @@
 چت‌بات پزشکی HELSSA یک دستیار هوشمند 24/7 است که با استفاده از GPT-4 و دانش پزشکی تخصصی، به سوالات بیماران پاسخ می‌دهد و راهنمایی‌های اولیه ارائه می‌کند.
 
 ### ویژگی‌های کلیدی
+
 - 💬 **پاسخ‌گویی 24/7** به سوالات پزشکی
 - 🧠 **هوش مصنوعی پیشرفته** با GPT-4
 - 🌐 **پشتیبانی چندزبانه** (فارسی، انگلیسی، عربی)
@@ -85,7 +86,8 @@ graph TB
 ```
 
 ### ساختار پروژه
-```
+
+```python
 chatbot/
 ├── models/
 │   ├── chat_session.py         # مدل جلسه چت
@@ -120,6 +122,7 @@ chatbot/
 ## 📊 مدل‌های داده
 
 ### Chat Session Model
+
 ```python
 # chatbot/models/chat_session.py
 from django.db import models
@@ -223,6 +226,7 @@ class ChatSession(models.Model):
 ```
 
 ### Chat Message Model
+
 ```python
 # chatbot/models/chat_message.py
 
@@ -344,6 +348,7 @@ class ChatMessage(models.Model):
 ```
 
 ### Chat Summary Model
+
 ```python
 # chatbot/models/chat_summary.py
 
@@ -432,6 +437,7 @@ class ChatSummary(models.Model):
 ## 💬 پردازش پیام‌ها
 
 ### Chat Service
+
 ```python
 # chatbot/services/chat_service.py
 from typing import Dict, Optional, List
@@ -582,6 +588,7 @@ class MedicalChatService:
 ```
 
 ### Query Processor
+
 ```python
 # chatbot/services/query_processor.py
 
@@ -653,6 +660,7 @@ class QueryProcessor:
 ```
 
 ### Medical Advisor
+
 ```python
 # chatbot/services/medical_advisor.py
 
@@ -781,6 +789,7 @@ class MedicalAdvisor:
 ## 📝 مدیریت مکالمات
 
 ### Session Manager
+
 ```python
 # chatbot/services/session_manager.py
 
@@ -903,6 +912,7 @@ class SessionManager:
 ```
 
 ### Conversation Flow Manager
+
 ```python
 # chatbot/services/conversation_flow.py
 
@@ -988,6 +998,7 @@ class ConversationFlowManager:
 ## 📊 خلاصه‌سازی و تحلیل
 
 ### Chat Summarizer
+
 ```python
 # chatbot/services/summarizer.py
 
@@ -1098,6 +1109,7 @@ class ChatSummarizer:
 ```
 
 ### Analytics Service
+
 ```python
 # chatbot/utils/analytics.py
 
@@ -1149,6 +1161,7 @@ class ChatAnalyticsService:
 ## 🔗 اشتراک‌گذاری با پزشک
 
 ### Share Service
+
 ```python
 # chatbot/services/share_service.py
 
@@ -1276,6 +1289,7 @@ class ChatShareService:
 ## 🖥️ رابط کاربری چت
 
 ### WebSocket Consumer
+
 ```python
 # chatbot/consumers/chat_consumer.py
 from channels.generic.websocket import AsyncWebsocketConsumer
@@ -1423,6 +1437,7 @@ class ChatConsumer(AsyncWebsocketConsumer):
 ```
 
 ### Chat API Views
+
 ```python
 # chatbot/api/views.py
 
@@ -1503,7 +1518,7 @@ class ChatViewSet(viewsets.ModelViewSet):
 
 ---
 
-<div align="center">
+[ELEMENT: div align="center"]
 
 [→ قبلی: دسترسی پزشک به بیمار](09-doctor-access.md) | [بعدی: پردازش صوت و STT ←](11-audio-processing.md)
 

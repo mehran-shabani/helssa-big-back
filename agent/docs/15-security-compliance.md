@@ -2,14 +2,14 @@
 
 ## 📋 فهرست مطالب
 
-- [معرفی امنیت HELSSA](#معرفی-امنیت-helssa)
-- [معماری امنیتی](#معماری-امنیتی)
-- [احراز هویت و مجوزدهی](#احراز-هویت-و-مجوزدهی)
-- [رمزنگاری داده‌ها](#رمزنگاری-داده‌ها)
-- [HIPAA Compliance](#hipaa-compliance)
-- [حفاظت از داده‌های پزشکی](#حفاظت-از-داده‌های-پزشکی)
-- [Audit و Logging](#audit-و-logging)
-- [مدیریت حوادث امنیتی](#مدیریت-حوادث-امنیتی)
+- [معرفی امنیت HELSSA](## 🎯 معرفی امنیت HELSSA)
+- [معماری امنیتی](## 🏗️ معماری امنیتی)
+- [احراز هویت و مجوزدهی](## 🔐 احراز هویت و مجوزدهی)
+- [رمزنگاری داده‌ها](## 🔐 رمزنگاری داده‌ها)
+- [HIPAA Compliance](## 🔐 HIPAA Compliance)
+- [حفاظت از داده‌های پزشکی](## 🔐 حفاظت از داده‌های پزشکی)
+- [Audit و Logging](## 🔐 Audit و Logging)
+- [مدیریت حوادث امنیتی](## 🔐 مدیریت حوادث امنیتی)
 
 ---
 
@@ -18,6 +18,7 @@
 امنیت در HELSSA با رویکرد Defense in Depth و Zero Trust طراحی شده و تمام جنبه‌های حفاظت از داده‌های حساس پزشکی را پوشش می‌دهد.
 
 ### اصول امنیتی
+
 - 🛡️ **Zero Trust Architecture**: هیچ کاربر یا سرویسی به طور پیش‌فرض قابل اعتماد نیست
 - 🔐 **End-to-End Encryption**: رمزنگاری کامل از کلاینت تا دیتابیس
 - 📋 **Principle of Least Privilege**: حداقل دسترسی لازم
@@ -80,6 +81,7 @@ graph TB
 ```
 
 ### Security Layers Implementation
+
 ```python
 # core/security/layers.py
 from typing import Dict, List, Optional
@@ -159,6 +161,7 @@ class SecurityLayerManager:
 ## 🔐 احراز هویت و مجوزدهی
 
 ### Multi-Factor Authentication
+
 ```python
 # unified_auth/services/mfa.py
 import pyotp
@@ -247,6 +250,7 @@ class MFAService:
 ```
 
 ### Role-Based Access Control (RBAC)
+
 ```python
 # unified_auth/services/rbac.py
 from enum import Enum
@@ -369,6 +373,7 @@ class RBACService:
 ```
 
 ### API Security Middleware
+
 ```python
 # core/middleware/security.py
 import jwt
@@ -435,6 +440,7 @@ class SecurityMiddleware(MiddlewareMixin):
 ## 🔐 رمزنگاری داده‌ها
 
 ### Field-Level Encryption
+
 ```python
 # core/security/encryption.py
 from cryptography.fernet import Fernet
@@ -511,6 +517,7 @@ class EncryptedModel(models.Model):
 ```
 
 ### Database Encryption
+
 ```python
 # core/security/database_encryption.py
 
@@ -570,6 +577,7 @@ class DatabaseEncryption:
 ## 🏥 HIPAA Compliance
 
 ### HIPAA Security Rule Implementation
+
 ```python
 # core/compliance/hipaa.py
 
@@ -647,6 +655,7 @@ class TechnicalSafeguards:
 ```
 
 ### Protected Health Information (PHI) Handler
+
 ```python
 # core/compliance/phi_handler.py
 
@@ -732,6 +741,7 @@ class PHIHandler:
 ## 🛡️ حفاظت از داده‌های پزشکی
 
 ### Data Masking Service
+
 ```python
 # core/security/data_masking.py
 
@@ -809,6 +819,7 @@ class DataMaskingService:
 ```
 
 ### Secure File Storage
+
 ```python
 # core/security/secure_storage.py
 
@@ -877,6 +888,7 @@ class SecureFileStorage:
 ## 📝 Audit و Logging
 
 ### Comprehensive Audit System
+
 ```python
 # core/audit/audit_system.py
 
@@ -976,6 +988,7 @@ class AuditSystem:
 ```
 
 ### Security Event Logger
+
 ```python
 # core/audit/security_logger.py
 
@@ -1041,6 +1054,7 @@ class SecurityEventLogger:
 ## 🚨 مدیریت حوادث امنیتی
 
 ### Incident Response System
+
 ```python
 # core/security/incident_response.py
 
@@ -1168,6 +1182,7 @@ class IncidentResponseSystem:
 ```
 
 ### Real-time Threat Detection
+
 ```python
 # core/security/threat_detection.py
 
@@ -1218,7 +1233,7 @@ class ThreatDetectionSystem:
 
 ---
 
-<div align="center">
+[ELEMENT: div align="center"]
 
 [→ قبلی: مرجع API](14-api-reference.md) | [بعدی: راهنمای Deployment ←](16-deployment-guide.md)
 

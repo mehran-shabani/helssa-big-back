@@ -2,14 +2,14 @@
 
 ## 📋 فهرست مطالب
 
-- [معرفی سیستم AI](#معرفی-سیستم-ai)
-- [معماری سیستم هوش مصنوعی](#معماری-سیستم-هوش-مصنوعی)
-- [چت‌بات پزشکی](#چت‌بات-پزشکی)
-- [پردازش صوت (STT)](#پردازش-صوت-stt)
-- [پردازش زبان طبیعی (NLP)](#پردازش-زبان-طبیعی-nlp)
-- [تحلیل تصاویر پزشکی](#تحلیل-تصاویر-پزشکی)
-- [مدیریت محدودیت‌ها](#مدیریت-محدودیت‌ها)
-- [بهینه‌سازی و کش](#بهینه‌سازی-و-کش)
+- [معرفی سیستم AI](## 🎯 معرفی سیستم AI)
+- [معماری سیستم هوش مصنوعی](## 🏗️ معماری سیستم هوش مصنوعی)
+- [چت‌بات پزشکی](## 💬 چت‌بات پزشکی)
+- [پردازش صوت (STT)](## 🎙️ پردازش صوت (STT))
+- [پردازش زبان طبیعی (NLP)](## 📝 پردازش زبان طبیعی (NLP))
+- [تحلیل تصاویر پزشکی](## 🖼️ تحلیل تصاویر پزشکی)
+- [مدیریت محدودیت‌ها](## 🔒 مدیریت محدودیت‌ها)
+- [بهینه‌سازی و کش](## 🔒 بهینه‌سازی و کش)
 
 ---
 
@@ -18,6 +18,7 @@
 سیستم هوش مصنوعی HELSSA یک پلتفرم جامع است که از جدیدترین مدل‌های AI برای ارائه خدمات پزشکی هوشمند استفاده می‌کند.
 
 ### قابلیت‌های کلیدی
+
 - 💬 **چت‌بات پزشکی 24/7** با GPT-4
 - 🎙️ **تبدیل گفتار به متن** با Whisper
 - 📝 **تولید گزارش SOAP** هوشمند
@@ -103,7 +104,8 @@ graph TB
 ```
 
 ### ساختار پروژه AI
-```
+
+```python
 unified_ai/
 ├── __init__.py
 ├── apps.py                      # Django app config
@@ -143,6 +145,7 @@ unified_ai/
 ## 💬 چت‌بات پزشکی
 
 ### Medical Chatbot Service
+
 ```python
 # unified_ai/services/chatbot_service.py
 from typing import Dict, List, Optional, AsyncGenerator
@@ -314,6 +317,7 @@ class MedicalChatbotService:
 ```
 
 ### Conversation Management
+
 ```python
 # unified_ai/services/conversation_manager.py
 
@@ -376,6 +380,7 @@ class ConversationMemoryManager:
 ## 🎙️ پردازش صوت (STT)
 
 ### Whisper STT Service
+
 ```python
 # unified_ai/services/stt_service.py
 import io
@@ -543,6 +548,7 @@ class WhisperSTTService:
 ```
 
 ### Audio Processing Pipeline
+
 ```python
 # unified_ai/tasks.py
 from celery import shared_task, chain, group
@@ -625,6 +631,7 @@ def transcribe_audio_chunk(chunk_id: str) -> Dict:
 ## 📝 پردازش زبان طبیعی (NLP)
 
 ### Medical NLP Service
+
 ```python
 # unified_ai/services/nlp_service.py
 import re
@@ -762,6 +769,7 @@ class MedicalNLPService:
 ```
 
 ### SOAP Generator
+
 ```python
 # unified_ai/services/soap_generator.py
 
@@ -854,6 +862,7 @@ class SOAPGenerator:
 ## 🖼️ تحلیل تصاویر پزشکی
 
 ### Medical Vision Service
+
 ```python
 # unified_ai/services/vision_service.py
 from PIL import Image
@@ -995,6 +1004,7 @@ class MedicalVisionService:
 ## 📊 مدیریت محدودیت‌ها
 
 ### Usage Management
+
 ```python
 # unified_ai/services/usage_manager.py
 
@@ -1081,6 +1091,7 @@ class AIUsageManager:
 ## 🚀 بهینه‌سازی و کش
 
 ### AI Response Cache
+
 ```python
 # unified_ai/services/cache_service.py
 
@@ -1174,7 +1185,7 @@ class AIResponseCache:
 
 ---
 
-<div align="center">
+[ELEMENT: div align="center"]
 
 [→ قبلی: احراز هویت یکپارچه](05-authentication.md) | [بعدی: سیستم مالی و اشتراک ←](07-billing-system.md)
 

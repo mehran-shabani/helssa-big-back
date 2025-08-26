@@ -1,6 +1,7 @@
 # Helssa Apps List
 
 ## Backend Apps
+
 - `auth_otp` — OTP authentication with Kavenegar, token management
 - `rbac` — Roles and permissions, least-privilege model
 - `patient` — Patient profile, medical records, consent forms
@@ -31,4 +32,3 @@
 - `api_gateway` — Unified API, versioning, rate-limiting
 - `compliance` — SOPs/policies, documentation and compliance
 - `devops` — Environment/secrets configuration, CI/CD
-

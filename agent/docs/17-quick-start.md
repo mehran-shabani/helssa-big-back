@@ -2,20 +2,21 @@
 
 ## 📋 فهرست مطالب
 
-- [نصب سریع با Docker](#نصب-سریع-با-docker)
-- [نصب محلی برای توسعه](#نصب-محلی-برای-توسعه)
-- [اولین گام‌ها](#اولین-گام‌ها)
-- [تست عملکرد](#تست-عملکرد)
-- [استفاده از API](#استفاده-از-api)
-- [توسعه Frontend](#توسعه-frontend)
-- [نکات مهم](#نکات-مهم)
-- [منابع مفید](#منابع-مفید)
+- [نصب سریع با Docker](## 🐳 نصب سریع با Docker)
+- [نصب محلی برای توسعه](## 💻 نصب محلی برای توسعه)
+- [اولین گام‌ها](## 🎯 اولین گام‌ها)
+- [تست عملکرد](## 🧪 تست عملکرد)
+- [استفاده از API](## 🔌 استفاده از API)
+- [توسعه Frontend](## ⚛️ توسعه Frontend)
+- [نکات مهم](## ⚡ نکات مهم)
+- [منابع مفید](## 📚 منابع مفید)
 
 ---
 
 ## 🐳 نصب سریع با Docker
 
 ### پیش‌نیازها
+
 - Docker نسخه 20.10+
 - Docker Compose نسخه 1.29+
 - Git
@@ -25,6 +26,7 @@
 ### مراحل نصب (5 دقیقه)
 
 #### 1️⃣ کلون کردن پروژه
+
 ```bash
 # کلون کردن ریپازیتوری
 git clone https://github.com/helssa/platform.git helssa
@@ -37,6 +39,7 @@ cd helssa-platform-main
 ```
 
 #### 2️⃣ تنظیم Environment
+
 ```bash
 # کپی فایل نمونه
 cp .env.example .env
@@ -53,6 +56,7 @@ MINIO_SECRET_KEY=minio-secret
 ```
 
 #### 3️⃣ راه‌اندازی با Docker Compose
+
 ```bash
 # Build و راه‌اندازی تمام سرویس‌ها
 docker-compose up -d
@@ -65,6 +69,7 @@ docker-compose logs -f
 ```
 
 #### 4️⃣ اجرای Migration و Setup اولیه
+
 ```bash
 # اجرای migrations
 docker-compose exec web python manage.py migrate
@@ -80,6 +85,7 @@ docker-compose exec web python manage.py loaddata initial_data
 ```
 
 #### 5️⃣ دسترسی به سیستم
+
 ```bash
 # URLs:
 - Web Interface: http://localhost:8000
@@ -91,16 +97,16 @@ docker-compose exec web python manage.py loaddata initial_data
 
 ## 💻 نصب محلی برای توسعه
 
-### پیش‌نیازها
+### Backend Setup
+
 - Python 3.11+
 - Node.js 18+
 - MySQL 8.0+
 - Redis 7+
 - MinIO (یا S3 compatible)
 
-### Backend Setup
-
 #### 1️⃣ ایجاد Virtual Environment
+
 ```bash
 # ایجاد venv
 python3 -m venv venv
@@ -113,6 +119,7 @@ venv\Scripts\activate
 ```
 
 #### 2️⃣ نصب Dependencies
+
 ```bash
 # به‌روزرسانی pip
 pip install --upgrade pip
@@ -125,6 +132,7 @@ pip install -r requirements-dev.txt
 ```
 
 #### 3️⃣ تنظیم Database
+
 ```bash
 # ایجاد دیتابیس MySQL
 mysql -u root -p
@@ -137,6 +145,7 @@ exit;
 ```
 
 #### 4️⃣ تنظیم Redis
+
 ```bash
 # نصب Redis (Ubuntu/Debian)
 sudo apt update
@@ -151,6 +160,7 @@ redis-cli ping
 ```
 
 #### 5️⃣ تنظیم MinIO
+
 ```bash
 # دانلود MinIO
 wget https://dl.min.io/server/minio/release/linux-amd64/minio
@@ -163,6 +173,7 @@ export MINIO_ROOT_PASSWORD=minioadmin
 ```
 
 #### 6️⃣ Migration و راه‌اندازی
+
 ```bash
 # تنظیم environment variables
 export DJANGO_SETTINGS_MODULE=helssa.settings.development
@@ -183,6 +194,7 @@ python manage.py runserver
 ### Frontend Setup
 
 #### 1️⃣ نصب Dependencies
+
 ```bash
 # رفتن به دایرکتوری frontend
 cd frontend
@@ -193,7 +205,8 @@ npm install
 yarn install
 ```
 
-#### 2️⃣ تنظیم Environment
+#### 2️⃣  Environment
+
 ```javascript
 // frontend/.env.local
 REACT_APP_API_URL=http://localhost:8000
@@ -202,6 +215,7 @@ REACT_APP_VERSION=1.0.0
 ```
 
 #### 3️⃣ اجرای Development Server
+
 ```bash
 # شروع development server
 npm start
@@ -217,6 +231,7 @@ yarn build
 ## 🎯 اولین گام‌ها
 
 ### 1. ورود به پنل مدیریت
+
 ```bash
 # URL: http://localhost:8000/admin
 # Username: superuser که ایجاد کردید
@@ -224,6 +239,7 @@ yarn build
 ```
 
 ### 2. ایجاد کاربر تست
+
 ```python
 # Django shell
 docker-compose exec web python manage.py shell
@@ -251,6 +267,7 @@ print("Users created successfully!")
 ```
 
 ### 3. تست SMS با کاوه‌نگار
+
 ```python
 # تست ارسال SMS
 from unified_auth.services import SMSService
@@ -261,6 +278,7 @@ print(f"SMS sent: {result}")
 ```
 
 ### 4. تست AI Service
+
 ```python
 # تست سرویس AI
 from unified_ai.services import AIService
@@ -277,6 +295,7 @@ print(response)
 ## 🧪 تست عملکرد
 
 ### Health Check
+
 ```bash
 # بررسی سلامت سیستم
 curl http://localhost:8000/health/
@@ -293,6 +312,7 @@ curl http://localhost:8000/health/
 ```
 
 ### تست‌های اتوماتیک
+
 ```bash
 # اجرای تمام تست‌ها
 docker-compose exec web python manage.py test
@@ -306,6 +326,7 @@ docker-compose exec web coverage report
 ```
 
 ### Performance Testing
+
 ```bash
 # نصب locust
 pip install locust
@@ -340,6 +361,7 @@ locust -f locustfile.py --host=http://localhost:8000
 ## 🔌 استفاده از API
 
 ### احراز هویت
+
 ```bash
 # 1. درخواست OTP
 curl -X POST http://localhost:8000/api/v1/auth/login/otp/ \
@@ -369,6 +391,7 @@ curl -X POST http://localhost:8000/api/v1/auth/verify/otp/ \
 ```
 
 ### استفاده از Token
+
 ```bash
 # ذخیره token
 export TOKEN="your-access-token"
@@ -379,6 +402,7 @@ curl -X GET http://localhost:8000/api/v1/patients/profile/ \
 ```
 
 ### Python Client
+
 ```python
 import requests
 
@@ -421,7 +445,8 @@ print(profile)
 ## ⚛️ توسعه Frontend
 
 ### ساختار پروژه React
-```
+
+```PYTHON
 frontend/
 ├── public/
 │   ├── index.html
@@ -440,6 +465,7 @@ frontend/
 ```
 
 ### نمونه Component
+
 ```jsx
 // src/components/LoginForm.jsx
 import React, { useState } from 'react';
@@ -502,6 +528,7 @@ export default LoginForm;
 ```
 
 ### API Service
+
 ```javascript
 // src/services/api.js
 import axios from 'axios';
@@ -559,6 +586,7 @@ export default api;
 ## ⚡ نکات مهم
 
 ### 1. بهینه‌سازی Performance
+
 ```python
 # settings/production.py
 
@@ -583,6 +611,7 @@ def doctor_list(request):
 ```
 
 ### 2. امنیت
+
 ```python
 # همیشه در production
 DEBUG = False
@@ -600,6 +629,7 @@ X_FRAME_OPTIONS = 'DENY'
 ```
 
 ### 3. Logging مناسب
+
 ```python
 # settings/base.py
 LOGGING = {
@@ -640,6 +670,7 @@ LOGGING = {
 ```
 
 ### 4. مدیریت خطاها
+
 ```python
 # utils/error_handler.py
 import logging
@@ -677,12 +708,14 @@ def handle_api_error(func):
 ## 📚 منابع مفید
 
 ### مستندات رسمی
+
 - [Django Documentation](https://docs.djangoproject.com/)
 - [Django REST Framework](https://www.django-rest-framework.org/)
 - [React Documentation](https://react.dev/)
 - [Docker Documentation](https://docs.docker.com/)
 
 ### ابزارهای توسعه
+
 - **Postman**: تست API
 - **DBeaver**: مدیریت دیتابیس
 - **Redis Desktop Manager**: مشاهده Redis
@@ -693,6 +726,7 @@ def handle_api_error(func):
   - Prettier
 
 ### دستورات مفید
+
 ```bash
 # Docker
 docker-compose logs -f web          # لاگ‌های web service
@@ -714,6 +748,7 @@ git push origin main               # پوش به ریموت
 ```
 
 ### Troubleshooting سریع
+
 ```bash
 # مشکل: Container ها بالا نمی‌آیند
 docker-compose down
@@ -736,7 +771,7 @@ docker-compose exec web python manage.py collectstatic --noinput
 
 ---
 
-<div align="center">
+[ELEMENT: div align="center"]
 
 🎉 **تبریک! شما با موفقیت HELSSA را نصب کردید**
 

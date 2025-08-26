@@ -2,15 +2,15 @@
 
 ## 📋 فهرست مطالب
 
-- [معرفی API](#معرفی-api)
-- [احراز هویت](#احراز-هویت)
-- [نقاط پایانی احراز هویت](#نقاط-پایانی-احراز-هویت)
-- [نقاط پایانی بیمار](#نقاط-پایانی-بیمار)
-- [نقاط پایانی پزشک](#نقاط-پایانی-پزشک)
-- [نقاط پایانی AI و چت‌بات](#نقاط-پایانی-ai-و-چت‌بات)
-- [نقاط پایانی مالی](#نقاط-پایانی-مالی)
-- [WebSocket APIs](#websocket-apis)
-- [کدهای خطا](#کدهای-خطا)
+- [معرفی API](## 🎯 معرفی API)
+- [احراز هویت](## 🔐 احراز هویت)
+- [نقاط پایانی احراز هویت](## 🔐 نقاط پایانی احراز هویت)
+- [نقاط پایانی بیمار](## 🔐 نقاط پایانی بیمار)
+- [نقاط پایانی پزشک](## 🔐 نقاط پایانی پزشک)
+- [نقاط پایانی AI و چت‌بات](## 🔐 نقاط پایانی AI و چت‌بات)
+- [نقاط پایانی مالی](## 🔐 نقاط پایانی مالی)
+- [WebSocket APIs](## 🔐 WebSocket APIs)
+- [کدهای خطا](## 🔐 کدهای خطا)
 
 ---
 
@@ -19,16 +19,18 @@
 HELSSA API یک RESTful API قدرتمند است که با Django REST Framework ساخته شده و تمام عملکردهای پلتفرم را در اختیار توسعه‌دهندگان قرار می‌دهد.
 
 ### مشخصات کلی
+
 - **Base URL**: `https://api.helssa.ir/v1/`
 - **Format**: JSON
 - **Authentication**: JWT Bearer Token
-- **Rate Limiting**: 
+- **Rate Limiting**:
   - Anonymous: 100 requests/hour
   - Authenticated: 1000 requests/hour
   - Premium: 10000 requests/hour
 - **Versioning**: URL path versioning (v1, v2)
 
 ### Headers مورد نیاز
+
 ```http
 Content-Type: application/json
 Accept: application/json
@@ -40,6 +42,7 @@ Accept-Language: fa
 ## 🔐 احراز هویت
 
 ### JWT Token Flow
+
 ```mermaid
 sequenceDiagram
     participant Client
@@ -69,6 +72,7 @@ sequenceDiagram
 ```
 
 ### Token Structure
+
 ```json
 {
   "access": "eyJ0eXAiOiJKV1QiLCJhbGciOiJIUzI1NiJ9...",
@@ -88,11 +92,20 @@ sequenceDiagram
 ## 📱 نقاط پایانی احراز هویت
 
 ### 1. درخواست OTP
+
 ```http
 POST /api/v1/auth/login/otp/
 ```
 
 **Request Body:**
+
+```json
+{
+  "phone_number": "+989121234567",
+  "channel": "sms"  // sms, whatsapp, call
+}
+```
+
 ```json
 {
   "phone_number": "+989121234567",
@@ -101,6 +114,7 @@ POST /api/v1/auth/login/otp/
 ```
 
 **Response (200 OK):**
+
 ```json
 {
   "message": "کد تایید ارسال شد",
@@ -111,6 +125,7 @@ POST /api/v1/auth/login/otp/
 ```
 
 **Response (429 Too Many Requests):**
+
 ```json
 {
   "error": "too_many_requests",
@@ -120,11 +135,13 @@ POST /api/v1/auth/login/otp/
 ```
 
 ### 2. تایید OTP
+
 ```http
 POST /api/v1/auth/verify/otp/
 ```
 
 **Request Body:**
+
 ```json
 {
   "phone_number": "+989121234567",
@@ -133,6 +150,7 @@ POST /api/v1/auth/verify/otp/
 ```
 
 **Response (200 OK):**
+
 ```json
 {
   "access": "eyJ0eXAiOiJKV1QiLCJhbGciOiJIUzI1NiJ9...",
@@ -152,11 +170,13 @@ POST /api/v1/auth/verify/otp/
 ```
 
 ### 3. Refresh Token
+
 ```http
 POST /api/v1/auth/refresh/
 ```
 
 **Request Body:**
+
 ```json
 {
   "refresh": "eyJ0eXAiOiJKV1QiLCJhbGciOiJIUzI1NiJ9..."
@@ -164,6 +184,7 @@ POST /api/v1/auth/refresh/
 ```
 
 **Response (200 OK):**
+
 ```json
 {
   "access": "new_access_token",
@@ -172,32 +193,43 @@ POST /api/v1/auth/refresh/
 ```
 
 ### 4. Logout
+
 ```http
 POST /api/v1/auth/logout/
 ```
 
 **Request Headers:**
+
 ```http
 Authorization: Bearer {access_token}
 ```
 
 **Request Body:**
+
 ```json
 {
   "refresh": "refresh_token_to_blacklist"
 }
 ```
 
-**Response (204 No Content)**
+**Response (204 No Content):**
+
+```json
+{
+  "message": "Logged out successfully"
+}
+```
 
 ## 👤 نقاط پایانی بیمار
 
 ### 1. پروفایل بیمار
+
 ```http
 GET /api/v1/patients/profile/
 ```
 
 **Response (200 OK):**
+
 ```json
 {
   "id": "550e8400-e29b-41d4-a716-446655440000",
@@ -236,11 +268,13 @@ GET /api/v1/patients/profile/
 ```
 
 ### 2. لیست ویزیت‌ها
+
 ```http
 GET /api/v1/patients/encounters/
 ```
 
 **Query Parameters:**
+
 - `status`: pending, completed, cancelled
 - `from_date`: 2024-01-01
 - `to_date`: 2024-12-31
@@ -249,6 +283,7 @@ GET /api/v1/patients/encounters/
 - `page_size`: 20
 
 **Response (200 OK):**
+
 ```json
 {
   "count": 15,
@@ -285,11 +320,13 @@ GET /api/v1/patients/encounters/
 ```
 
 ### 3. جستجوی پزشک
+
 ```http
 GET /api/v1/patients/doctors/search/
 ```
 
 **Query Parameters:**
+
 - `q`: search query
 - `specialty`: specialty code
 - `city`: city name
@@ -301,6 +338,7 @@ GET /api/v1/patients/doctors/search/
 - `page`: 1
 
 **Response (200 OK):**
+
 ```json
 {
   "count": 50,
@@ -339,11 +377,13 @@ GET /api/v1/patients/doctors/search/
 ```
 
 ### 4. رزرو ویزیت
+
 ```http
 POST /api/v1/patients/encounters/book/
 ```
 
 **Request Body:**
+
 ```json
 {
   "doctor_id": "doctor_uuid",
@@ -360,6 +400,7 @@ POST /api/v1/patients/encounters/book/
 ```
 
 **Response (201 Created):**
+
 ```json
 {
   "id": "encounter_id",
@@ -389,11 +430,13 @@ POST /api/v1/patients/encounters/book/
 ```
 
 ### 5. آپلود فایل پزشکی
+
 ```http
 POST /api/v1/patients/medical-files/upload/
 ```
 
 **Request (multipart/form-data):**
+
 - `file`: binary file data
 - `file_type`: lab_result, imaging, prescription, other
 - `title`: عنوان فایل
@@ -401,6 +444,7 @@ POST /api/v1/patients/medical-files/upload/
 - `encounter_id`: مرتبط با ویزیت (اختیاری)
 
 **Response (201 Created):**
+
 ```json
 {
   "id": "file_id",
@@ -418,11 +462,13 @@ POST /api/v1/patients/medical-files/upload/
 ## 👨‍⚕️ نقاط پایانی پزشک
 
 ### 1. داشبورد پزشک
+
 ```http
 GET /api/v1/doctors/dashboard/
 ```
 
 **Response (200 OK):**
+
 ```json
 {
   "today_stats": {
@@ -466,11 +512,13 @@ GET /api/v1/doctors/dashboard/
 ```
 
 ### 2. مدیریت دسترسی موقت
+
 ```http
 POST /api/v1/doctors/patient-access/grant/
 ```
 
 **Request Body:**
+
 ```json
 {
   "patient_phone": "+989121234567",
@@ -481,6 +529,7 @@ POST /api/v1/doctors/patient-access/grant/
 ```
 
 **Response (201 Created):**
+
 ```json
 {
   "access_code": "ABC123",
@@ -496,11 +545,13 @@ POST /api/v1/doctors/patient-access/grant/
 ```
 
 ### 3. ثبت یادداشت برای بیمار
+
 ```http
 POST /api/v1/doctors/patients/{patient_id}/notes/
 ```
 
 **Request Body:**
+
 ```json
 {
   "encounter_id": "encounter_id",
@@ -512,6 +563,7 @@ POST /api/v1/doctors/patients/{patient_id}/notes/
 ```
 
 **Response (201 Created):**
+
 ```json
 {
   "id": "note_id",
@@ -532,11 +584,13 @@ POST /api/v1/doctors/patients/{patient_id}/notes/
 ```
 
 ### 4. تنظیمات پزشک
+
 ```http
 PUT /api/v1/doctors/settings/
 ```
 
 **Request Body:**
+
 ```json
 {
   "consultation_settings": {
@@ -576,11 +630,13 @@ PUT /api/v1/doctors/settings/
 ## 🤖 نقاط پایانی AI و چت‌بات
 
 ### 1. شروع چت جدید
+
 ```http
 POST /api/v1/ai/chat/sessions/
 ```
 
 **Request Body:**
+
 ```json
 {
   "title": "مشاوره دارویی",
@@ -589,6 +645,7 @@ POST /api/v1/ai/chat/sessions/
 ```
 
 **Response (201 Created):**
+
 ```json
 {
   "id": "session_id",
@@ -616,11 +673,13 @@ POST /api/v1/ai/chat/sessions/
 ```
 
 ### 2. ارسال پیام در چت
+
 ```http
 POST /api/v1/ai/chat/sessions/{session_id}/messages/
 ```
 
 **Request Body:**
+
 ```json
 {
   "content": "بله، از دیروز دچار تهوع شدیدی شده‌ام",
@@ -634,6 +693,7 @@ POST /api/v1/ai/chat/sessions/{session_id}/messages/
 ```
 
 **Response (200 OK):**
+
 ```json
 {
   "id": "msg_3",
@@ -655,16 +715,19 @@ POST /api/v1/ai/chat/sessions/{session_id}/messages/
 ```
 
 ### 3. تحلیل تصویر پزشکی
+
 ```http
 POST /api/v1/ai/vision/analyze/
 ```
 
 **Request (multipart/form-data):**
+
 - `image`: binary image data
 - `analysis_type`: skin_condition, wound, rash, other
 - `description`: توضیحات تکمیلی
 
 **Response (200 OK):**
+
 ```json
 {
   "analysis_id": "analysis_id",
@@ -691,11 +754,13 @@ POST /api/v1/ai/vision/analyze/
 ```
 
 ### 4. تولید گزارش SOAP
+
 ```http
 POST /api/v1/ai/soap/generate/
 ```
 
 **Request Body:**
+
 ```json
 {
   "encounter_id": "encounter_id",
@@ -705,6 +770,7 @@ POST /api/v1/ai/soap/generate/
 ```
 
 **Response (202 Accepted):**
+
 ```json
 {
   "task_id": "task_id",
@@ -715,6 +781,7 @@ POST /api/v1/ai/soap/generate/
 ```
 
 **Progress Check (GET /api/v1/ai/soap/tasks/{task_id}):**
+
 ```json
 {
   "task_id": "task_id",
@@ -768,11 +835,13 @@ POST /api/v1/ai/soap/generate/
 ## 💳 نقاط پایانی مالی
 
 ### 1. کیف پول کاربر
+
 ```http
 GET /api/v1/billing/wallet/
 ```
 
 **Response (200 OK):**
+
 ```json
 {
   "wallet_id": "wallet_id",
@@ -794,11 +863,13 @@ GET /api/v1/billing/wallet/
 ```
 
 ### 2. شارژ کیف پول
+
 ```http
 POST /api/v1/billing/wallet/charge/
 ```
 
 **Request Body:**
+
 ```json
 {
   "amount": 1000000,
@@ -809,6 +880,7 @@ POST /api/v1/billing/wallet/charge/
 ```
 
 **Response (200 OK):**
+
 ```json
 {
   "transaction_id": "tx_id",
@@ -819,11 +891,13 @@ POST /api/v1/billing/wallet/charge/
 ```
 
 ### 3. لیست اشتراک‌ها
+
 ```http
 GET /api/v1/billing/subscriptions/plans/
 ```
 
 **Response (200 OK):**
+
 ```json
 {
   "plans": [
@@ -869,11 +943,13 @@ GET /api/v1/billing/subscriptions/plans/
 ```
 
 ### 4. خرید اشتراک
+
 ```http
 POST /api/v1/billing/subscriptions/purchase/
 ```
 
 **Request Body:**
+
 ```json
 {
   "plan_id": "premium",
@@ -884,6 +960,7 @@ POST /api/v1/billing/subscriptions/purchase/
 ```
 
 **Response (200 OK):**
+
 ```json
 {
   "subscription": {
@@ -910,6 +987,7 @@ POST /api/v1/billing/subscriptions/purchase/
 ## 🔌 WebSocket APIs
 
 ### 1. چت Real-time
+
 ```javascript
 // Connection
 const ws = new WebSocket('wss://api.helssa.ir/ws/chat/');
@@ -960,6 +1038,7 @@ ws.onmessage = (event) => {
 ```
 
 ### 2. ویزیت آنلاین (WebRTC Signaling)
+
 ```javascript
 // Connection for video call
 const ws = new WebSocket('wss://api.helssa.ir/ws/video/');
@@ -1012,6 +1091,7 @@ ws.onmessage = (event) => {
 ## ❌ کدهای خطا
 
 ### کدهای استاندارد HTTP
+
 - `200 OK`: درخواست موفق
 - `201 Created`: منبع جدید ایجاد شد
 - `204 No Content`: موفق، بدون محتوا
@@ -1025,6 +1105,7 @@ ws.onmessage = (event) => {
 - `500 Internal Server Error`: خطای سرور
 
 ### فرمت خطای استاندارد
+
 ```json
 {
   "error": {
@@ -1047,6 +1128,7 @@ ws.onmessage = (event) => {
 ```
 
 ### کدهای خطای سفارشی
+
 ```json
 {
   "OTP_EXPIRED": "کد تایید منقضی شده است",
@@ -1063,6 +1145,7 @@ ws.onmessage = (event) => {
 ```
 
 ### Rate Limiting Headers
+
 ```http
 X-RateLimit-Limit: 1000
 X-RateLimit-Remaining: 950
@@ -1072,7 +1155,7 @@ Retry-After: 3600
 
 ---
 
-<div align="center">
+[ELEMENT: div align="center"]
 
 [→ قبلی: زیرساخت و Docker](13-infrastructure.md) | [بعدی: امنیت و Compliance ←](15-security-compliance.md)
 

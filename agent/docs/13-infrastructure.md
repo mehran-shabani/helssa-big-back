@@ -2,14 +2,14 @@
 
 ## 📋 فهرست مطالب
 
-- [معرفی زیرساخت](#معرفی-زیرساخت)
-- [معماری Docker](#معماری-docker)
-- [Docker Compose](#docker-compose)
-- [پایگاه داده MySQL](#پایگاه-داده-mysql)
-- [Redis Cache & Queue](#redis-cache--queue)
-- [MinIO Object Storage](#minio-object-storage)
-- [Nginx Reverse Proxy](#nginx-reverse-proxy)
-- [مانیتورینگ و لاگینگ](#مانیتورینگ-و-لاگینگ)
+- [معرفی زیرساخت](## 🎯 معرفی زیرساخت)
+- [معماری Docker](## 🐳 معماری Docker)
+- [Docker Compose](## 📦 Docker Compose)
+- [پایگاه داده MySQL](## 📦 پایگاه داده MySQL)
+- [Redis Cache & Queue](## 📦 Redis Cache & Queue)
+- [MinIO Object Storage](## 📦 MinIO Object Storage)
+- [Nginx Reverse Proxy](## 🔐 Nginx Reverse Proxy)
+- [مانیتورینگ و لاگینگ](## 📈 مانیتورینگ و لاگینگ)
 
 ---
 
@@ -18,6 +18,7 @@
 زیرساخت HELSSA بر پایه معماری میکروسرویس و کانتینرها طراحی شده و از تکنولوژی‌های مدرن برای اطمینان از کارایی، مقیاس‌پذیری و قابلیت اطمینان بالا استفاده می‌کند.
 
 ### ویژگی‌های کلیدی زیرساخت
+
 - 🐳 **Containerized Architecture** با Docker
 - 🔄 **Service Orchestration** با Docker Compose
 - 📊 **High Performance Database** با MySQL 8
@@ -95,7 +96,8 @@ graph TB
 ```
 
 ### ساختار پروژه زیرساخت
-```
+
+```python
 infra/
 ├── docker/
 │   ├── web/
@@ -134,6 +136,7 @@ infra/
 ## 🐳 Docker Compose
 
 ### Production Docker Compose
+
 ```yaml
 # docker-compose.yml
 version: '3.9'
@@ -425,6 +428,7 @@ volumes:
 ```
 
 ### Web Dockerfile
+
 ```dockerfile
 # infra/docker/web/Dockerfile
 FROM python:3.11-slim
@@ -486,6 +490,7 @@ CMD ["gunicorn", "--bind", "0.0.0.0:8000", "--workers", "4", "--threads", "2", "
 ```
 
 ### Entrypoint Script
+
 ```bash
 #!/bin/bash
 # infra/docker/web/entrypoint.sh
@@ -567,6 +572,7 @@ exec "$@"
 ## 💾 پایگاه داده MySQL
 
 ### MySQL Configuration
+
 ```ini
 # infra/docker/services/mysql/my.cnf
 [mysqld]
@@ -610,6 +616,7 @@ default-character-set=utf8mb4
 ```
 
 ### Database Initialization
+
 ```sql
 -- infra/docker/services/mysql/init.sql
 
@@ -636,6 +643,7 @@ WHERE NAME LIKE 'wait/io/file/%';
 ```
 
 ### Database Backup Script
+
 ```bash
 #!/bin/bash
 # infra/scripts/backup.sh
@@ -692,6 +700,7 @@ fi
 ## 🚀 Redis Cache & Queue
 
 ### Redis Configuration for Django
+
 ```python
 # helssa/settings/production.py
 
@@ -771,6 +780,7 @@ CELERY_BEAT_SCHEDULE = {
 ```
 
 ### Redis Health Check
+
 ```python
 # core/utils/redis_health.py
 
@@ -823,6 +833,7 @@ class RedisHealthCheck:
 ## 📦 MinIO Object Storage
 
 ### MinIO Service Configuration
+
 ```python
 # core/services/storage.py
 
@@ -944,6 +955,7 @@ class MinIOStorageService:
 ```
 
 ### MinIO Backup Strategy
+
 ```python
 # core/tasks/backup_tasks.py
 
@@ -985,6 +997,7 @@ def backup_to_minio():
 ## 🔐 Nginx Reverse Proxy
 
 ### Nginx Configuration
+
 ```nginx
 # infra/docker/nginx/nginx.conf
 
@@ -1063,6 +1076,7 @@ http {
 ```
 
 ### Site Configuration
+
 ```nginx
 # infra/docker/nginx/conf.d/helssa.conf
 
@@ -1176,6 +1190,7 @@ server {
 ## 📊 مانیتورینگ و لاگینگ
 
 ### Prometheus Configuration
+
 ```yaml
 # infra/monitoring/prometheus/prometheus.yml
 
@@ -1217,6 +1232,7 @@ scrape_configs:
 ```
 
 ### Health Check Endpoint
+
 ```python
 # core/views/health.py
 
@@ -1293,6 +1309,7 @@ class HealthCheckView(View):
 ```
 
 ### Deployment Script
+
 ```bash
 #!/bin/bash
 # infra/scripts/deploy.sh
@@ -1340,7 +1357,7 @@ docker-compose ps
 
 ---
 
-<div align="center">
+[ELEMENT: div align="center"]
 
 [→ قبلی: تولید گزارش‌ها](12-output-generation.md) | [بعدی: API Reference ←](14-api-reference.md)
 

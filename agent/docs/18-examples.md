@@ -2,23 +2,24 @@
 
 ## 📋 فهرست مطالب
 
-- [اتصال به MinIO](#اتصال-به-minio)
-- [پیاده‌سازی درگاه پرداخت BitPay](#پیاده‌سازی-درگاه-پرداخت-bitpay)
-- [ارتباط با OpenAI](#ارتباط-با-openai)
-- [OpenAI Agent](#openai-agent)
-- [ارسال SMS با کاوه‌نگار](#ارسال-sms-با-کاوه‌نگار)
-- [ارسال ایمیل](#ارسال-ایمیل)
-- [Integration با سرویس‌های خارجی](#integration-با-سرویس‌های-خارجی)
-- [پردازش و ارسال صدا](#پردازش-و-ارسال-صدا)
-- [ضبط صدا](#ضبط-صدا)
-- [مسائل فنی پردازش صدا](#مسائل-فنی-پردازش-صدا)
-- [ایجاد گزارش SOAP](#ایجاد-گزارش-soap)
+- [اتصال به MinIO](## 📦 اتصال به MinIO)
+- [پیاده‌سازی درگاه پرداخت BitPay](## 💳 پیاده‌سازی درگاه پرداخت BitPay)
+- [ارتباط با OpenAI](## 🤖 ارتباط با OpenAI)
+- [OpenAI Agent](## 🤖 OpenAI Agent)
+- [ارسال SMS با کاوه‌نگار](## 📱 ارسال SMS با کاوه‌نگار)
+- [ارسال ایمیل](## 📧 ارسال ایمیل)
+- [Integration با سرویس‌های خارجی](## 🔌 Integration با سرویس‌های خارجی)
+- [پردازش و ارسال صدا](## 🎤 پردازش و ارسال صدا)
+- [ضبط صدا](## 🎤 ضبط صدا)
+- [مسائل فنی پردازش صدا](## 🔍 مسائل فنی پردازش صدا)
+- [ایجاد گزارش SOAP](## 📄 ایجاد گزارش SOAP)
 
 ---
 
 ## 📦 اتصال به MinIO
 
 ### پیکربندی اولیه MinIO
+
 ```python
 # core/storage/minio_client.py
 from minio import Minio
@@ -112,6 +113,7 @@ audio_url = minio_client.upload_file(
 ## 💳 پیاده‌سازی درگاه پرداخت BitPay
 
 ### BitPay Payment Gateway
+
 ```python
 # telemedicine/payment/bitpay.py
 import requests
@@ -319,6 +321,7 @@ class VerifyPaymentView(View):
 ## 🤖 ارتباط با OpenAI
 
 ### OpenAI Service Implementation
+
 ```python
 # unified_ai/services/openai_service.py
 import openai
@@ -437,6 +440,7 @@ class OpenAIService:
 ## 🤖 OpenAI Agent
 
 ### Autonomous Medical Assistant Agent
+
 ```python
 # unified_ai/agents/medical_agent.py
 from typing import List, Dict, Optional
@@ -625,6 +629,7 @@ print(result)
 ## 📱 ارسال SMS با کاوه‌نگار
 
 ### Kavenegar SMS Service
+
 ```python
 # core/sms/kavenegar_service.py
 from kavenegar import *
@@ -752,6 +757,7 @@ helssa.ir"""
 ## 📧 ارسال ایمیل
 
 ### Email Service from telemedicine/signals.py
+
 ```python
 # telemedicine/signals.py
 from django.core.mail import send_mail, EmailMultiAlternatives
@@ -888,6 +894,7 @@ def prescription_created(sender, instance, created, **kwargs):
 ## 🔌 Integration با سرویس‌های خارجی
 
 ### External API Integration
+
 ```python
 # integrations/external_api.py
 import httpx
@@ -1030,6 +1037,7 @@ def verify_webhook_signature(payload: bytes, signature: str) -> bool:
 ## 🎤 پردازش و ارسال صدا
 
 ### Audio Processing Service
+
 ```python
 # audio/services/audio_processor.py
 import wave
@@ -1201,6 +1209,7 @@ class AudioUploader:
 ## 🎙️ ضبط صدا
 
 ### Audio Recording Implementation
+
 ```python
 # static/js/audio_recorder.js
 class AudioRecorder {
@@ -1513,6 +1522,7 @@ const RecordingComponent = () => {
 ## 🔧 مسائل فنی پردازش صدا
 
 ### Technical Audio Processing Issues
+
 ```python
 # audio/technical/audio_issues.py
 
@@ -1738,6 +1748,7 @@ audio = audio.set_channels(1)
 ## 📝 ایجاد گزارش SOAP
 
 ### SOAP Report Generation
+
 ```python
 # outputs/soap_generator.py
 from typing import Dict, List, Optional
@@ -1994,7 +2005,7 @@ class GenerateSOAPView(APIView):
 
 ---
 
-<div align="center">
+[ELEMENT: div align="center"]
 
 ✨ **این نمونه کدها آماده استفاده در پروژه HELSSA هستند**
 

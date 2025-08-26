@@ -2,14 +2,14 @@
 
 ## 📋 فهرست مطالب
 
-- [معرفی سیستم تولید گزارش](#معرفی-سیستم-تولید-گزارش)
-- [معماری تولید خروجی](#معماری-تولید-خروجی)
-- [تولید گزارش SOAP](#تولید-گزارش-soap)
-- [قالب‌ها و فرمت‌ها](#قالب‌ها-و-فرمت‌ها)
-- [تولید PDF حرفه‌ای](#تولید-pdf-حرفه‌ای)
-- [تولید نسخه الکترونیک](#تولید-نسخه-الکترونیک)
-- [امضای دیجیتال](#امضای-دیجیتال)
-- [سفارشی‌سازی گزارش‌ها](#سفارشی‌سازی-گزارش‌ها)
+- [معرفی سیستم تولید گزارش](## 🎯 معرفی سیستم تولید گزارش)
+- [معماری تولید خروجی](## 🏗️ معماری تولید خروجی)
+- [تولید گزارش SOAP](## 📝 تولید گزارش SOAP)
+- [قالب‌ها و فرمت‌ها](## 📝 قالب‌ها و فرمت‌ها)
+- [تولید PDF حرفه‌ای](## 📝 تولید PDF حرفه‌ای)
+- [تولید نسخه الکترونیک](## 📝 تولید نسخه الکترونیک)
+- [امضای دیجیتال](## 📝 امضای دیجیتال)
+- [سفارشی‌سازی گزارش‌ها](## 📝 سفارشی‌سازی گزارش‌ها)
 
 ---
 
@@ -18,6 +18,7 @@
 سیستم تولید گزارش HELSSA یک پلتفرم جامع برای ایجاد انواع گزارش‌های پزشکی، نسخه‌ها و مستندات با کیفیت بالا و قابلیت سفارشی‌سازی است.
 
 ### ویژگی‌های کلیدی
+
 - 📝 **تولید خودکار SOAP** از رونویسی ملاقات
 - 🎨 **قالب‌های حرفه‌ای** قابل سفارشی‌سازی
 - 📑 **خروجی چندفرمته** (PDF, Word, HTML, Markdown)
@@ -92,7 +93,8 @@ graph TB
 ```
 
 ### ساختار پروژه
-```
+
+```python
 outputs/
 ├── models/
 │   ├── report_template.py      # مدل قالب گزارش
@@ -127,6 +129,7 @@ outputs/
 ## 📝 تولید گزارش SOAP
 
 ### SOAP Generator Service
+
 ```python
 # outputs/services/soap_generator.py
 from typing import Dict, List, Optional
@@ -331,6 +334,7 @@ class SOAPGenerator:
 ```
 
 ### SOAP Formatter
+
 ```python
 # outputs/services/soap_formatter.py
 
@@ -415,6 +419,7 @@ class SOAPFormatter:
 ## 🎨 قالب‌ها و فرمت‌ها
 
 ### Template Engine
+
 ```python
 # outputs/services/template_engine.py
 from jinja2 import Environment, FileSystemLoader, select_autoescape
@@ -499,6 +504,7 @@ class TemplateEngine:
 ```
 
 ### Report Templates
+
 ```html
 <!-- outputs/templates/soap/report.html -->
 <!DOCTYPE html>
@@ -757,6 +763,7 @@ class TemplateEngine:
 ## 📑 تولید PDF حرفه‌ای
 
 ### PDF Generator Service
+
 ```python
 # outputs/services/pdf_generator.py
 from reportlab.lib import colors
@@ -978,6 +985,7 @@ class PDFGenerator:
 ```
 
 ### Advanced PDF Features
+
 ```python
 # outputs/services/pdf_advanced.py
 
@@ -1064,6 +1072,7 @@ class AdvancedPDFGenerator(PDFGenerator):
 ## 💊 تولید نسخه الکترونیک
 
 ### Prescription Generator
+
 ```python
 # outputs/services/prescription_generator.py
 
@@ -1169,6 +1178,7 @@ class PrescriptionGenerator:
 ```
 
 ### E-Prescription Format
+
 ```python
 # outputs/models/prescription.py
 
@@ -1307,6 +1317,7 @@ class Prescription(models.Model):
 ## ✍️ امضای دیجیتال
 
 ### Digital Signature Service
+
 ```python
 # outputs/services/signature_service.py
 from cryptography.hazmat.primitives import hashes
@@ -1423,6 +1434,7 @@ class DigitalSignatureService:
 ## 🎨 سفارشی‌سازی گزارش‌ها
 
 ### Report Customization Service
+
 ```python
 # outputs/services/customization_service.py
 
@@ -1504,6 +1516,7 @@ class ReportCustomizationService:
 ```
 
 ### Custom Report Templates
+
 ```python
 # outputs/services/template_manager.py
 
@@ -1558,7 +1571,7 @@ class TemplateManager:
 
 ---
 
-<div align="center">
+[ELEMENT: div align="center"]
 
 [→ قبلی: پردازش صوت و STT](11-audio-processing.md) | [بعدی: زیرساخت و Docker ←](13-infrastructure.md)
 

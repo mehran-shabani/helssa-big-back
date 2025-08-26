@@ -7,7 +7,9 @@
 ## هسته‌های مرکزی
 
 ### 1. هسته‌ی ورودی API (API Ingress Core)
+
 **مسئولیت‌ها:**
+
 - مدیریت HTTP requests و responses
 - اعتبارسنجی ورودی‌ها (validation)
 - احراز هویت و authorization
@@ -17,7 +19,8 @@
 - Request/Response logging
 
 **الگوی پیاده‌سازی:**
-```python
+
+```bash
 # views.py
 from rest_framework.decorators import api_view, permission_classes
 from rest_framework.permissions import IsAuthenticated
@@ -53,7 +56,9 @@ def endpoint_name(request):
 ```
 
 ### 2. هسته‌ی پردازش متن (Text Processing Core)
+
 **مسئولیت‌ها:**
+
 - پردازش زبان طبیعی (NLP)
 - تولید متن با AI
 - خلاصه‌سازی گفتگوها
@@ -62,7 +67,8 @@ def endpoint_name(request):
 - sentiment analysis
 
 **الگوی پیاده‌سازی:**
-```python
+
+```bash
 # text_processor.py
 from unified_ai.services import UnifiedAIService
 import logging
@@ -96,7 +102,9 @@ class TextProcessor:
 ```
 
 ### 3. هسته‌ی پردازش صوت (Speech Processing Core)
+
 **مسئولیت‌ها:**
+
 - تبدیل گفتار به متن (STT)
 - تبدیل متن به گفتار (TTS)
 - پردازش فایل‌های صوتی
@@ -105,6 +113,7 @@ class TextProcessor:
 - کاهش نویز
 
 **الگوی پیاده‌سازی:**
+
 ```python
 # speech_processor.py
 from stt.services.whisper_service import WhisperService
@@ -138,7 +147,9 @@ class SpeechProcessor:
 ```
 
 ### 4. هسته‌ی ارکستراسیون مرکزی (Central Orchestration Core)
+
 **مسئولیت‌ها:**
+
 - هماهنگی بین هسته‌ها
 - مدیریت workflow ها
 - اعمال business logic
@@ -148,6 +159,7 @@ class SpeechProcessor:
 - اجرای background tasks
 
 **الگوی پیاده‌سازی:**
+
 ```python
 # orchestrator.py
 from django.db import transaction
@@ -208,21 +220,25 @@ class CentralOrchestrator:
 ## اصول طراحی
 
 ### 1. جدایی نگرانی‌ها (Separation of Concerns)
+
 - هر هسته فقط مسئولیت‌های خاص خود را دارد
 - هیچ هسته‌ای نباید مستقیماً به هسته‌ی دیگر وابسته باشد
 - تمام ارتباطات از طریق هسته‌ی ارکستراسیون انجام می‌شود
 
 ### 2. قابلیت تست‌پذیری
+
 - هر هسته باید بتواند مستقل تست شود
 - Mock objects برای تست‌های واحد
 - Integration tests برای تست ارتباط بین هسته‌ها
 
 ### 3. مقیاس‌پذیری
+
 - هر هسته باید قابلیت scale کردن مستقل داشته باشد
 - استفاده از async/await برای عملیات I/O
 - Cache strategy برای بهبود performance
 
 ### 4. مانیتورینگ و لاگ‌گذاری
+
 - تمام عملیات در هسته‌ها لاگ می‌شوند
 - Metrics برای monitoring performance
 - Error tracking و alerting
@@ -230,6 +246,7 @@ class CentralOrchestrator:
 ## الگوهای امنیتی
 
 ### 1. احراز هویت یکپارچه
+
 ```python
 # تمام endpoints باید از unified auth استفاده کنند
 from unified_auth.decorators import unified_auth_required
@@ -241,6 +258,7 @@ def secure_endpoint(request):
 ```
 
 ### 2. مدیریت دسترسی
+
 ```python
 # بررسی سطح دسترسی
 if request.user.user_type == 'patient':
@@ -250,6 +268,7 @@ elif request.user.user_type == 'doctor':
 ```
 
 ### 3. OTP و Kavenegar
+
 ```python
 # استفاده از سرویس OTP یکپارچه
 from unified_auth.services import UnifiedOTPService
@@ -261,16 +280,19 @@ result = otp_service.send_otp(phone_number, purpose='login')
 ## ادغام با سیستم‌های موجود
 
 ### 1. Unified Auth
+
 - همه اپ‌ها باید از `unified_auth.UnifiedUser` استفاده کنند
 - JWT authentication برای API ها
 - OTP verification برای عملیات حساس
 
 ### 2. Unified Billing
+
 - بررسی محدودیت‌های اشتراک قبل از پردازش
 - ثبت استفاده از منابع
 - مدیریت کیف پول
 
 ### 3. Unified Access
+
 - دسترسی موقت پزشک به اطلاعات بیمار
 - کدهای دسترسی 6 رقمی
 - Session management و audit logging

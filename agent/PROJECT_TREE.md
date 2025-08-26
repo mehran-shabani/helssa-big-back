@@ -2,7 +2,7 @@
 
 ## 📊 ساختار کلی پروژه
 
-```
+```bash
 unified_agent/
 ├── 📁 docs/                          # مستندات کامل سیستم
 │   ├── 01-system-overview.md         # نمای کلی سیستم
@@ -97,7 +97,7 @@ unified_agent/
 
 ### 1️⃣ patient_chatbot - چت‌بات بیمار
 
-```
+```bash
 apps/patient_chatbot/
 ├── PLAN.md                           # برنامه اجرایی
 ├── CHECKLIST.json                    # چک‌لیست
@@ -140,7 +140,7 @@ apps/patient_chatbot/
     └── admin_guide.md
 ```
 
-#### API Endpoints:
+#### API Endpoints
 
 ```yaml
 /api/patient_chatbot/:
@@ -155,7 +155,7 @@ apps/patient_chatbot/
 
 ### 2️⃣ doctor_chatbot - چت‌بات پزشک
 
-```
+```bash
 apps/doctor_chatbot/
 ├── (ساختار مشابه patient_chatbot)
 └── app_code/
@@ -167,7 +167,7 @@ apps/doctor_chatbot/
     └── ...
 ```
 
-#### API Endpoints:
+#### API Endpoints2
 
 ```yaml
 /api/doctor_chatbot/:
@@ -180,7 +180,7 @@ apps/doctor_chatbot/
 
 ### 3️⃣ soapify_v2 - تولید گزارش SOAP
 
-```
+```bash
 apps/soapify_v2/
 ├── (ساختار استاندارد)
 └── app_code/
@@ -195,7 +195,7 @@ apps/soapify_v2/
     └── ...
 ```
 
-#### API Endpoints:
+#### API Endpoints3
 
 ```yaml
 /api/soapify_v2/:
@@ -209,7 +209,7 @@ apps/soapify_v2/
 
 ### 4️⃣ visit_management - مدیریت ویزیت
 
-```yaml
+```bash
 /api/visit_management/:
   - POST   /visit/book/              # رزرو ویزیت
   - GET    /visit/available-times/   # زمان‌های خالی
@@ -221,7 +221,7 @@ apps/soapify_v2/
 
 ### 5️⃣ prescription_system - سیستم نسخه‌نویسی
 
-```yaml
+```bash
 /api/prescription_system/:
   - POST   /prescription/create/     # ایجاد نسخه
   - GET    /prescription/{id}/       # مشاهده نسخه
@@ -232,7 +232,7 @@ apps/soapify_v2/
 
 ### 6️⃣ telemedicine_core - طب از راه دور
 
-```yaml
+```bash
 /api/telemedicine_core/:
   - POST   /session/create/          # ایجاد جلسه ویدئویی
   - POST   /session/{id}/join/       # پیوستن به جلسه
@@ -242,7 +242,7 @@ apps/soapify_v2/
 
 ### 7️⃣ patient_records - پرونده بیمار
 
-```yaml
+```bash
 /api/patient_records/:
   - GET    /record/                  # مشاهده پرونده
   - POST   /record/document/         # افزودن مدرک
@@ -252,7 +252,7 @@ apps/soapify_v2/
 
 ### 8️⃣ appointment_scheduler - زمان‌بندی قرارها
 
-```yaml
+```bash
 /api/appointment_scheduler/:
   - GET    /doctor/schedule/         # برنامه پزشک
   - POST   /appointment/book/        # رزرو نوبت
@@ -264,7 +264,7 @@ apps/soapify_v2/
 
 ### unified_auth - احراز هویت یکپارچه
 
-```yaml
+```bash
 Features:
   - JWT Authentication (Access: 5min, Refresh: 7days)
   - OTP via Kavenegar SMS
@@ -275,7 +275,7 @@ Features:
 
 ### unified_billing - سیستم مالی یکپارچه
 
-```yaml
+```bash
 Features:
   - Wallet management
   - Payment gateways (BitPay, ZarinPal, Stripe)
@@ -286,7 +286,7 @@ Features:
 
 ### unified_ai - AI یکپارچه
 
-```yaml
+```bash
 Features:
   - OpenAI/GapGPT integration
   - Medical prompt templates
@@ -297,7 +297,7 @@ Features:
 
 ### unified_access - کنترل دسترسی یکپارچه
 
-```yaml
+```bash
 Features:
   - RBAC (Role-Based Access Control)
   - Resource permissions
@@ -309,21 +309,25 @@ Features:
 ## 🛠️ ابزارهای استاندارد ایجنت‌ها
 
 ### کد ژنراتور (code_generator.py)
+
 - تولید خودکار ساختار اپ
 - ایجاد فایل‌های پایه
 - تولید کد بر اساس الگوها
 
 ### اعتبارسنج ساختار (structure_validator.py)
+
 - بررسی رعایت معماری چهار هسته‌ای
 - کنترل استانداردها
 - گزارش انحرافات
 
 ### ردیاب پیشرفت (progress_tracker.py)
+
 - محاسبه درصد پیشرفت
 - تولید گزارش‌های JSON
 - به‌روزرسانی خودکار
 
 ### تولیدکننده نمودار (chart_generator.py)
+
 - نمودارهای دونات پیشرفت
 - نمودارهای Gantt
 - گزارش‌های تصویری

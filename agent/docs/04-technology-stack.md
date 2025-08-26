@@ -2,21 +2,29 @@
 
 ## 📋 فهرست مطالب
 
-- [نمای کلی استک تکنولوژی](#نمای-کلی-استک-تکنولوژی)
-- [Backend Technologies](#backend-technologies)
-- [Frontend Technologies](#frontend-technologies)
-- [AI/ML Stack](#aiml-stack)
-- [Infrastructure & DevOps](#infrastructure--devops)
-- [Third-party Services](#third-party-services)
-- [Development Tools](#development-tools)
-- [Security Stack](#security-stack)
-- [Performance & Monitoring](#performance--monitoring)
+- [نمای کلی استک تکنولوژی](## 🎯 نمای کلی استک تکنولوژی)
+- [Backend Technologies](## 💻 Backend Technologies)
+- [Frontend Technologies](## 🎨 Frontend Technologies)
+- [State Management & Data Fetching](## 📊 State Management & Data Fetching)
+- [UI Components & Styling](## 🎨 UI Components & Styling)
+- [Build Tools & Development](## 🛠️ Build Tools & Development)
+- [AI/ML Stack](## 🤖 AI/ML Stack)
+- [Infrastructure & DevOps](## 🏗️ Infrastructure & DevOps)
+
+- [Web Server & Proxy](## 🌐 Web Server & Proxy)
+- [Payment Gateways](## 💳 Payment Gateways)
+- [Communication Services](## 📱 Communication Services)
+- [Storage Services](## 📂 Storage Services)
+- [Third-party Services](## 🔗 Third-party Services)
+- [Development Tools](## 🛠️ Development Tools)
+- [Security Stack](## 🔒 Security Stack)
+- [Performance & Monitoring](## 📊 Performance & Monitoring)
 
 ---
 
 ## 🎯 نمای کلی استک تکنولوژی
 
-```mermaid
+```python
 graph TB
     subgraph "Frontend Layer"
         REACT[React.js v18]
@@ -73,6 +81,7 @@ graph TB
 ## 💻 Backend Technologies
 
 ### Django Framework
+
 ```python
 # Core Django Stack
 Django==4.2.7                    # Web framework
@@ -91,6 +100,7 @@ django-celery-results==2.5.1     # Task results backend
 ```
 
 ### Authentication & Security
+
 ```python
 # Authentication
 djangorestframework-simplejwt==5.3.0  # JWT authentication
@@ -105,7 +115,8 @@ django-csp==3.7                  # Content Security Policy
 django-defender==0.9.7           # Brute force protection
 ```
 
-### Database & ORM
+### 📊 Database & ORM
+
 ```python
 # Database Drivers
 mysqlclient==2.2.0               # MySQL connector
@@ -118,7 +129,24 @@ django-taggit==5.0.1            # Tagging
 django-simple-history==3.4.0     # Model history
 ```
 
-### Async & Task Processing
+### 🔒 Authentication & Security
+
+```python
+# Authentication
+djangorestframework-simplejwt==5.3.0  # JWT authentication
+python-jose==3.3.0                    # JOSE implementation
+cryptography==41.0.5                  # Cryptographic recipes
+django-otp==1.3.0                     # One-time passwords
+pyotp==2.9.0                          # OTP implementation
+
+# Security
+django-ratelimit==4.1.0          # Rate limiting
+django-csp==3.7                  # Content Security Policy
+django-defender==0.9.7           # Brute force protection
+```
+
+### 🔗 Async & Task Processing
+
 ```python
 # Celery Stack
 celery==5.3.4                    # Distributed task queue
@@ -126,6 +154,8 @@ redis==5.0.1                     # Redis client
 kombu==5.3.4                     # Messaging library
 amqp==5.2.0                      # AMQP client
 billiard==4.2.0                  # Process pool
+
+
 
 # Async Support
 channels==4.0.0                  # WebSocket support
@@ -136,7 +166,8 @@ daphne==4.0.0                    # ASGI server
 ## 🎨 Frontend Technologies
 
 ### React Ecosystem
-```json
+
+```python
 {
   "dependencies": {
     "react": "^18.2.0",
@@ -151,7 +182,8 @@ daphne==4.0.0                    # ASGI server
 ```
 
 ### State Management & Data Fetching
-```json
+
+```python
 {
   "dependencies": {
     "@reduxjs/toolkit": "^1.9.7",
@@ -164,7 +196,8 @@ daphne==4.0.0                    # ASGI server
 ```
 
 ### UI Components & Styling
-```json
+
+```python
 {
   "dependencies": {
     "@mui/icons-material": "^5.14.0",
@@ -179,7 +212,8 @@ daphne==4.0.0                    # ASGI server
 ```
 
 ### Build Tools & Development
-```json
+
+```python
 {
   "devDependencies": {
     "@types/react": "^18.2.0",
@@ -196,7 +230,13 @@ daphne==4.0.0                    # ASGI server
 ## 🤖 AI/ML Stack
 
 ### OpenAI Integration
+
 ```python
+# OpenAI/GapGPT
+openai==1.3.0                    # OpenAI Python client
+tiktoken==0.5.1                  # Token counting
+langchain==0.0.340               # LLM framework
+langchain-openai==0.0.5          # OpenAI integration
 # OpenAI/GapGPT
 openai==1.3.0                    # OpenAI Python client
 tiktoken==0.5.1                  # Token counting
@@ -218,6 +258,7 @@ OPENAI_CONFIG = {
 ```
 
 ### Speech Processing
+
 ```python
 # Audio Processing
 whisper==1.1.10                  # OpenAI Whisper
@@ -228,6 +269,7 @@ ffmpeg-python==0.2.0             # FFmpeg wrapper
 ```
 
 ### NLP & Text Processing
+
 ```python
 # NLP Libraries
 spacy==3.7.2                     # Industrial NLP
@@ -241,6 +283,7 @@ parsivar==0.2.3                  # Persian text preprocessing
 ```
 
 ### Machine Learning
+
 ```python
 # Core ML
 numpy==1.24.3                    # Numerical computing
@@ -257,8 +300,10 @@ tensorflow==2.14.0               # TensorFlow (optional)
 ## 🏗️ Infrastructure & DevOps
 
 ### Containerization
-```dockerfile
-# Dockerfile
+
+```python
+# dockerfile
+
 FROM python:3.11-slim
 
 # Install system dependencies
@@ -287,8 +332,9 @@ RUN python manage.py collectstatic --noinput
 CMD ["gunicorn", "--bind", "0.0.0.0:8000", "--workers", "4", "medogram.wsgi:application"]
 ```
 
-### Orchestration
-```yaml
+### 🚀 Orchestration
+
+```python yaml
 # kubernetes/deployment.yaml
 apiVersion: apps/v1
 kind: Deployment
@@ -325,7 +371,8 @@ spec:
 ```
 
 ### Web Server & Proxy
-```nginx
+
+```python
 # nginx/conf.d/helssa.conf
 upstream helssa_backend {
     server web:8000;
@@ -386,6 +433,7 @@ server {
 ## 🔗 Third-party Services
 
 ### Payment Gateways
+
 ```python
 # Iranian Payment Gateways
 PAYMENT_GATEWAYS = {
@@ -412,6 +460,7 @@ paypal-checkout-serversdk==2.0.0 # PayPal SDK
 ```
 
 ### Communication Services
+
 ```python
 # SMS Service
 KAVENEGAR_CONFIG = {
@@ -440,6 +489,7 @@ FIREBASE_CONFIG = {
 ```
 
 ### Storage Services
+
 ```python
 # MinIO/S3 Configuration
 DEFAULT_FILE_STORAGE = 'storages.backends.s3boto3.S3Boto3Storage'
@@ -462,6 +512,7 @@ STORAGE_CLASSES = {
 ## 🛠️ Development Tools
 
 ### Code Quality
+
 ```python
 # Linting & Formatting
 black==23.11.0                   # Code formatter
@@ -475,6 +526,7 @@ pre-commit==3.5.0                # Git hook framework
 ```
 
 ### Testing
+
 ```python
 # Testing Framework
 pytest==7.4.3                    # Test framework
@@ -490,6 +542,7 @@ responses==0.24.1                # Mock HTTP responses
 ```
 
 ### Documentation
+
 ```python
 # Documentation
 sphinx==7.2.6                    # Documentation builder
@@ -500,6 +553,7 @@ drf-spectacular==0.26.5          # OpenAPI 3.0 schema
 ## 🔒 Security Stack
 
 ### Security Libraries
+
 ```python
 # Security
 python-decouple==3.8             # Env var management
@@ -513,6 +567,7 @@ bandit==1.7.5                    # Security linter
 ```
 
 ### Encryption & Certificates
+
 ```bash
 # SSL/TLS Certificates
 certbot                          # Let's Encrypt
@@ -526,6 +581,7 @@ mozilla-sops                     # Encrypted files
 ## 📊 Performance & Monitoring
 
 ### Monitoring Stack
+
 ```python
 # APM & Monitoring
 sentry-sdk==1.38.0               # Error tracking
@@ -539,6 +595,7 @@ loguru==0.7.2                    # Advanced logging
 ```
 
 ### Performance Tools
+
 ```python
 # Caching
 django-redis==5.4.0              # Redis cache backend
@@ -553,6 +610,7 @@ memory-profiler==0.61.0          # Memory profiling
 ```
 
 ### Analytics
+
 ```python
 # Analytics Integration
 google-analytics-data==0.17.1    # Google Analytics
@@ -562,7 +620,7 @@ segment-analytics-python==2.2.3  # Segment.io
 
 ---
 
-<div align="center">
+[ELEMENT: div align="center"]
 
 [→ قبلی: نمودار درختی پروژه](03-project-tree.md) | [بعدی: احراز هویت یکپارچه ←](05-authentication.md)
 
