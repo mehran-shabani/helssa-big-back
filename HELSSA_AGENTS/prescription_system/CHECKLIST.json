@@ -1,0 +1,359 @@
+{
+  "checklist": {
+    "app_name": "{APP_NAME}",
+    "version": "1.0.0",
+    "last_updated": "{DATE}",
+    "total_items": 45,
+    "completed_items": 0,
+    "completion_percentage": 0
+  },
+  "phases": {
+    "design": {
+      "name": "طراحی و برنامه‌ریزی",
+      "items": [
+        {
+          "id": "design_001",
+          "task": "مطالعه کامل CORE_ARCHITECTURE.md",
+          "status": "pending",
+          "priority": "high",
+          "estimated_time": "2h"
+        },
+        {
+          "id": "design_002", 
+          "task": "مطالعه کامل SECURITY_POLICIES.md",
+          "status": "pending",
+          "priority": "high",
+          "estimated_time": "1h"
+        },
+        {
+          "id": "design_003",
+          "task": "بررسی الگوهای موجود در کد پایه",
+          "status": "pending",
+          "priority": "medium",
+          "estimated_time": "3h"
+        },
+        {
+          "id": "design_004",
+          "task": "تکمیل PLAN.md بر اساس template",
+          "status": "pending",
+          "priority": "high",
+          "estimated_time": "4h"
+        },
+        {
+          "id": "design_005",
+          "task": "تعریف مدل‌های داده",
+          "status": "pending",
+          "priority": "high",
+          "estimated_time": "3h"
+        },
+        {
+          "id": "design_006",
+          "task": "طراحی API endpoints",
+          "status": "pending",
+          "priority": "high",
+          "estimated_time": "2h"
+        }
+      ]
+    },
+    "implementation": {
+      "name": "پیاده‌سازی",
+      "items": [
+        {
+          "id": "impl_001",
+          "task": "ایجاد Django app",
+          "status": "pending",
+          "priority": "high",
+          "estimated_time": "0.5h"
+        },
+        {
+          "id": "impl_002",
+          "task": "نوشتن models.py",
+          "status": "pending",
+          "priority": "high",
+          "estimated_time": "3h"
+        },
+        {
+          "id": "impl_003",
+          "task": "ایجاد migrations",
+          "status": "pending",
+          "priority": "high",
+          "estimated_time": "1h"
+        },
+        {
+          "id": "impl_004",
+          "task": "پیاده‌سازی API Ingress Core",
+          "status": "pending",
+          "priority": "high",
+          "estimated_time": "4h"
+        },
+        {
+          "id": "impl_005",
+          "task": "پیاده‌سازی Text Processing Core",
+          "status": "pending",
+          "priority": "high",
+          "estimated_time": "5h"
+        },
+        {
+          "id": "impl_006",
+          "task": "پیاده‌سازی Speech Processing Core",
+          "status": "pending",
+          "priority": "medium",
+          "estimated_time": "4h"
+        },
+        {
+          "id": "impl_007",
+          "task": "پیاده‌سازی Central Orchestration Core",
+          "status": "pending",
+          "priority": "high",
+          "estimated_time": "6h"
+        },
+        {
+          "id": "impl_008",
+          "task": "ایجاد serializers.py",
+          "status": "pending",
+          "priority": "high",
+          "estimated_time": "3h"
+        },
+        {
+          "id": "impl_009",
+          "task": "ایجاد views.py",
+          "status": "pending",
+          "priority": "high",
+          "estimated_time": "4h"
+        },
+        {
+          "id": "impl_010",
+          "task": "پیکربندی URLs",
+          "status": "pending",
+          "priority": "medium",
+          "estimated_time": "1h"
+        },
+        {
+          "id": "impl_011",
+          "task": "ایجاد permissions.py",
+          "status": "pending",
+          "priority": "high",
+          "estimated_time": "2h"
+        }
+      ]
+    },
+    "integration": {
+      "name": "یکپارچه‌سازی",
+      "items": [
+        {
+          "id": "int_001",
+          "task": "ادغام با unified_auth",
+          "status": "pending",
+          "priority": "high",
+          "estimated_time": "3h"
+        },
+        {
+          "id": "int_002",
+          "task": "ادغام با unified_billing",
+          "status": "pending",
+          "priority": "medium",
+          "estimated_time": "2h"
+        },
+        {
+          "id": "int_003",
+          "task": "ادغام با unified_access",
+          "status": "pending",
+          "priority": "medium",
+          "estimated_time": "2h"
+        },
+        {
+          "id": "int_004",
+          "task": "پیکربندی Kavenegar OTP",
+          "status": "pending",
+          "priority": "high",
+          "estimated_time": "2h"
+        },
+        {
+          "id": "int_005",
+          "task": "یکپارچه‌سازی با unified_ai",
+          "status": "pending",
+          "priority": "high",
+          "estimated_time": "3h"
+        }
+      ]
+    },
+    "security": {
+      "name": "امنیت",
+      "items": [
+        {
+          "id": "sec_001",
+          "task": "پیاده‌سازی احراز هویت OTP",
+          "status": "pending",
+          "priority": "high",
+          "estimated_time": "3h"
+        },
+        {
+          "id": "sec_002",
+          "task": "اعمال رمزنگاری داده‌ها",
+          "status": "pending",
+          "priority": "high",
+          "estimated_time": "2h"
+        },
+        {
+          "id": "sec_003",
+          "task": "بررسی HIPAA compliance",
+          "status": "pending",
+          "priority": "high",
+          "estimated_time": "2h"
+        },
+        {
+          "id": "sec_004",
+          "task": "تفکیک دسترسی patient/doctor",
+          "status": "pending",
+          "priority": "high",
+          "estimated_time": "2h"
+        },
+        {
+          "id": "sec_005",
+          "task": "اعمال rate limiting",
+          "status": "pending",
+          "priority": "medium",
+          "estimated_time": "1h"
+        }
+      ]
+    },
+    "testing": {
+      "name": "تست‌ها",
+      "items": [
+        {
+          "id": "test_001",
+          "task": "نوشتن تست‌های models",
+          "status": "pending",
+          "priority": "medium",
+          "estimated_time": "3h"
+        },
+        {
+          "id": "test_002",
+          "task": "نوشتن تست‌های views",
+          "status": "pending",
+          "priority": "medium",
+          "estimated_time": "4h"
+        },
+        {
+          "id": "test_003",
+          "task": "نوشتن تست‌های serializers",
+          "status": "pending",
+          "priority": "medium",
+          "estimated_time": "2h"
+        },
+        {
+          "id": "test_004",
+          "task": "نوشتن تست‌های integration",
+          "status": "pending",
+          "priority": "medium",
+          "estimated_time": "4h"
+        },
+        {
+          "id": "test_005",
+          "task": "نوشتن تست‌های هسته‌ها",
+          "status": "pending",
+          "priority": "high",
+          "estimated_time": "5h"
+        }
+      ]
+    },
+    "documentation": {
+      "name": "مستندسازی",
+      "items": [
+        {
+          "id": "doc_001",
+          "task": "تکمیل README.md",
+          "status": "pending",
+          "priority": "medium",
+          "estimated_time": "2h"
+        },
+        {
+          "id": "doc_002",
+          "task": "ایجاد API specification (OpenAPI)",
+          "status": "pending",
+          "priority": "medium",
+          "estimated_time": "3h"
+        },
+        {
+          "id": "doc_003",
+          "task": "نوشتن راهنمای کاربر",
+          "status": "pending",
+          "priority": "low",
+          "estimated_time": "2h"
+        },
+        {
+          "id": "doc_004",
+          "task": "نوشتن راهنمای ادمین",
+          "status": "pending",
+          "priority": "low",
+          "estimated_time": "1h"
+        }
+      ]
+    },
+    "deployment": {
+      "name": "آماده‌سازی استقرار",
+      "items": [
+        {
+          "id": "dep_001",
+          "task": "ایجاد settings_additions.py",
+          "status": "pending",
+          "priority": "high",
+          "estimated_time": "1h"
+        },
+        {
+          "id": "dep_002",
+          "task": "ایجاد urls_additions.py",
+          "status": "pending",
+          "priority": "high",
+          "estimated_time": "0.5h"
+        },
+        {
+          "id": "dep_003",
+          "task": "ایجاد requirements_additions.txt",
+          "status": "pending",
+          "priority": "high",
+          "estimated_time": "0.5h"
+        },
+        {
+          "id": "dep_004",
+          "task": "به‌روزرسانی PROGRESS.json",
+          "status": "pending",
+          "priority": "medium",
+          "estimated_time": "0.5h"
+        },
+        {
+          "id": "dep_005",
+          "task": "ثبت تغییرات در LOG.md",
+          "status": "pending",
+          "priority": "medium",
+          "estimated_time": "1h"
+        }
+      ]
+    }
+  },
+  "validation_rules": {
+    "mandatory_files": [
+      "app_code/__init__.py",
+      "app_code/models.py", 
+      "app_code/views.py",
+      "app_code/serializers.py",
+      "app_code/urls.py",
+      "app_code/cores/api_ingress.py",
+      "app_code/cores/orchestrator.py",
+      "deployment/settings_additions.py",
+      "deployment/urls_additions.py",
+      "README.md"
+    ],
+    "security_requirements": [
+      "OTP integration implemented",
+      "HIPAA compliance verified",
+      "Data encryption applied",
+      "Role-based access control"
+    ],
+    "performance_requirements": [
+      "Response time < 2000ms",
+      "Rate limiting implemented",
+      "Caching strategy defined"
+    ]
+  }
+}

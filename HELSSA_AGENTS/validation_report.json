@@ -1,0 +1,1749 @@
+{
+  "patient_chatbot": {
+    "app_name": "patient_chatbot",
+    "valid": false,
+    "issues": [
+      "Missing required file: app_code/__init__.py",
+      "Missing required file: app_code/models.py",
+      "Missing required file: app_code/views.py",
+      "Missing required file: app_code/serializers.py",
+      "Missing required file: app_code/urls.py",
+      "Missing required file: app_code/admin.py",
+      "Missing required file: app_code/permissions.py",
+      "Missing required file: app_code/cores/__init__.py",
+      "Missing required file: app_code/cores/api_ingress.py",
+      "Missing required file: app_code/cores/text_processor.py",
+      "Missing required file: app_code/cores/speech_processor.py",
+      "Missing required file: app_code/cores/orchestrator.py",
+      "Missing required file: deployment/settings_additions.py",
+      "Missing required file: deployment/urls_additions.py",
+      "Missing required file: deployment/requirements_additions.txt",
+      "Invalid JSON in CHECKLIST.json: Extra data: line 285 column 1 (char 8072)"
+    ],
+    "files": {
+      "PLAN.md": {
+        "path": "/workspace/HELSSA_AGENTS/patient_chatbot/PLAN.md",
+        "exists": true,
+        "size": 21025
+      },
+      "CHECKLIST.json": {
+        "path": "/workspace/HELSSA_AGENTS/patient_chatbot/CHECKLIST.json",
+        "exists": true,
+        "size": 14419
+      },
+      "PROGRESS.json": {
+        "path": "/workspace/HELSSA_AGENTS/patient_chatbot/PROGRESS.json",
+        "exists": true,
+        "size": 853
+      },
+      "LOG.md": {
+        "path": "/workspace/HELSSA_AGENTS/patient_chatbot/LOG.md",
+        "exists": true,
+        "size": 1087
+      },
+      "README.md": {
+        "path": "/workspace/HELSSA_AGENTS/patient_chatbot/README.md",
+        "exists": true,
+        "size": 4501
+      },
+      "app_code/__init__.py": {
+        "path": "/workspace/HELSSA_AGENTS/patient_chatbot/app_code/__init__.py",
+        "exists": false,
+        "size": 0
+      },
+      "app_code/models.py": {
+        "path": "/workspace/HELSSA_AGENTS/patient_chatbot/app_code/models.py",
+        "exists": false,
+        "size": 0
+      },
+      "app_code/views.py": {
+        "path": "/workspace/HELSSA_AGENTS/patient_chatbot/app_code/views.py",
+        "exists": false,
+        "size": 0
+      },
+      "app_code/serializers.py": {
+        "path": "/workspace/HELSSA_AGENTS/patient_chatbot/app_code/serializers.py",
+        "exists": false,
+        "size": 0
+      },
+      "app_code/urls.py": {
+        "path": "/workspace/HELSSA_AGENTS/patient_chatbot/app_code/urls.py",
+        "exists": false,
+        "size": 0
+      },
+      "app_code/admin.py": {
+        "path": "/workspace/HELSSA_AGENTS/patient_chatbot/app_code/admin.py",
+        "exists": false,
+        "size": 0
+      },
+      "app_code/permissions.py": {
+        "path": "/workspace/HELSSA_AGENTS/patient_chatbot/app_code/permissions.py",
+        "exists": false,
+        "size": 0
+      },
+      "app_code/cores/__init__.py": {
+        "path": "/workspace/HELSSA_AGENTS/patient_chatbot/app_code/cores/__init__.py",
+        "exists": false,
+        "size": 0
+      },
+      "app_code/cores/api_ingress.py": {
+        "path": "/workspace/HELSSA_AGENTS/patient_chatbot/app_code/cores/api_ingress.py",
+        "exists": false,
+        "size": 0
+      },
+      "app_code/cores/text_processor.py": {
+        "path": "/workspace/HELSSA_AGENTS/patient_chatbot/app_code/cores/text_processor.py",
+        "exists": false,
+        "size": 0
+      },
+      "app_code/cores/speech_processor.py": {
+        "path": "/workspace/HELSSA_AGENTS/patient_chatbot/app_code/cores/speech_processor.py",
+        "exists": false,
+        "size": 0
+      },
+      "app_code/cores/orchestrator.py": {
+        "path": "/workspace/HELSSA_AGENTS/patient_chatbot/app_code/cores/orchestrator.py",
+        "exists": false,
+        "size": 0
+      },
+      "deployment/settings_additions.py": {
+        "path": "/workspace/HELSSA_AGENTS/patient_chatbot/deployment/settings_additions.py",
+        "exists": false,
+        "size": 0
+      },
+      "deployment/urls_additions.py": {
+        "path": "/workspace/HELSSA_AGENTS/patient_chatbot/deployment/urls_additions.py",
+        "exists": false,
+        "size": 0
+      },
+      "deployment/requirements_additions.txt": {
+        "path": "/workspace/HELSSA_AGENTS/patient_chatbot/deployment/requirements_additions.txt",
+        "exists": false,
+        "size": 0
+      }
+    }
+  },
+  "doctor-chatbot-a": {
+    "app_name": "doctor-chatbot-a",
+    "valid": false,
+    "issues": [
+      "Missing required file: app_code/__init__.py",
+      "Missing required file: app_code/models.py",
+      "Missing required file: app_code/views.py",
+      "Missing required file: app_code/serializers.py",
+      "Missing required file: app_code/urls.py",
+      "Missing required file: app_code/admin.py",
+      "Missing required file: app_code/permissions.py",
+      "Missing required file: app_code/cores/__init__.py",
+      "Missing required file: app_code/cores/api_ingress.py",
+      "Missing required file: app_code/cores/text_processor.py",
+      "Missing required file: app_code/cores/speech_processor.py",
+      "Missing required file: app_code/cores/orchestrator.py",
+      "Missing required file: deployment/settings_additions.py",
+      "Missing required file: deployment/urls_additions.py",
+      "Missing required file: deployment/requirements_additions.txt"
+    ],
+    "files": {
+      "PLAN.md": {
+        "path": "/workspace/HELSSA_AGENTS/doctor-chatbot-a/PLAN.md",
+        "exists": true,
+        "size": 9792
+      },
+      "CHECKLIST.json": {
+        "path": "/workspace/HELSSA_AGENTS/doctor-chatbot-a/CHECKLIST.json",
+        "exists": true,
+        "size": 6582
+      },
+      "PROGRESS.json": {
+        "path": "/workspace/HELSSA_AGENTS/doctor-chatbot-a/PROGRESS.json",
+        "exists": true,
+        "size": 1131
+      },
+      "LOG.md": {
+        "path": "/workspace/HELSSA_AGENTS/doctor-chatbot-a/LOG.md",
+        "exists": true,
+        "size": 1725
+      },
+      "README.md": {
+        "path": "/workspace/HELSSA_AGENTS/doctor-chatbot-a/README.md",
+        "exists": true,
+        "size": 6127
+      },
+      "app_code/__init__.py": {
+        "path": "/workspace/HELSSA_AGENTS/doctor-chatbot-a/app_code/__init__.py",
+        "exists": false,
+        "size": 0
+      },
+      "app_code/models.py": {
+        "path": "/workspace/HELSSA_AGENTS/doctor-chatbot-a/app_code/models.py",
+        "exists": false,
+        "size": 0
+      },
+      "app_code/views.py": {
+        "path": "/workspace/HELSSA_AGENTS/doctor-chatbot-a/app_code/views.py",
+        "exists": false,
+        "size": 0
+      },
+      "app_code/serializers.py": {
+        "path": "/workspace/HELSSA_AGENTS/doctor-chatbot-a/app_code/serializers.py",
+        "exists": false,
+        "size": 0
+      },
+      "app_code/urls.py": {
+        "path": "/workspace/HELSSA_AGENTS/doctor-chatbot-a/app_code/urls.py",
+        "exists": false,
+        "size": 0
+      },
+      "app_code/admin.py": {
+        "path": "/workspace/HELSSA_AGENTS/doctor-chatbot-a/app_code/admin.py",
+        "exists": false,
+        "size": 0
+      },
+      "app_code/permissions.py": {
+        "path": "/workspace/HELSSA_AGENTS/doctor-chatbot-a/app_code/permissions.py",
+        "exists": false,
+        "size": 0
+      },
+      "app_code/cores/__init__.py": {
+        "path": "/workspace/HELSSA_AGENTS/doctor-chatbot-a/app_code/cores/__init__.py",
+        "exists": false,
+        "size": 0
+      },
+      "app_code/cores/api_ingress.py": {
+        "path": "/workspace/HELSSA_AGENTS/doctor-chatbot-a/app_code/cores/api_ingress.py",
+        "exists": false,
+        "size": 0
+      },
+      "app_code/cores/text_processor.py": {
+        "path": "/workspace/HELSSA_AGENTS/doctor-chatbot-a/app_code/cores/text_processor.py",
+        "exists": false,
+        "size": 0
+      },
+      "app_code/cores/speech_processor.py": {
+        "path": "/workspace/HELSSA_AGENTS/doctor-chatbot-a/app_code/cores/speech_processor.py",
+        "exists": false,
+        "size": 0
+      },
+      "app_code/cores/orchestrator.py": {
+        "path": "/workspace/HELSSA_AGENTS/doctor-chatbot-a/app_code/cores/orchestrator.py",
+        "exists": false,
+        "size": 0
+      },
+      "deployment/settings_additions.py": {
+        "path": "/workspace/HELSSA_AGENTS/doctor-chatbot-a/deployment/settings_additions.py",
+        "exists": false,
+        "size": 0
+      },
+      "deployment/urls_additions.py": {
+        "path": "/workspace/HELSSA_AGENTS/doctor-chatbot-a/deployment/urls_additions.py",
+        "exists": false,
+        "size": 0
+      },
+      "deployment/requirements_additions.txt": {
+        "path": "/workspace/HELSSA_AGENTS/doctor-chatbot-a/deployment/requirements_additions.txt",
+        "exists": false,
+        "size": 0
+      }
+    }
+  },
+  "doctor-dashboard": {
+    "app_name": "doctor-dashboard",
+    "valid": false,
+    "issues": [
+      "Missing required file: app_code/__init__.py",
+      "Missing required file: app_code/models.py",
+      "Missing required file: app_code/views.py",
+      "Missing required file: app_code/serializers.py",
+      "Missing required file: app_code/urls.py",
+      "Missing required file: app_code/admin.py",
+      "Missing required file: app_code/permissions.py",
+      "Missing required file: app_code/cores/__init__.py",
+      "Missing required file: app_code/cores/api_ingress.py",
+      "Missing required file: app_code/cores/text_processor.py",
+      "Missing required file: app_code/cores/speech_processor.py",
+      "Missing required file: app_code/cores/orchestrator.py",
+      "Missing required file: deployment/settings_additions.py",
+      "Missing required file: deployment/urls_additions.py",
+      "Missing required file: deployment/requirements_additions.txt"
+    ],
+    "files": {
+      "PLAN.md": {
+        "path": "/workspace/HELSSA_AGENTS/doctor-dashboard/PLAN.md",
+        "exists": true,
+        "size": 10435
+      },
+      "CHECKLIST.json": {
+        "path": "/workspace/HELSSA_AGENTS/doctor-dashboard/CHECKLIST.json",
+        "exists": true,
+        "size": 7499
+      },
+      "PROGRESS.json": {
+        "path": "/workspace/HELSSA_AGENTS/doctor-dashboard/PROGRESS.json",
+        "exists": true,
+        "size": 1530
+      },
+      "LOG.md": {
+        "path": "/workspace/HELSSA_AGENTS/doctor-dashboard/LOG.md",
+        "exists": true,
+        "size": 1848
+      },
+      "README.md": {
+        "path": "/workspace/HELSSA_AGENTS/doctor-dashboard/README.md",
+        "exists": true,
+        "size": 7141
+      },
+      "app_code/__init__.py": {
+        "path": "/workspace/HELSSA_AGENTS/doctor-dashboard/app_code/__init__.py",
+        "exists": false,
+        "size": 0
+      },
+      "app_code/models.py": {
+        "path": "/workspace/HELSSA_AGENTS/doctor-dashboard/app_code/models.py",
+        "exists": false,
+        "size": 0
+      },
+      "app_code/views.py": {
+        "path": "/workspace/HELSSA_AGENTS/doctor-dashboard/app_code/views.py",
+        "exists": false,
+        "size": 0
+      },
+      "app_code/serializers.py": {
+        "path": "/workspace/HELSSA_AGENTS/doctor-dashboard/app_code/serializers.py",
+        "exists": false,
+        "size": 0
+      },
+      "app_code/urls.py": {
+        "path": "/workspace/HELSSA_AGENTS/doctor-dashboard/app_code/urls.py",
+        "exists": false,
+        "size": 0
+      },
+      "app_code/admin.py": {
+        "path": "/workspace/HELSSA_AGENTS/doctor-dashboard/app_code/admin.py",
+        "exists": false,
+        "size": 0
+      },
+      "app_code/permissions.py": {
+        "path": "/workspace/HELSSA_AGENTS/doctor-dashboard/app_code/permissions.py",
+        "exists": false,
+        "size": 0
+      },
+      "app_code/cores/__init__.py": {
+        "path": "/workspace/HELSSA_AGENTS/doctor-dashboard/app_code/cores/__init__.py",
+        "exists": false,
+        "size": 0
+      },
+      "app_code/cores/api_ingress.py": {
+        "path": "/workspace/HELSSA_AGENTS/doctor-dashboard/app_code/cores/api_ingress.py",
+        "exists": false,
+        "size": 0
+      },
+      "app_code/cores/text_processor.py": {
+        "path": "/workspace/HELSSA_AGENTS/doctor-dashboard/app_code/cores/text_processor.py",
+        "exists": false,
+        "size": 0
+      },
+      "app_code/cores/speech_processor.py": {
+        "path": "/workspace/HELSSA_AGENTS/doctor-dashboard/app_code/cores/speech_processor.py",
+        "exists": false,
+        "size": 0
+      },
+      "app_code/cores/orchestrator.py": {
+        "path": "/workspace/HELSSA_AGENTS/doctor-dashboard/app_code/cores/orchestrator.py",
+        "exists": false,
+        "size": 0
+      },
+      "deployment/settings_additions.py": {
+        "path": "/workspace/HELSSA_AGENTS/doctor-dashboard/deployment/settings_additions.py",
+        "exists": false,
+        "size": 0
+      },
+      "deployment/urls_additions.py": {
+        "path": "/workspace/HELSSA_AGENTS/doctor-dashboard/deployment/urls_additions.py",
+        "exists": false,
+        "size": 0
+      },
+      "deployment/requirements_additions.txt": {
+        "path": "/workspace/HELSSA_AGENTS/doctor-dashboard/deployment/requirements_additions.txt",
+        "exists": false,
+        "size": 0
+      }
+    }
+  },
+  "soapify": {
+    "app_name": "soapify",
+    "valid": false,
+    "issues": [
+      "Missing required file: app_code/__init__.py",
+      "Missing required file: app_code/models.py",
+      "Missing required file: app_code/views.py",
+      "Missing required file: app_code/serializers.py",
+      "Missing required file: app_code/urls.py",
+      "Missing required file: app_code/admin.py",
+      "Missing required file: app_code/permissions.py",
+      "Missing required file: app_code/cores/__init__.py",
+      "Missing required file: app_code/cores/api_ingress.py",
+      "Missing required file: app_code/cores/text_processor.py",
+      "Missing required file: app_code/cores/speech_processor.py",
+      "Missing required file: app_code/cores/orchestrator.py",
+      "Missing required file: deployment/settings_additions.py",
+      "Missing required file: deployment/urls_additions.py",
+      "Missing required file: deployment/requirements_additions.txt"
+    ],
+    "files": {
+      "PLAN.md": {
+        "path": "/workspace/HELSSA_AGENTS/soapify/PLAN.md",
+        "exists": true,
+        "size": 7113
+      },
+      "CHECKLIST.json": {
+        "path": "/workspace/HELSSA_AGENTS/soapify/CHECKLIST.json",
+        "exists": true,
+        "size": 6460
+      },
+      "PROGRESS.json": {
+        "path": "/workspace/HELSSA_AGENTS/soapify/PROGRESS.json",
+        "exists": true,
+        "size": 853
+      },
+      "LOG.md": {
+        "path": "/workspace/HELSSA_AGENTS/soapify/LOG.md",
+        "exists": true,
+        "size": 1087
+      },
+      "README.md": {
+        "path": "/workspace/HELSSA_AGENTS/soapify/README.md",
+        "exists": true,
+        "size": 4501
+      },
+      "app_code/__init__.py": {
+        "path": "/workspace/HELSSA_AGENTS/soapify/app_code/__init__.py",
+        "exists": false,
+        "size": 0
+      },
+      "app_code/models.py": {
+        "path": "/workspace/HELSSA_AGENTS/soapify/app_code/models.py",
+        "exists": false,
+        "size": 0
+      },
+      "app_code/views.py": {
+        "path": "/workspace/HELSSA_AGENTS/soapify/app_code/views.py",
+        "exists": false,
+        "size": 0
+      },
+      "app_code/serializers.py": {
+        "path": "/workspace/HELSSA_AGENTS/soapify/app_code/serializers.py",
+        "exists": false,
+        "size": 0
+      },
+      "app_code/urls.py": {
+        "path": "/workspace/HELSSA_AGENTS/soapify/app_code/urls.py",
+        "exists": false,
+        "size": 0
+      },
+      "app_code/admin.py": {
+        "path": "/workspace/HELSSA_AGENTS/soapify/app_code/admin.py",
+        "exists": false,
+        "size": 0
+      },
+      "app_code/permissions.py": {
+        "path": "/workspace/HELSSA_AGENTS/soapify/app_code/permissions.py",
+        "exists": false,
+        "size": 0
+      },
+      "app_code/cores/__init__.py": {
+        "path": "/workspace/HELSSA_AGENTS/soapify/app_code/cores/__init__.py",
+        "exists": false,
+        "size": 0
+      },
+      "app_code/cores/api_ingress.py": {
+        "path": "/workspace/HELSSA_AGENTS/soapify/app_code/cores/api_ingress.py",
+        "exists": false,
+        "size": 0
+      },
+      "app_code/cores/text_processor.py": {
+        "path": "/workspace/HELSSA_AGENTS/soapify/app_code/cores/text_processor.py",
+        "exists": false,
+        "size": 0
+      },
+      "app_code/cores/speech_processor.py": {
+        "path": "/workspace/HELSSA_AGENTS/soapify/app_code/cores/speech_processor.py",
+        "exists": false,
+        "size": 0
+      },
+      "app_code/cores/orchestrator.py": {
+        "path": "/workspace/HELSSA_AGENTS/soapify/app_code/cores/orchestrator.py",
+        "exists": false,
+        "size": 0
+      },
+      "deployment/settings_additions.py": {
+        "path": "/workspace/HELSSA_AGENTS/soapify/deployment/settings_additions.py",
+        "exists": false,
+        "size": 0
+      },
+      "deployment/urls_additions.py": {
+        "path": "/workspace/HELSSA_AGENTS/soapify/deployment/urls_additions.py",
+        "exists": false,
+        "size": 0
+      },
+      "deployment/requirements_additions.txt": {
+        "path": "/workspace/HELSSA_AGENTS/soapify/deployment/requirements_additions.txt",
+        "exists": false,
+        "size": 0
+      }
+    }
+  },
+  "patient_records": {
+    "app_name": "patient_records",
+    "valid": false,
+    "issues": [
+      "Missing required file: PLAN.md",
+      "Missing required file: CHECKLIST.json",
+      "Missing required file: PROGRESS.json",
+      "Missing required file: LOG.md",
+      "Missing required file: README.md",
+      "Missing required file: app_code/cores/__init__.py"
+    ],
+    "files": {
+      "PLAN.md": {
+        "path": "/workspace/HELSSA_AGENTS/patient_records/PLAN.md",
+        "exists": false,
+        "size": 0
+      },
+      "CHECKLIST.json": {
+        "path": "/workspace/HELSSA_AGENTS/patient_records/CHECKLIST.json",
+        "exists": false,
+        "size": 0
+      },
+      "PROGRESS.json": {
+        "path": "/workspace/HELSSA_AGENTS/patient_records/PROGRESS.json",
+        "exists": false,
+        "size": 0
+      },
+      "LOG.md": {
+        "path": "/workspace/HELSSA_AGENTS/patient_records/LOG.md",
+        "exists": false,
+        "size": 0
+      },
+      "README.md": {
+        "path": "/workspace/HELSSA_AGENTS/patient_records/README.md",
+        "exists": false,
+        "size": 0
+      },
+      "app_code/__init__.py": {
+        "path": "/workspace/HELSSA_AGENTS/patient_records/app_code/__init__.py",
+        "exists": true,
+        "size": 344
+      },
+      "app_code/models.py": {
+        "path": "/workspace/HELSSA_AGENTS/patient_records/app_code/models.py",
+        "exists": true,
+        "size": 2786
+      },
+      "app_code/views.py": {
+        "path": "/workspace/HELSSA_AGENTS/patient_records/app_code/views.py",
+        "exists": true,
+        "size": 13026
+      },
+      "app_code/serializers.py": {
+        "path": "/workspace/HELSSA_AGENTS/patient_records/app_code/serializers.py",
+        "exists": true,
+        "size": 4662
+      },
+      "app_code/urls.py": {
+        "path": "/workspace/HELSSA_AGENTS/patient_records/app_code/urls.py",
+        "exists": true,
+        "size": 992
+      },
+      "app_code/admin.py": {
+        "path": "/workspace/HELSSA_AGENTS/patient_records/app_code/admin.py",
+        "exists": true,
+        "size": 5042
+      },
+      "app_code/permissions.py": {
+        "path": "/workspace/HELSSA_AGENTS/patient_records/app_code/permissions.py",
+        "exists": true,
+        "size": 4740
+      },
+      "app_code/cores/__init__.py": {
+        "path": "/workspace/HELSSA_AGENTS/patient_records/app_code/cores/__init__.py",
+        "exists": false,
+        "size": 0
+      },
+      "app_code/cores/api_ingress.py": {
+        "path": "/workspace/HELSSA_AGENTS/patient_records/app_code/cores/api_ingress.py",
+        "exists": true,
+        "size": 9531
+      },
+      "app_code/cores/text_processor.py": {
+        "path": "/workspace/HELSSA_AGENTS/patient_records/app_code/cores/text_processor.py",
+        "exists": true,
+        "size": 12354
+      },
+      "app_code/cores/speech_processor.py": {
+        "path": "/workspace/HELSSA_AGENTS/patient_records/app_code/cores/speech_processor.py",
+        "exists": true,
+        "size": 17444
+      },
+      "app_code/cores/orchestrator.py": {
+        "path": "/workspace/HELSSA_AGENTS/patient_records/app_code/cores/orchestrator.py",
+        "exists": true,
+        "size": 17056
+      },
+      "deployment/settings_additions.py": {
+        "path": "/workspace/HELSSA_AGENTS/patient_records/deployment/settings_additions.py",
+        "exists": true,
+        "size": 5860
+      },
+      "deployment/urls_additions.py": {
+        "path": "/workspace/HELSSA_AGENTS/patient_records/deployment/urls_additions.py",
+        "exists": true,
+        "size": 790
+      },
+      "deployment/requirements_additions.txt": {
+        "path": "/workspace/HELSSA_AGENTS/patient_records/deployment/requirements_additions.txt",
+        "exists": true,
+        "size": 2387
+      }
+    }
+  },
+  "appointment_scheduler": {
+    "app_name": "appointment_scheduler",
+    "valid": false,
+    "issues": [
+      "Missing required file: PLAN.md",
+      "Missing required file: CHECKLIST.json",
+      "Missing required file: PROGRESS.json",
+      "Missing required file: LOG.md",
+      "Missing required file: README.md",
+      "Missing required file: app_code/cores/__init__.py"
+    ],
+    "files": {
+      "PLAN.md": {
+        "path": "/workspace/HELSSA_AGENTS/appointment_scheduler/PLAN.md",
+        "exists": false,
+        "size": 0
+      },
+      "CHECKLIST.json": {
+        "path": "/workspace/HELSSA_AGENTS/appointment_scheduler/CHECKLIST.json",
+        "exists": false,
+        "size": 0
+      },
+      "PROGRESS.json": {
+        "path": "/workspace/HELSSA_AGENTS/appointment_scheduler/PROGRESS.json",
+        "exists": false,
+        "size": 0
+      },
+      "LOG.md": {
+        "path": "/workspace/HELSSA_AGENTS/appointment_scheduler/LOG.md",
+        "exists": false,
+        "size": 0
+      },
+      "README.md": {
+        "path": "/workspace/HELSSA_AGENTS/appointment_scheduler/README.md",
+        "exists": false,
+        "size": 0
+      },
+      "app_code/__init__.py": {
+        "path": "/workspace/HELSSA_AGENTS/appointment_scheduler/app_code/__init__.py",
+        "exists": true,
+        "size": 344
+      },
+      "app_code/models.py": {
+        "path": "/workspace/HELSSA_AGENTS/appointment_scheduler/app_code/models.py",
+        "exists": true,
+        "size": 2786
+      },
+      "app_code/views.py": {
+        "path": "/workspace/HELSSA_AGENTS/appointment_scheduler/app_code/views.py",
+        "exists": true,
+        "size": 13026
+      },
+      "app_code/serializers.py": {
+        "path": "/workspace/HELSSA_AGENTS/appointment_scheduler/app_code/serializers.py",
+        "exists": true,
+        "size": 4662
+      },
+      "app_code/urls.py": {
+        "path": "/workspace/HELSSA_AGENTS/appointment_scheduler/app_code/urls.py",
+        "exists": true,
+        "size": 992
+      },
+      "app_code/admin.py": {
+        "path": "/workspace/HELSSA_AGENTS/appointment_scheduler/app_code/admin.py",
+        "exists": true,
+        "size": 5042
+      },
+      "app_code/permissions.py": {
+        "path": "/workspace/HELSSA_AGENTS/appointment_scheduler/app_code/permissions.py",
+        "exists": true,
+        "size": 4740
+      },
+      "app_code/cores/__init__.py": {
+        "path": "/workspace/HELSSA_AGENTS/appointment_scheduler/app_code/cores/__init__.py",
+        "exists": false,
+        "size": 0
+      },
+      "app_code/cores/api_ingress.py": {
+        "path": "/workspace/HELSSA_AGENTS/appointment_scheduler/app_code/cores/api_ingress.py",
+        "exists": true,
+        "size": 9531
+      },
+      "app_code/cores/text_processor.py": {
+        "path": "/workspace/HELSSA_AGENTS/appointment_scheduler/app_code/cores/text_processor.py",
+        "exists": true,
+        "size": 12354
+      },
+      "app_code/cores/speech_processor.py": {
+        "path": "/workspace/HELSSA_AGENTS/appointment_scheduler/app_code/cores/speech_processor.py",
+        "exists": true,
+        "size": 17444
+      },
+      "app_code/cores/orchestrator.py": {
+        "path": "/workspace/HELSSA_AGENTS/appointment_scheduler/app_code/cores/orchestrator.py",
+        "exists": true,
+        "size": 17056
+      },
+      "deployment/settings_additions.py": {
+        "path": "/workspace/HELSSA_AGENTS/appointment_scheduler/deployment/settings_additions.py",
+        "exists": true,
+        "size": 5860
+      },
+      "deployment/urls_additions.py": {
+        "path": "/workspace/HELSSA_AGENTS/appointment_scheduler/deployment/urls_additions.py",
+        "exists": true,
+        "size": 790
+      },
+      "deployment/requirements_additions.txt": {
+        "path": "/workspace/HELSSA_AGENTS/appointment_scheduler/deployment/requirements_additions.txt",
+        "exists": true,
+        "size": 2387
+      }
+    }
+  },
+  "telemedicine_core": {
+    "app_name": "telemedicine_core",
+    "valid": false,
+    "issues": [
+      "Missing required file: PLAN.md",
+      "Missing required file: CHECKLIST.json",
+      "Missing required file: PROGRESS.json",
+      "Missing required file: LOG.md",
+      "Missing required file: README.md",
+      "Missing required file: app_code/cores/__init__.py"
+    ],
+    "files": {
+      "PLAN.md": {
+        "path": "/workspace/HELSSA_AGENTS/telemedicine_core/PLAN.md",
+        "exists": false,
+        "size": 0
+      },
+      "CHECKLIST.json": {
+        "path": "/workspace/HELSSA_AGENTS/telemedicine_core/CHECKLIST.json",
+        "exists": false,
+        "size": 0
+      },
+      "PROGRESS.json": {
+        "path": "/workspace/HELSSA_AGENTS/telemedicine_core/PROGRESS.json",
+        "exists": false,
+        "size": 0
+      },
+      "LOG.md": {
+        "path": "/workspace/HELSSA_AGENTS/telemedicine_core/LOG.md",
+        "exists": false,
+        "size": 0
+      },
+      "README.md": {
+        "path": "/workspace/HELSSA_AGENTS/telemedicine_core/README.md",
+        "exists": false,
+        "size": 0
+      },
+      "app_code/__init__.py": {
+        "path": "/workspace/HELSSA_AGENTS/telemedicine_core/app_code/__init__.py",
+        "exists": true,
+        "size": 344
+      },
+      "app_code/models.py": {
+        "path": "/workspace/HELSSA_AGENTS/telemedicine_core/app_code/models.py",
+        "exists": true,
+        "size": 2786
+      },
+      "app_code/views.py": {
+        "path": "/workspace/HELSSA_AGENTS/telemedicine_core/app_code/views.py",
+        "exists": true,
+        "size": 13026
+      },
+      "app_code/serializers.py": {
+        "path": "/workspace/HELSSA_AGENTS/telemedicine_core/app_code/serializers.py",
+        "exists": true,
+        "size": 4662
+      },
+      "app_code/urls.py": {
+        "path": "/workspace/HELSSA_AGENTS/telemedicine_core/app_code/urls.py",
+        "exists": true,
+        "size": 992
+      },
+      "app_code/admin.py": {
+        "path": "/workspace/HELSSA_AGENTS/telemedicine_core/app_code/admin.py",
+        "exists": true,
+        "size": 5042
+      },
+      "app_code/permissions.py": {
+        "path": "/workspace/HELSSA_AGENTS/telemedicine_core/app_code/permissions.py",
+        "exists": true,
+        "size": 4740
+      },
+      "app_code/cores/__init__.py": {
+        "path": "/workspace/HELSSA_AGENTS/telemedicine_core/app_code/cores/__init__.py",
+        "exists": false,
+        "size": 0
+      },
+      "app_code/cores/api_ingress.py": {
+        "path": "/workspace/HELSSA_AGENTS/telemedicine_core/app_code/cores/api_ingress.py",
+        "exists": true,
+        "size": 9531
+      },
+      "app_code/cores/text_processor.py": {
+        "path": "/workspace/HELSSA_AGENTS/telemedicine_core/app_code/cores/text_processor.py",
+        "exists": true,
+        "size": 12354
+      },
+      "app_code/cores/speech_processor.py": {
+        "path": "/workspace/HELSSA_AGENTS/telemedicine_core/app_code/cores/speech_processor.py",
+        "exists": true,
+        "size": 17444
+      },
+      "app_code/cores/orchestrator.py": {
+        "path": "/workspace/HELSSA_AGENTS/telemedicine_core/app_code/cores/orchestrator.py",
+        "exists": true,
+        "size": 17056
+      },
+      "deployment/settings_additions.py": {
+        "path": "/workspace/HELSSA_AGENTS/telemedicine_core/deployment/settings_additions.py",
+        "exists": true,
+        "size": 5860
+      },
+      "deployment/urls_additions.py": {
+        "path": "/workspace/HELSSA_AGENTS/telemedicine_core/deployment/urls_additions.py",
+        "exists": true,
+        "size": 790
+      },
+      "deployment/requirements_additions.txt": {
+        "path": "/workspace/HELSSA_AGENTS/telemedicine_core/deployment/requirements_additions.txt",
+        "exists": true,
+        "size": 2387
+      }
+    }
+  },
+  "prescription_system": {
+    "app_name": "prescription_system",
+    "valid": false,
+    "issues": [
+      "Missing required file: PLAN.md",
+      "Missing required file: CHECKLIST.json",
+      "Missing required file: PROGRESS.json",
+      "Missing required file: LOG.md",
+      "Missing required file: README.md",
+      "Missing required file: app_code/cores/__init__.py"
+    ],
+    "files": {
+      "PLAN.md": {
+        "path": "/workspace/HELSSA_AGENTS/prescription_system/PLAN.md",
+        "exists": false,
+        "size": 0
+      },
+      "CHECKLIST.json": {
+        "path": "/workspace/HELSSA_AGENTS/prescription_system/CHECKLIST.json",
+        "exists": false,
+        "size": 0
+      },
+      "PROGRESS.json": {
+        "path": "/workspace/HELSSA_AGENTS/prescription_system/PROGRESS.json",
+        "exists": false,
+        "size": 0
+      },
+      "LOG.md": {
+        "path": "/workspace/HELSSA_AGENTS/prescription_system/LOG.md",
+        "exists": false,
+        "size": 0
+      },
+      "README.md": {
+        "path": "/workspace/HELSSA_AGENTS/prescription_system/README.md",
+        "exists": false,
+        "size": 0
+      },
+      "app_code/__init__.py": {
+        "path": "/workspace/HELSSA_AGENTS/prescription_system/app_code/__init__.py",
+        "exists": true,
+        "size": 344
+      },
+      "app_code/models.py": {
+        "path": "/workspace/HELSSA_AGENTS/prescription_system/app_code/models.py",
+        "exists": true,
+        "size": 2786
+      },
+      "app_code/views.py": {
+        "path": "/workspace/HELSSA_AGENTS/prescription_system/app_code/views.py",
+        "exists": true,
+        "size": 13026
+      },
+      "app_code/serializers.py": {
+        "path": "/workspace/HELSSA_AGENTS/prescription_system/app_code/serializers.py",
+        "exists": true,
+        "size": 4662
+      },
+      "app_code/urls.py": {
+        "path": "/workspace/HELSSA_AGENTS/prescription_system/app_code/urls.py",
+        "exists": true,
+        "size": 992
+      },
+      "app_code/admin.py": {
+        "path": "/workspace/HELSSA_AGENTS/prescription_system/app_code/admin.py",
+        "exists": true,
+        "size": 5042
+      },
+      "app_code/permissions.py": {
+        "path": "/workspace/HELSSA_AGENTS/prescription_system/app_code/permissions.py",
+        "exists": true,
+        "size": 4740
+      },
+      "app_code/cores/__init__.py": {
+        "path": "/workspace/HELSSA_AGENTS/prescription_system/app_code/cores/__init__.py",
+        "exists": false,
+        "size": 0
+      },
+      "app_code/cores/api_ingress.py": {
+        "path": "/workspace/HELSSA_AGENTS/prescription_system/app_code/cores/api_ingress.py",
+        "exists": true,
+        "size": 9531
+      },
+      "app_code/cores/text_processor.py": {
+        "path": "/workspace/HELSSA_AGENTS/prescription_system/app_code/cores/text_processor.py",
+        "exists": true,
+        "size": 12354
+      },
+      "app_code/cores/speech_processor.py": {
+        "path": "/workspace/HELSSA_AGENTS/prescription_system/app_code/cores/speech_processor.py",
+        "exists": true,
+        "size": 17444
+      },
+      "app_code/cores/orchestrator.py": {
+        "path": "/workspace/HELSSA_AGENTS/prescription_system/app_code/cores/orchestrator.py",
+        "exists": true,
+        "size": 17056
+      },
+      "deployment/settings_additions.py": {
+        "path": "/workspace/HELSSA_AGENTS/prescription_system/deployment/settings_additions.py",
+        "exists": true,
+        "size": 5860
+      },
+      "deployment/urls_additions.py": {
+        "path": "/workspace/HELSSA_AGENTS/prescription_system/deployment/urls_additions.py",
+        "exists": true,
+        "size": 790
+      },
+      "deployment/requirements_additions.txt": {
+        "path": "/workspace/HELSSA_AGENTS/prescription_system/deployment/requirements_additions.txt",
+        "exists": true,
+        "size": 2387
+      }
+    }
+  },
+  "visit_management": {
+    "app_name": "visit_management",
+    "valid": false,
+    "issues": [
+      "Missing required file: PLAN.md",
+      "Missing required file: CHECKLIST.json",
+      "Missing required file: PROGRESS.json",
+      "Missing required file: LOG.md",
+      "Missing required file: README.md",
+      "Missing required file: app_code/cores/__init__.py"
+    ],
+    "files": {
+      "PLAN.md": {
+        "path": "/workspace/HELSSA_AGENTS/visit_management/PLAN.md",
+        "exists": false,
+        "size": 0
+      },
+      "CHECKLIST.json": {
+        "path": "/workspace/HELSSA_AGENTS/visit_management/CHECKLIST.json",
+        "exists": false,
+        "size": 0
+      },
+      "PROGRESS.json": {
+        "path": "/workspace/HELSSA_AGENTS/visit_management/PROGRESS.json",
+        "exists": false,
+        "size": 0
+      },
+      "LOG.md": {
+        "path": "/workspace/HELSSA_AGENTS/visit_management/LOG.md",
+        "exists": false,
+        "size": 0
+      },
+      "README.md": {
+        "path": "/workspace/HELSSA_AGENTS/visit_management/README.md",
+        "exists": false,
+        "size": 0
+      },
+      "app_code/__init__.py": {
+        "path": "/workspace/HELSSA_AGENTS/visit_management/app_code/__init__.py",
+        "exists": true,
+        "size": 344
+      },
+      "app_code/models.py": {
+        "path": "/workspace/HELSSA_AGENTS/visit_management/app_code/models.py",
+        "exists": true,
+        "size": 2786
+      },
+      "app_code/views.py": {
+        "path": "/workspace/HELSSA_AGENTS/visit_management/app_code/views.py",
+        "exists": true,
+        "size": 13026
+      },
+      "app_code/serializers.py": {
+        "path": "/workspace/HELSSA_AGENTS/visit_management/app_code/serializers.py",
+        "exists": true,
+        "size": 4662
+      },
+      "app_code/urls.py": {
+        "path": "/workspace/HELSSA_AGENTS/visit_management/app_code/urls.py",
+        "exists": true,
+        "size": 992
+      },
+      "app_code/admin.py": {
+        "path": "/workspace/HELSSA_AGENTS/visit_management/app_code/admin.py",
+        "exists": true,
+        "size": 5042
+      },
+      "app_code/permissions.py": {
+        "path": "/workspace/HELSSA_AGENTS/visit_management/app_code/permissions.py",
+        "exists": true,
+        "size": 4740
+      },
+      "app_code/cores/__init__.py": {
+        "path": "/workspace/HELSSA_AGENTS/visit_management/app_code/cores/__init__.py",
+        "exists": false,
+        "size": 0
+      },
+      "app_code/cores/api_ingress.py": {
+        "path": "/workspace/HELSSA_AGENTS/visit_management/app_code/cores/api_ingress.py",
+        "exists": true,
+        "size": 9531
+      },
+      "app_code/cores/text_processor.py": {
+        "path": "/workspace/HELSSA_AGENTS/visit_management/app_code/cores/text_processor.py",
+        "exists": true,
+        "size": 12354
+      },
+      "app_code/cores/speech_processor.py": {
+        "path": "/workspace/HELSSA_AGENTS/visit_management/app_code/cores/speech_processor.py",
+        "exists": true,
+        "size": 17444
+      },
+      "app_code/cores/orchestrator.py": {
+        "path": "/workspace/HELSSA_AGENTS/visit_management/app_code/cores/orchestrator.py",
+        "exists": true,
+        "size": 17056
+      },
+      "deployment/settings_additions.py": {
+        "path": "/workspace/HELSSA_AGENTS/visit_management/deployment/settings_additions.py",
+        "exists": true,
+        "size": 5860
+      },
+      "deployment/urls_additions.py": {
+        "path": "/workspace/HELSSA_AGENTS/visit_management/deployment/urls_additions.py",
+        "exists": true,
+        "size": 790
+      },
+      "deployment/requirements_additions.txt": {
+        "path": "/workspace/HELSSA_AGENTS/visit_management/deployment/requirements_additions.txt",
+        "exists": true,
+        "size": 2387
+      }
+    }
+  },
+  "unified_auth_integration": {
+    "app_name": "unified_auth_integration",
+    "valid": false,
+    "issues": [
+      "Missing required file: PLAN.md",
+      "Missing required file: CHECKLIST.json",
+      "Missing required file: PROGRESS.json",
+      "Missing required file: LOG.md",
+      "Missing required file: README.md",
+      "Missing required file: app_code/cores/__init__.py"
+    ],
+    "files": {
+      "PLAN.md": {
+        "path": "/workspace/HELSSA_AGENTS/unified_auth_integration/PLAN.md",
+        "exists": false,
+        "size": 0
+      },
+      "CHECKLIST.json": {
+        "path": "/workspace/HELSSA_AGENTS/unified_auth_integration/CHECKLIST.json",
+        "exists": false,
+        "size": 0
+      },
+      "PROGRESS.json": {
+        "path": "/workspace/HELSSA_AGENTS/unified_auth_integration/PROGRESS.json",
+        "exists": false,
+        "size": 0
+      },
+      "LOG.md": {
+        "path": "/workspace/HELSSA_AGENTS/unified_auth_integration/LOG.md",
+        "exists": false,
+        "size": 0
+      },
+      "README.md": {
+        "path": "/workspace/HELSSA_AGENTS/unified_auth_integration/README.md",
+        "exists": false,
+        "size": 0
+      },
+      "app_code/__init__.py": {
+        "path": "/workspace/HELSSA_AGENTS/unified_auth_integration/app_code/__init__.py",
+        "exists": true,
+        "size": 344
+      },
+      "app_code/models.py": {
+        "path": "/workspace/HELSSA_AGENTS/unified_auth_integration/app_code/models.py",
+        "exists": true,
+        "size": 2786
+      },
+      "app_code/views.py": {
+        "path": "/workspace/HELSSA_AGENTS/unified_auth_integration/app_code/views.py",
+        "exists": true,
+        "size": 13026
+      },
+      "app_code/serializers.py": {
+        "path": "/workspace/HELSSA_AGENTS/unified_auth_integration/app_code/serializers.py",
+        "exists": true,
+        "size": 4662
+      },
+      "app_code/urls.py": {
+        "path": "/workspace/HELSSA_AGENTS/unified_auth_integration/app_code/urls.py",
+        "exists": true,
+        "size": 992
+      },
+      "app_code/admin.py": {
+        "path": "/workspace/HELSSA_AGENTS/unified_auth_integration/app_code/admin.py",
+        "exists": true,
+        "size": 5042
+      },
+      "app_code/permissions.py": {
+        "path": "/workspace/HELSSA_AGENTS/unified_auth_integration/app_code/permissions.py",
+        "exists": true,
+        "size": 4740
+      },
+      "app_code/cores/__init__.py": {
+        "path": "/workspace/HELSSA_AGENTS/unified_auth_integration/app_code/cores/__init__.py",
+        "exists": false,
+        "size": 0
+      },
+      "app_code/cores/api_ingress.py": {
+        "path": "/workspace/HELSSA_AGENTS/unified_auth_integration/app_code/cores/api_ingress.py",
+        "exists": true,
+        "size": 9531
+      },
+      "app_code/cores/text_processor.py": {
+        "path": "/workspace/HELSSA_AGENTS/unified_auth_integration/app_code/cores/text_processor.py",
+        "exists": true,
+        "size": 12354
+      },
+      "app_code/cores/speech_processor.py": {
+        "path": "/workspace/HELSSA_AGENTS/unified_auth_integration/app_code/cores/speech_processor.py",
+        "exists": true,
+        "size": 17444
+      },
+      "app_code/cores/orchestrator.py": {
+        "path": "/workspace/HELSSA_AGENTS/unified_auth_integration/app_code/cores/orchestrator.py",
+        "exists": true,
+        "size": 17056
+      },
+      "deployment/settings_additions.py": {
+        "path": "/workspace/HELSSA_AGENTS/unified_auth_integration/deployment/settings_additions.py",
+        "exists": true,
+        "size": 5860
+      },
+      "deployment/urls_additions.py": {
+        "path": "/workspace/HELSSA_AGENTS/unified_auth_integration/deployment/urls_additions.py",
+        "exists": true,
+        "size": 790
+      },
+      "deployment/requirements_additions.txt": {
+        "path": "/workspace/HELSSA_AGENTS/unified_auth_integration/deployment/requirements_additions.txt",
+        "exists": true,
+        "size": 2387
+      }
+    }
+  },
+  "unified_billing_integration": {
+    "app_name": "unified_billing_integration",
+    "valid": false,
+    "issues": [
+      "Missing required file: PLAN.md",
+      "Missing required file: CHECKLIST.json",
+      "Missing required file: PROGRESS.json",
+      "Missing required file: LOG.md",
+      "Missing required file: README.md",
+      "Missing required file: app_code/cores/__init__.py"
+    ],
+    "files": {
+      "PLAN.md": {
+        "path": "/workspace/HELSSA_AGENTS/unified_billing_integration/PLAN.md",
+        "exists": false,
+        "size": 0
+      },
+      "CHECKLIST.json": {
+        "path": "/workspace/HELSSA_AGENTS/unified_billing_integration/CHECKLIST.json",
+        "exists": false,
+        "size": 0
+      },
+      "PROGRESS.json": {
+        "path": "/workspace/HELSSA_AGENTS/unified_billing_integration/PROGRESS.json",
+        "exists": false,
+        "size": 0
+      },
+      "LOG.md": {
+        "path": "/workspace/HELSSA_AGENTS/unified_billing_integration/LOG.md",
+        "exists": false,
+        "size": 0
+      },
+      "README.md": {
+        "path": "/workspace/HELSSA_AGENTS/unified_billing_integration/README.md",
+        "exists": false,
+        "size": 0
+      },
+      "app_code/__init__.py": {
+        "path": "/workspace/HELSSA_AGENTS/unified_billing_integration/app_code/__init__.py",
+        "exists": true,
+        "size": 344
+      },
+      "app_code/models.py": {
+        "path": "/workspace/HELSSA_AGENTS/unified_billing_integration/app_code/models.py",
+        "exists": true,
+        "size": 2786
+      },
+      "app_code/views.py": {
+        "path": "/workspace/HELSSA_AGENTS/unified_billing_integration/app_code/views.py",
+        "exists": true,
+        "size": 13026
+      },
+      "app_code/serializers.py": {
+        "path": "/workspace/HELSSA_AGENTS/unified_billing_integration/app_code/serializers.py",
+        "exists": true,
+        "size": 4662
+      },
+      "app_code/urls.py": {
+        "path": "/workspace/HELSSA_AGENTS/unified_billing_integration/app_code/urls.py",
+        "exists": true,
+        "size": 992
+      },
+      "app_code/admin.py": {
+        "path": "/workspace/HELSSA_AGENTS/unified_billing_integration/app_code/admin.py",
+        "exists": true,
+        "size": 5042
+      },
+      "app_code/permissions.py": {
+        "path": "/workspace/HELSSA_AGENTS/unified_billing_integration/app_code/permissions.py",
+        "exists": true,
+        "size": 4740
+      },
+      "app_code/cores/__init__.py": {
+        "path": "/workspace/HELSSA_AGENTS/unified_billing_integration/app_code/cores/__init__.py",
+        "exists": false,
+        "size": 0
+      },
+      "app_code/cores/api_ingress.py": {
+        "path": "/workspace/HELSSA_AGENTS/unified_billing_integration/app_code/cores/api_ingress.py",
+        "exists": true,
+        "size": 9531
+      },
+      "app_code/cores/text_processor.py": {
+        "path": "/workspace/HELSSA_AGENTS/unified_billing_integration/app_code/cores/text_processor.py",
+        "exists": true,
+        "size": 12354
+      },
+      "app_code/cores/speech_processor.py": {
+        "path": "/workspace/HELSSA_AGENTS/unified_billing_integration/app_code/cores/speech_processor.py",
+        "exists": true,
+        "size": 17444
+      },
+      "app_code/cores/orchestrator.py": {
+        "path": "/workspace/HELSSA_AGENTS/unified_billing_integration/app_code/cores/orchestrator.py",
+        "exists": true,
+        "size": 17056
+      },
+      "deployment/settings_additions.py": {
+        "path": "/workspace/HELSSA_AGENTS/unified_billing_integration/deployment/settings_additions.py",
+        "exists": true,
+        "size": 5860
+      },
+      "deployment/urls_additions.py": {
+        "path": "/workspace/HELSSA_AGENTS/unified_billing_integration/deployment/urls_additions.py",
+        "exists": true,
+        "size": 790
+      },
+      "deployment/requirements_additions.txt": {
+        "path": "/workspace/HELSSA_AGENTS/unified_billing_integration/deployment/requirements_additions.txt",
+        "exists": true,
+        "size": 2387
+      }
+    }
+  },
+  "unified_ai_integration": {
+    "app_name": "unified_ai_integration",
+    "valid": false,
+    "issues": [
+      "Missing required file: PLAN.md",
+      "Missing required file: CHECKLIST.json",
+      "Missing required file: PROGRESS.json",
+      "Missing required file: LOG.md",
+      "Missing required file: README.md",
+      "Missing required file: app_code/cores/__init__.py"
+    ],
+    "files": {
+      "PLAN.md": {
+        "path": "/workspace/HELSSA_AGENTS/unified_ai_integration/PLAN.md",
+        "exists": false,
+        "size": 0
+      },
+      "CHECKLIST.json": {
+        "path": "/workspace/HELSSA_AGENTS/unified_ai_integration/CHECKLIST.json",
+        "exists": false,
+        "size": 0
+      },
+      "PROGRESS.json": {
+        "path": "/workspace/HELSSA_AGENTS/unified_ai_integration/PROGRESS.json",
+        "exists": false,
+        "size": 0
+      },
+      "LOG.md": {
+        "path": "/workspace/HELSSA_AGENTS/unified_ai_integration/LOG.md",
+        "exists": false,
+        "size": 0
+      },
+      "README.md": {
+        "path": "/workspace/HELSSA_AGENTS/unified_ai_integration/README.md",
+        "exists": false,
+        "size": 0
+      },
+      "app_code/__init__.py": {
+        "path": "/workspace/HELSSA_AGENTS/unified_ai_integration/app_code/__init__.py",
+        "exists": true,
+        "size": 344
+      },
+      "app_code/models.py": {
+        "path": "/workspace/HELSSA_AGENTS/unified_ai_integration/app_code/models.py",
+        "exists": true,
+        "size": 2786
+      },
+      "app_code/views.py": {
+        "path": "/workspace/HELSSA_AGENTS/unified_ai_integration/app_code/views.py",
+        "exists": true,
+        "size": 13026
+      },
+      "app_code/serializers.py": {
+        "path": "/workspace/HELSSA_AGENTS/unified_ai_integration/app_code/serializers.py",
+        "exists": true,
+        "size": 4662
+      },
+      "app_code/urls.py": {
+        "path": "/workspace/HELSSA_AGENTS/unified_ai_integration/app_code/urls.py",
+        "exists": true,
+        "size": 992
+      },
+      "app_code/admin.py": {
+        "path": "/workspace/HELSSA_AGENTS/unified_ai_integration/app_code/admin.py",
+        "exists": true,
+        "size": 5042
+      },
+      "app_code/permissions.py": {
+        "path": "/workspace/HELSSA_AGENTS/unified_ai_integration/app_code/permissions.py",
+        "exists": true,
+        "size": 4740
+      },
+      "app_code/cores/__init__.py": {
+        "path": "/workspace/HELSSA_AGENTS/unified_ai_integration/app_code/cores/__init__.py",
+        "exists": false,
+        "size": 0
+      },
+      "app_code/cores/api_ingress.py": {
+        "path": "/workspace/HELSSA_AGENTS/unified_ai_integration/app_code/cores/api_ingress.py",
+        "exists": true,
+        "size": 9531
+      },
+      "app_code/cores/text_processor.py": {
+        "path": "/workspace/HELSSA_AGENTS/unified_ai_integration/app_code/cores/text_processor.py",
+        "exists": true,
+        "size": 12354
+      },
+      "app_code/cores/speech_processor.py": {
+        "path": "/workspace/HELSSA_AGENTS/unified_ai_integration/app_code/cores/speech_processor.py",
+        "exists": true,
+        "size": 17444
+      },
+      "app_code/cores/orchestrator.py": {
+        "path": "/workspace/HELSSA_AGENTS/unified_ai_integration/app_code/cores/orchestrator.py",
+        "exists": true,
+        "size": 17056
+      },
+      "deployment/settings_additions.py": {
+        "path": "/workspace/HELSSA_AGENTS/unified_ai_integration/deployment/settings_additions.py",
+        "exists": true,
+        "size": 5860
+      },
+      "deployment/urls_additions.py": {
+        "path": "/workspace/HELSSA_AGENTS/unified_ai_integration/deployment/urls_additions.py",
+        "exists": true,
+        "size": 790
+      },
+      "deployment/requirements_additions.txt": {
+        "path": "/workspace/HELSSA_AGENTS/unified_ai_integration/deployment/requirements_additions.txt",
+        "exists": true,
+        "size": 2387
+      }
+    }
+  },
+  "admin_dashboard": {
+    "app_name": "admin_dashboard",
+    "valid": false,
+    "issues": [
+      "Missing required file: PLAN.md",
+      "Missing required file: CHECKLIST.json",
+      "Missing required file: PROGRESS.json",
+      "Missing required file: LOG.md",
+      "Missing required file: README.md",
+      "Missing required file: app_code/cores/__init__.py"
+    ],
+    "files": {
+      "PLAN.md": {
+        "path": "/workspace/HELSSA_AGENTS/admin_dashboard/PLAN.md",
+        "exists": false,
+        "size": 0
+      },
+      "CHECKLIST.json": {
+        "path": "/workspace/HELSSA_AGENTS/admin_dashboard/CHECKLIST.json",
+        "exists": false,
+        "size": 0
+      },
+      "PROGRESS.json": {
+        "path": "/workspace/HELSSA_AGENTS/admin_dashboard/PROGRESS.json",
+        "exists": false,
+        "size": 0
+      },
+      "LOG.md": {
+        "path": "/workspace/HELSSA_AGENTS/admin_dashboard/LOG.md",
+        "exists": false,
+        "size": 0
+      },
+      "README.md": {
+        "path": "/workspace/HELSSA_AGENTS/admin_dashboard/README.md",
+        "exists": false,
+        "size": 0
+      },
+      "app_code/__init__.py": {
+        "path": "/workspace/HELSSA_AGENTS/admin_dashboard/app_code/__init__.py",
+        "exists": true,
+        "size": 344
+      },
+      "app_code/models.py": {
+        "path": "/workspace/HELSSA_AGENTS/admin_dashboard/app_code/models.py",
+        "exists": true,
+        "size": 2786
+      },
+      "app_code/views.py": {
+        "path": "/workspace/HELSSA_AGENTS/admin_dashboard/app_code/views.py",
+        "exists": true,
+        "size": 13026
+      },
+      "app_code/serializers.py": {
+        "path": "/workspace/HELSSA_AGENTS/admin_dashboard/app_code/serializers.py",
+        "exists": true,
+        "size": 4662
+      },
+      "app_code/urls.py": {
+        "path": "/workspace/HELSSA_AGENTS/admin_dashboard/app_code/urls.py",
+        "exists": true,
+        "size": 992
+      },
+      "app_code/admin.py": {
+        "path": "/workspace/HELSSA_AGENTS/admin_dashboard/app_code/admin.py",
+        "exists": true,
+        "size": 5042
+      },
+      "app_code/permissions.py": {
+        "path": "/workspace/HELSSA_AGENTS/admin_dashboard/app_code/permissions.py",
+        "exists": true,
+        "size": 4740
+      },
+      "app_code/cores/__init__.py": {
+        "path": "/workspace/HELSSA_AGENTS/admin_dashboard/app_code/cores/__init__.py",
+        "exists": false,
+        "size": 0
+      },
+      "app_code/cores/api_ingress.py": {
+        "path": "/workspace/HELSSA_AGENTS/admin_dashboard/app_code/cores/api_ingress.py",
+        "exists": true,
+        "size": 9531
+      },
+      "app_code/cores/text_processor.py": {
+        "path": "/workspace/HELSSA_AGENTS/admin_dashboard/app_code/cores/text_processor.py",
+        "exists": true,
+        "size": 12354
+      },
+      "app_code/cores/speech_processor.py": {
+        "path": "/workspace/HELSSA_AGENTS/admin_dashboard/app_code/cores/speech_processor.py",
+        "exists": true,
+        "size": 17444
+      },
+      "app_code/cores/orchestrator.py": {
+        "path": "/workspace/HELSSA_AGENTS/admin_dashboard/app_code/cores/orchestrator.py",
+        "exists": true,
+        "size": 17056
+      },
+      "deployment/settings_additions.py": {
+        "path": "/workspace/HELSSA_AGENTS/admin_dashboard/deployment/settings_additions.py",
+        "exists": true,
+        "size": 5860
+      },
+      "deployment/urls_additions.py": {
+        "path": "/workspace/HELSSA_AGENTS/admin_dashboard/deployment/urls_additions.py",
+        "exists": true,
+        "size": 790
+      },
+      "deployment/requirements_additions.txt": {
+        "path": "/workspace/HELSSA_AGENTS/admin_dashboard/deployment/requirements_additions.txt",
+        "exists": true,
+        "size": 2387
+      }
+    }
+  },
+  "analytics_system": {
+    "app_name": "analytics_system",
+    "valid": false,
+    "issues": [
+      "Missing required file: PLAN.md",
+      "Missing required file: CHECKLIST.json",
+      "Missing required file: PROGRESS.json",
+      "Missing required file: LOG.md",
+      "Missing required file: README.md",
+      "Missing required file: app_code/cores/__init__.py"
+    ],
+    "files": {
+      "PLAN.md": {
+        "path": "/workspace/HELSSA_AGENTS/analytics_system/PLAN.md",
+        "exists": false,
+        "size": 0
+      },
+      "CHECKLIST.json": {
+        "path": "/workspace/HELSSA_AGENTS/analytics_system/CHECKLIST.json",
+        "exists": false,
+        "size": 0
+      },
+      "PROGRESS.json": {
+        "path": "/workspace/HELSSA_AGENTS/analytics_system/PROGRESS.json",
+        "exists": false,
+        "size": 0
+      },
+      "LOG.md": {
+        "path": "/workspace/HELSSA_AGENTS/analytics_system/LOG.md",
+        "exists": false,
+        "size": 0
+      },
+      "README.md": {
+        "path": "/workspace/HELSSA_AGENTS/analytics_system/README.md",
+        "exists": false,
+        "size": 0
+      },
+      "app_code/__init__.py": {
+        "path": "/workspace/HELSSA_AGENTS/analytics_system/app_code/__init__.py",
+        "exists": true,
+        "size": 344
+      },
+      "app_code/models.py": {
+        "path": "/workspace/HELSSA_AGENTS/analytics_system/app_code/models.py",
+        "exists": true,
+        "size": 2786
+      },
+      "app_code/views.py": {
+        "path": "/workspace/HELSSA_AGENTS/analytics_system/app_code/views.py",
+        "exists": true,
+        "size": 13026
+      },
+      "app_code/serializers.py": {
+        "path": "/workspace/HELSSA_AGENTS/analytics_system/app_code/serializers.py",
+        "exists": true,
+        "size": 4662
+      },
+      "app_code/urls.py": {
+        "path": "/workspace/HELSSA_AGENTS/analytics_system/app_code/urls.py",
+        "exists": true,
+        "size": 992
+      },
+      "app_code/admin.py": {
+        "path": "/workspace/HELSSA_AGENTS/analytics_system/app_code/admin.py",
+        "exists": true,
+        "size": 5042
+      },
+      "app_code/permissions.py": {
+        "path": "/workspace/HELSSA_AGENTS/analytics_system/app_code/permissions.py",
+        "exists": true,
+        "size": 4740
+      },
+      "app_code/cores/__init__.py": {
+        "path": "/workspace/HELSSA_AGENTS/analytics_system/app_code/cores/__init__.py",
+        "exists": false,
+        "size": 0
+      },
+      "app_code/cores/api_ingress.py": {
+        "path": "/workspace/HELSSA_AGENTS/analytics_system/app_code/cores/api_ingress.py",
+        "exists": true,
+        "size": 9531
+      },
+      "app_code/cores/text_processor.py": {
+        "path": "/workspace/HELSSA_AGENTS/analytics_system/app_code/cores/text_processor.py",
+        "exists": true,
+        "size": 12354
+      },
+      "app_code/cores/speech_processor.py": {
+        "path": "/workspace/HELSSA_AGENTS/analytics_system/app_code/cores/speech_processor.py",
+        "exists": true,
+        "size": 17444
+      },
+      "app_code/cores/orchestrator.py": {
+        "path": "/workspace/HELSSA_AGENTS/analytics_system/app_code/cores/orchestrator.py",
+        "exists": true,
+        "size": 17056
+      },
+      "deployment/settings_additions.py": {
+        "path": "/workspace/HELSSA_AGENTS/analytics_system/deployment/settings_additions.py",
+        "exists": true,
+        "size": 5860
+      },
+      "deployment/urls_additions.py": {
+        "path": "/workspace/HELSSA_AGENTS/analytics_system/deployment/urls_additions.py",
+        "exists": true,
+        "size": 790
+      },
+      "deployment/requirements_additions.txt": {
+        "path": "/workspace/HELSSA_AGENTS/analytics_system/deployment/requirements_additions.txt",
+        "exists": true,
+        "size": 2387
+      }
+    }
+  },
+  "notification_system": {
+    "app_name": "notification_system",
+    "valid": false,
+    "issues": [
+      "Missing required file: PLAN.md",
+      "Missing required file: CHECKLIST.json",
+      "Missing required file: PROGRESS.json",
+      "Missing required file: LOG.md",
+      "Missing required file: README.md",
+      "Missing required file: app_code/cores/__init__.py"
+    ],
+    "files": {
+      "PLAN.md": {
+        "path": "/workspace/HELSSA_AGENTS/notification_system/PLAN.md",
+        "exists": false,
+        "size": 0
+      },
+      "CHECKLIST.json": {
+        "path": "/workspace/HELSSA_AGENTS/notification_system/CHECKLIST.json",
+        "exists": false,
+        "size": 0
+      },
+      "PROGRESS.json": {
+        "path": "/workspace/HELSSA_AGENTS/notification_system/PROGRESS.json",
+        "exists": false,
+        "size": 0
+      },
+      "LOG.md": {
+        "path": "/workspace/HELSSA_AGENTS/notification_system/LOG.md",
+        "exists": false,
+        "size": 0
+      },
+      "README.md": {
+        "path": "/workspace/HELSSA_AGENTS/notification_system/README.md",
+        "exists": false,
+        "size": 0
+      },
+      "app_code/__init__.py": {
+        "path": "/workspace/HELSSA_AGENTS/notification_system/app_code/__init__.py",
+        "exists": true,
+        "size": 344
+      },
+      "app_code/models.py": {
+        "path": "/workspace/HELSSA_AGENTS/notification_system/app_code/models.py",
+        "exists": true,
+        "size": 2786
+      },
+      "app_code/views.py": {
+        "path": "/workspace/HELSSA_AGENTS/notification_system/app_code/views.py",
+        "exists": true,
+        "size": 13026
+      },
+      "app_code/serializers.py": {
+        "path": "/workspace/HELSSA_AGENTS/notification_system/app_code/serializers.py",
+        "exists": true,
+        "size": 4662
+      },
+      "app_code/urls.py": {
+        "path": "/workspace/HELSSA_AGENTS/notification_system/app_code/urls.py",
+        "exists": true,
+        "size": 992
+      },
+      "app_code/admin.py": {
+        "path": "/workspace/HELSSA_AGENTS/notification_system/app_code/admin.py",
+        "exists": true,
+        "size": 5042
+      },
+      "app_code/permissions.py": {
+        "path": "/workspace/HELSSA_AGENTS/notification_system/app_code/permissions.py",
+        "exists": true,
+        "size": 4740
+      },
+      "app_code/cores/__init__.py": {
+        "path": "/workspace/HELSSA_AGENTS/notification_system/app_code/cores/__init__.py",
+        "exists": false,
+        "size": 0
+      },
+      "app_code/cores/api_ingress.py": {
+        "path": "/workspace/HELSSA_AGENTS/notification_system/app_code/cores/api_ingress.py",
+        "exists": true,
+        "size": 9531
+      },
+      "app_code/cores/text_processor.py": {
+        "path": "/workspace/HELSSA_AGENTS/notification_system/app_code/cores/text_processor.py",
+        "exists": true,
+        "size": 12354
+      },
+      "app_code/cores/speech_processor.py": {
+        "path": "/workspace/HELSSA_AGENTS/notification_system/app_code/cores/speech_processor.py",
+        "exists": true,
+        "size": 17444
+      },
+      "app_code/cores/orchestrator.py": {
+        "path": "/workspace/HELSSA_AGENTS/notification_system/app_code/cores/orchestrator.py",
+        "exists": true,
+        "size": 17056
+      },
+      "deployment/settings_additions.py": {
+        "path": "/workspace/HELSSA_AGENTS/notification_system/deployment/settings_additions.py",
+        "exists": true,
+        "size": 5860
+      },
+      "deployment/urls_additions.py": {
+        "path": "/workspace/HELSSA_AGENTS/notification_system/deployment/urls_additions.py",
+        "exists": true,
+        "size": 790
+      },
+      "deployment/requirements_additions.txt": {
+        "path": "/workspace/HELSSA_AGENTS/notification_system/deployment/requirements_additions.txt",
+        "exists": true,
+        "size": 2387
+      }
+    }
+  }
+}

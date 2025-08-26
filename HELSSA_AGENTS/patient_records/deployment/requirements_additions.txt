@@ -1,0 +1,130 @@
+# {APP_NAME} Specific Requirements
+# Part of HELSSA Platform
+# Additional Python packages required for {APP_DESCRIPTION}
+
+# Core Django packages (if not already in main requirements)
+django>=4.2.7
+djangorestframework>=3.14.0
+django-cors-headers>=4.3.1
+
+# Authentication and permissions
+django-oauth-toolkit>=1.7.1
+djangorestframework-simplejwt>=5.3.0
+
+# Database and caching
+redis>=5.0.1
+django-redis>=5.4.0
+psycopg2-binary>=2.9.9
+
+# File handling and storage
+Pillow>=10.1.0
+django-storages>=1.14.2
+boto3>=1.34.0
+
+# API documentation
+drf-yasg>=1.21.7
+django-silk>=5.0.4  # For API profiling
+
+# Text processing and AI
+openai>=1.3.0
+tiktoken>=0.5.1
+anthropic>=0.7.0  # If using Claude
+
+# Audio processing
+whisper>=1.1.10
+librosa>=0.10.1
+soundfile>=0.12.1
+pydub>=0.25.1
+
+# NLP libraries
+spacy>=3.7.2
+transformers>=4.35.0
+torch>=2.1.0
+
+# Medical/Scientific libraries
+scikit-learn>=1.3.2
+numpy>=1.24.0
+pandas>=2.1.0
+
+# Async processing
+celery>=5.3.4
+kombu>=5.3.4
+billiard>=4.2.0
+
+# Monitoring and logging
+sentry-sdk>=1.38.0
+structlog>=23.2.0
+django-health-check>=3.17.0
+
+# Validation and serialization
+marshmallow>=3.20.1
+cerberus>=1.3.4
+jsonschema>=4.20.0
+
+# HTTP and networking
+requests>=2.31.0
+httpx>=0.25.2
+websockets>=12.0  # If WebSocket support needed
+
+# Development and testing
+pytest>=7.4.3
+pytest-django>=4.7.0
+factory-boy>=3.3.0
+freezegun>=1.2.2
+responses>=0.24.1
+
+# Code quality
+black>=23.11.0
+flake8>=6.1.0
+isort>=5.12.0
+mypy>=1.7.0
+
+# Security
+cryptography>=41.0.7
+pyotp>=2.9.0  # For OTP generation
+
+# Utilities
+python-dotenv>=1.0.0
+click>=8.1.7
+tqdm>=4.66.1
+python-dateutil>=2.8.2
+
+# Performance
+django-debug-toolbar>=4.2.0  # Development only
+django-extensions>=3.2.3
+
+# Internationalization
+django-modeltranslation>=0.18.11  # If multi-language support needed
+
+# Email
+django-anymail>=10.2  # For email service integration
+
+# API rate limiting
+django-ratelimit>=4.1.0
+
+# Background tasks
+django-rq>=2.8.1  # Alternative to Celery
+
+# Data export
+openpyxl>=3.1.2
+xlsxwriter>=3.1.9
+
+# Image processing
+opencv-python>=4.8.1.78  # If image processing needed
+
+# Geographic data
+geopy>=2.4.0  # If location features needed
+
+# PDF generation
+reportlab>=4.0.7  # If PDF reports needed
+weasyprint>=60.2  # Alternative PDF library
+
+# Environment specific requirements
+# Development
+django-extensions>=3.2.3
+ipython>=8.17.2
+
+# Production
+gunicorn>=21.2.0
+uwsgi>=2.0.23
+whitenoise>=6.6.0
