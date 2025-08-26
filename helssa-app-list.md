@@ -32,8 +32,3 @@
 - `compliance` — SOPs/policies, documentation and compliance
 - `devops` — Environment/secrets configuration, CI/CD
 
-## Frontends
-- `helssa_patient_app` — Flutter Web/Mobile (patient UI)
-- `helssa_doctor_dashboard` — Flutter Web (doctor portal)
-- `medogram_site` — React/Next (marketing and blog)
-
