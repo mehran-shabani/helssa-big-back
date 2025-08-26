@@ -163,21 +163,26 @@ def main():
     Generate progress charts for all apps in the agent directory
     """
     agent_dir = Path(__file__).parent
+    apps_dir = agent_dir / "apps"
     
     print("🎯 Generating Progress Charts for HELSSA Apps")
     print("=" * 50)
     
     results = []
     
-    # Find all app directories
-    for app_dir in agent_dir.iterdir():
-        if app_dir.is_dir() and app_dir.name not in ['TEMPLATES', '__pycache__']:
-            if app_dir.name.startswith('.'):
-                continue
-                
-            result = create_progress_chart_for_app(app_dir)
-            if result:
-                results.append(result)
+    # Find all app directories under agent/apps
+    search_root = apps_dir if apps_dir.exists() else agent_dir
+    for app_dir in search_root.iterdir():
+        if not app_dir.is_dir():
+            continue
+        if app_dir.name.startswith('.'):
+            continue
+        if app_dir.name in ['TEMPLATES', '__pycache__', 'docs']:
+            continue
+
+        result = create_progress_chart_for_app(app_dir)
+        if result:
+            results.append(result)
     
     print("\n📊 Summary:")
     print("-" * 30)

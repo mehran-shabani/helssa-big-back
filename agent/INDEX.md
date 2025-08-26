@@ -7,49 +7,55 @@
 ## 📁 ساختار پوشه
 
 ```
-AGENT/
+agent/
 ├── INDEX.md                      # این فایل
 ├── README.md                     # راهنمای کلی
 ├── ARCHITECTURE_CONVENTIONS.md   # قراردادهای معماری
-├── FINAL_CHECKLIST.json         # چک‌لیست نهایی QA
-├── FINAL_REPORT.md              # گزارش نهایی
-├── overall_progress.svg         # نمودار پیشرفت کلی
-│
-├── patient_chatbot/             # دستورالعمل چت‌بات بیمار
-│   ├── PLAN.md
-│   ├── CHECKLIST.json
-│   ├── PROGRESS.json
-│   ├── LOG.md
-│   ├── README.md
-│   └── charts/
-│       └── progress_doughnut.svg
-│
-├── doctor_chatbot/              # دستورالعمل چت‌بات پزشک
-│   ├── PLAN.md
-│   ├── CHECKLIST.json
-│   ├── PROGRESS.json
-│   ├── LOG.md
-│   ├── README.md
-│   └── charts/
-│       └── progress_doughnut.svg
-│
-├── soapify/                     # دستورالعمل SOAPify
-│   ├── PLAN.md
-│   ├── CHECKLIST.json
-│   ├── PROGRESS.json
-│   ├── LOG.md
-│   ├── README.md
-│   └── charts/
-│       └── progress_doughnut.svg
-│
-└── doctor_dashboard/            # دستورالعمل داشبورد پزشک
-    ├── PLAN.md
-    ├── CHECKLIST.json
-    ├── PROGRESS.json
-    ├── LOG.md
-    ├── README.md
-    └── charts/
-        └── progress_doughnut.svg
+├── CORE_ARCHITECTURE.md          # هسته‌های مرکزی
+├── SECURITY_POLICIES.md          # سیاست‌های امنیتی
+├── FINAL_CHECKLIST.json          # چک‌لیست نهایی QA
+├── FINAL_REPORT.md               # گزارش نهایی
+├── FINAL_SUMMARY.md              # خلاصه نهایی
+├── TEMPLATES/                    # تمپلیت‌ها
+├── docs/                         # مستندات HELSSA
+│   ├── 03-project-tree.md
+│   └── ...
+└── apps/                         # اپ‌ها
+    ├── patient_chatbot/
+    │   ├── PLAN.md
+    │   ├── CHECKLIST.json
+    │   ├── PROGRESS.json
+    │   ├── LOG.md
+    │   ├── README.md
+    │   └── charts/
+    │       └── progress_doughnut.svg
+    │
+    ├── doctor_chatbot/
+    │   ├── PLAN.md
+    │   ├── CHECKLIST.json
+    │   ├── PROGRESS.json
+    │   ├── LOG.md
+    │   ├── README.md
+    │   └── charts/
+    │       └── progress_doughnut.svg
+    │
+    ├── soapify/
+    │   ├── PLAN.md
+    │   ├── CHECKLIST.json
+    │   ├── PROGRESS.json
+    │   ├── LOG.md
+    │   ├── README.md
+    │   └── charts/
+    │       └── progress_doughnut.svg
+    │
+    └── doctor_dashboard/
+        ├── PLAN.md
+        ├── CHECKLIST.json
+        ├── PROGRESS.json
+        ├── LOG.md
+        ├── README.md
+        └── charts/
+            └── progress_doughnut.svg
 ```
 
 ## 🎯 نحوه استفاده

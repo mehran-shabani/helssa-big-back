@@ -56,7 +56,7 @@
 1. خواندن کامل CORE_ARCHITECTURE.md
 2. خواندن کامل SECURITY_POLICIES.md  
 3. بررسی الگوهای موجود در کد پایه
-4. ایجاد پوشه اپ در `agent/<app_name>/`
+4. ایجاد پوشه اپ در `agent/apps/<app_name>/`
 
 ### مرحله 2: طراحی
 1. تکمیل PLAN.md بر اساس template
@@ -86,7 +86,7 @@
 ## ساختار استاندارد اپلیکیشن
 
 ```
-agent/<app_name>/
+agent/apps/<app_name>/
 ├── PLAN.md                    # برنامه تفصیلی
 ├── CHECKLIST.json             # چک‌لیست اجرا
 ├── PROGRESS.json              # گزارش پیشرفت
@@ -103,6 +103,7 @@ agent/<app_name>/
 │   ├── views.py
 │   ├── urls.py
 │   ├── permissions.py
+│   ├── forms.py
 │   ├── cores/                 # چهار هسته
 │   │   ├── __init__.py
 │   │   ├── api_ingress.py
@@ -158,33 +159,30 @@ def standard_endpoint(request):
         serializer = RequestSerializer(data=request.data)
         if not serializer.is_valid():
             return Response(
-                {'error': 'Invalid input', 'details': serializer.errors},
-                status=status.HTTP_400_BAD_REQUEST
+                {
+                    "success": False,
+                    "errors": serializer.errors,
+                    "message": "Validation failed",
+                },
+                status=status.HTTP_400_BAD_REQUEST,
             )
-        
-        # 2. Permission check
-        if not request.user.has_permission_for_action():
-            return Response(
-                {'error': 'Permission denied'},
-                status=status.HTTP_403_FORBIDDEN
-            )
-        
-        # 3. Process through orchestrator
-        orchestrator = CentralOrchestrator()
-        result = orchestrator.execute_workflow(
-            'workflow_name',
-            serializer.validated_data,
-            request.user
-        )
-        
-        # 4. Return response
-        return Response(result, status=status.HTTP_200_OK)
-        
-    except Exception as e:
-        logger.error(f"Endpoint error: {str(e)}")
+
+        # 2. Business logic delegation
+        result = SomeService.handle(serializer.validated_data)
+
+        # 3. Success response
         return Response(
-            {'error': 'Internal server error'},
-            status=status.HTTP_500_INTERNAL_SERVER_ERROR
+            {"success": True, "data": result},
+            status=status.HTTP_200_OK,
+        )
+
+    except Exception as exc:
+        return Response(
+            {
+                "success": False,
+                "message": str(exc),
+            },
+            status=status.HTTP_500_INTERNAL_SERVER_ERROR,
         )
 ```
 

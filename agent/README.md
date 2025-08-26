@@ -8,15 +8,25 @@
 
 ```
 agent/
-├── README.md                    # این فایل
-├── ARCHITECTURE_CONVENTIONS.md  # قراردادهای معماری استخراج شده
-├── patient_chatbot/            # دستورالعمل چت‌بات بیمار
-├── doctor_chatbot/             # دستورالعمل چت‌بات پزشک  
-├── soapify/                    # دستورالعمل SOAPify
-├── doctor_dashboard/           # دستورالعمل داشبورد پزشک
-├── FINAL_CHECKLIST.json        # چک‌لیست نهایی QA
-└── FINAL_REPORT.md             # گزارش نهایی
-
+├── README.md                      # این فایل
+├── ARCHITECTURE_CONVENTIONS.md    # قراردادهای معماری
+├── CORE_ARCHITECTURE.md           # هسته‌های مرکزی
+├── SECURITY_POLICIES.md           # سیاست‌های امنیتی
+├── AGENT_INSTRUCTIONS.md          # دستورالعمل ایجنت‌ها
+├── QA_AGENT_INSTRUCTIONS.md       # دستورالعمل QA
+├── FINAL_CHECKLIST.json           # چک‌لیست نهایی QA
+├── FINAL_REPORT.md                # گزارش نهایی
+├── FINAL_SUMMARY.md               # خلاصه نهایی
+├── progress_chart_generator.py    # تولید نمودارهای پیشرفت
+├── TEMPLATES/                     # تمپلیت‌های اسناد و چک‌لیست
+├── docs/                          # مستندات HELSSA-MAIN منتقل‌شده
+│   ├── 03-project-tree.md         # ساختار پروژه مرجع
+│   └── ...
+└── apps/                          # همه اپ‌ها
+    ├── patient_chatbot/
+    ├── doctor_chatbot/
+    ├── doctor_dashboard/
+    └── soapify/
 ```
 
 ## 🏗️ معماری کلی
@@ -39,14 +49,14 @@ agent/
 
 هر ایجنت فرعی باید:
 
-1. دستورالعمل مربوط به خود را از پوشه مخصوص بخواند
+1. دستورالعمل مربوط به خود را از پوشه مخصوص بخواند (زیر `agent/apps/<app>`)
 2. دقیقاً طبق PLAN.md و CHECKLIST.json عمل کند
 3. هرگونه مشکل یا ابهام را در LOG.md ثبت کند
 4. پیشرفت خود را در PROGRESS.json به‌روزرسانی کند
 
 ## ⚠️ نکات مهم
 
-- تمام خروجی‌ها باید در پوشه `agent/<app_name>/` ذخیره شوند
+- تمام خروجی‌ها باید در پوشه `agent/apps/<app_name>/` ذخیره شوند
 - هیچ فایلی در خارج از پوشه agent نباید ایجاد یا تغییر کند
 - تست‌ها نوشته شوند اما اجرا نشوند
 - مستندسازی کامل و دقیق الزامی است
