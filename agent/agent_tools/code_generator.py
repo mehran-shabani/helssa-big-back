@@ -1,5 +1,4 @@
 """
-تولیدکننده کد برای ایجنت‌ها
 Code Generator for Agents
 """
 

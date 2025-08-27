@@ -1,5 +1,4 @@
 """
-تولیدکننده نمودار برای ایجنت‌ها
 Chart Generator for Agents
 """
 

@@ -5,19 +5,19 @@ Standard API View Patterns
 
 from rest_framework import status
 from rest_framework.decorators import api_view, permission_classes, throttle_classes
-from rest_framework.permissions import IsAuthenticated, AllowAny
+from rest_framework.permissions import IsAuthenticated
 from rest_framework.response import Response
 from rest_framework.views import APIView
-from rest_framework.generics import ListAPIView, RetrieveAPIView, CreateAPIView
+from rest_framework.generics import ListAPIView
 from rest_framework.viewsets import ModelViewSet
-from rest_framework.throttling import UserRateThrottle, AnonRateThrottle
+from rest_framework.throttling import UserRateThrottle
 from rest_framework.pagination import PageNumberPagination
-from django.shortcuts import get_object_or_404
 from django.db import transaction
 from django.core.cache import cache
-from unified_auth.permissions import IsPatient, IsDoctor
+from app_standards.permissions import IsPatient, IsDoctor
 from app_standards.four_cores import APIIngressCore, CentralOrchestrator
 import logging
+from django.http import JsonResponse
 
 logger = logging.getLogger(__name__)
 

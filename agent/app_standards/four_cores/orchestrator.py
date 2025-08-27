@@ -7,10 +7,7 @@ from typing import Dict, List, Any, Optional, Callable
 from enum import Enum
 from dataclasses import dataclass
 import logging
-import asyncio
 from concurrent.futures import ThreadPoolExecutor
-import json
-from django.conf import settings
 from django.db import transaction
 from .api_ingress import APIIngressCore
 from .text_processor import TextProcessorCore

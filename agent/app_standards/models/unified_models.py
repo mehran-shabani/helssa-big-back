@@ -7,7 +7,6 @@ from django.db import models
 from django.contrib.auth import get_user_model
 from .base_models import BaseModel, StatusModel
 from decimal import Decimal
-import json
 
 User = get_user_model()
 

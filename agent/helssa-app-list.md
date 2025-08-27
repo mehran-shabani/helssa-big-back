@@ -2,18 +2,19 @@
 
 ## Backend Apps
 
-- `auth_otp` — OTP authentication with Kavenegar, token management
+- `auth_otp` — accounts, OTP authentication with Kavenegar, token management
 - `rbac` — Roles and permissions, least-privilege model
-- `patient` — Patient profile, medical records, consent forms
-- `doctor` — Doctor profile, schedules, shifts, dashboard
+- `patient` — Patient profile, medical records, prescriptions, consent forms
+- `doctor` — Doctor profile, schedules, shifts, dashboard, auto-generate-pdf-prescription-auto-generate-pdf-certificate
+- `visit-extensions` — patient options for save repeat prescription, drug reminders
 - `encounters` — Visit/session management, session state machine
 - `soap` — Versioned SOAP notes with HMAC signatures
 - `triage` — Symptom triage, initial differential diagnosis
-- `chat` — Patient–doctor messaging/tickets, history
+- `chatbot` — Patient–doctor, separate chatbot app for patient and doctor
 - `stt` — Speech-to-text (Whisper), quality control
 - `ai_helsabrain` — Agent orchestrator, prompts/guardrails
 - `ai_guardrails` — Policy enforcement, safety SOPs, red-flag detection
-- `search` — Full-text + pgvector for session and document history
+- `search` — Full-text and compatible with MySQL
 - `files` — Uploads, MinIO/S3, documents/attachments
 - `exports` — Generating MD/PDF outputs, secure sharing
 - `notifications` — SMS/Push/Email, templates and queues
