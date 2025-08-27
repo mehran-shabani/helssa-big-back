@@ -1,8 +1,9 @@
-![Helssa logo](images/logo.png)                             ![Math & Med](images/mm.png)
-
 # Helssa — Intelligent Telemedicine Platform
 
+![Helssa logo](images/logo.png)
+
 *End-to-end, agent-assisted, FHIR-ready telemedicine suite for clinicians and patients.*
+![Math & Med](images/mm.png)
 
 ---
 
@@ -183,4 +184,3 @@ TALKBOT_API=xxxxx
 ## License
 
 Proprietary — © Helssa/Medogram. All rights reserved.
-
