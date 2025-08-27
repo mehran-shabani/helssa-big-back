@@ -36,18 +36,36 @@ logger = logging.getLogger(__name__)
 @permission_classes([AllowAny])
 def send_otp(request):
     """
-    ارسال کد OTP به شماره موبایل
+    ارسال کد یک‌بارمصرف (OTP) به شماره موبایل برای اهداف مختلف احراز هویت.
     
-    Request Body:
-        - phone_number: شماره موبایل (الزامی)
-        - purpose: هدف (login/register/reset_password/verify_phone)
-        - sent_via: روش ارسال (sms/call)
-        
-    Returns:
-        201: OTP ارسال شد
-        400: خطای اعتبارسنجی
-        429: محدودیت نرخ
-        500: خطای سرور
+    جزئیات:
+    - ورودی‌های مورد انتظار در بدنه درخواست: `phone_number` (فرمت شماره موبایل)، `purpose` (یکی از 'login', 'register', 'reset_password', 'verify_phone') و اختیاری `sent_via` ('sms' یا 'call').
+    - عملکرد: ورودی را اعتبارسنجی می‌کند، آدرس IP و User-Agent درخواست را استخراج می‌کند و درخواست ارسال OTP را به سرویس مربوطه می‌فرستد.
+    - پاسخ‌ها:
+      - 201: OTP با موفقیت ارسال شده و داده‌های مرتبط در فیلد `data` بازگردانده می‌شود.
+      - 400: ورودی نامعتبر یا خطای تجاری دیگر — در بدنه پاسخ فیلدهای `error`, `message` و `details` توضیح داده می‌شوند.
+      - 429: در صورت عبور از محدودیت نرخ (`error` = 'rate_limit_exceeded').
+      - 500: خطای داخلی سرور (پیغام کلی به مشتری بازگردانده می‌شود).
+    - اثر جانبی ضروری: ایجاد و ثبت درخواست ارسال OTP (از طریق سرویس OTP) و ثبت خطا در لاگر در صورت بروز استثنا.
+    
+    پارامترهای بدنه (خلاصه):
+    - phone_number: شماره موبایل دریافت‌کننده (الزامی).
+    - purpose: هدف استفاده از OTP؛ یکی از مقادیر مجاز: 'login', 'register', 'reset_password', 'verify_phone' (الزامی).
+    - sent_via: روش ارسال؛ پیش‌فرض 'sms'، مقدار مجاز شامل 'sms' و 'call' (اختیاری).
+    
+    محتوای پاسخ موفق:
+    {
+        "success": True,
+        "data": {...}  # اطلاعات مربوط به درخواست OTP (مثلاً شناسه درخواست، زمان انقضا و ...)
+    }
+    
+    محتوای پاسخ خطا:
+    {
+        "success": False,
+        "error": "<error_code>",
+        "message": "<human_readable_message>",
+        "details": {...}  # در صورت وجود، جزئیات خطا یا خطاهای اعتبارسنجی
+    }
     """
     try:
         # اعتبارسنجی ورودی
@@ -121,20 +139,22 @@ def send_otp(request):
 @permission_classes([AllowAny])
 def verify_otp(request):
     """
-    تأیید کد OTP و ورود/ثبت‌نام
+    تأیید کد OTP و ورود یا ثبت‌نام کاربر با تولید توکن و ثبت جلسه (verification record).
     
-    Request Body:
-        - phone_number: شماره موبایل (الزامی)
-        - otp_code: کد 6 رقمی (الزامی)
-        - purpose: هدف (login/register)
-        - device_id: شناسه دستگاه
-        - device_name: نام دستگاه
-        
-    Returns:
-        200: ورود موفق
-        400: کد نامعتبر
-        404: OTP یافت نشد
-        500: خطای سرور
+    این تابع ورودی درخواست را با OTPVerifySerializer اعتبارسنجی می‌کند، کد OTP را از طریق OTPService تأیید می‌کند و در صورت موفقیت:
+    - کاربر را با AuthService.create_user_if_not_exists ایجاد یا بازیابی می‌کند (نوع پیش‌فرض 'patient').
+    - توکن‌های دسترسی و رفرش را با AuthService.generate_tokens تولید می‌کند.
+    - رکورد تأیید (verification record) را با AuthService.create_verification_record شامل otp_request، کاربر، توکن‌ها و اطلاعات دستگاه/جلسه ایجاد می‌کند.
+    - در پاسخ، توکن‌ها، اطلاعات کاربر (UserInfoSerializer)، پرچم is_new_user و پیام مناسب بازگردانده می‌شوند.
+    
+    رفتار بازگشتی (HTTP):
+    - 200 OK: تأیید موفق؛ بدنه شامل { "success": True, "data": { "tokens", "user", "is_new_user", "message" } }.
+    - 400 Bad Request: خطای اعتبارسنجی ورودی یا عدم موفقیت در تأیید OTP؛ بدنه شامل اطلاعات خطا (error, message, details).
+    - 500 Internal Server Error: خطای سیستمی ثبت‌شده در لاگ؛ بدنه شامل { "success": False, "error": "internal_error", "message": "خطای سیستمی در تأیید کد" }.
+    
+    نکات پیاده‌سازی:
+    - پارامترهای device_id و device_name از داده‌های اعتبارسنجی‌شده استخراج و session_key از request.session خوانده می‌شود (در صورت وجود).
+    - خطاها لاگ می‌شوند و هیچ استثنایی به فراخواننده پرتاب نمی‌شود (همه با پاسخ 500 مدیریت می‌شوند).
     """
     try:
         # اعتبارسنجی ورودی
@@ -226,15 +246,22 @@ def verify_otp(request):
 @permission_classes([AllowAny])
 def refresh_token(request):
     """
-    تازه‌سازی Access Token
+    تازه‌سازی Access Token با استفاده از Refresh Token.
     
-    Request Body:
-        - refresh: Refresh Token (الزامی)
-        
-    Returns:
-        200: توکن جدید
-        401: توکن نامعتبر
-        500: خطای سرور
+    دسکریپشن:
+        این endpoint یک Refresh Token معتبر می‌پذیرد و در صورت اعتبار موفق، یک Access Token جدید (و در صورت نیاز داده‌های مرتبط با توکن) برمی‌گرداند.
+        - ورودی: بدنه درخواست باید شامل فیلد `refresh` (رشته) باشد.
+        - منطق: از سرویس AuthService.refresh_access_token برای انجام عملیات تازه‌سازی استفاده می‌شود.
+        - خطاها:
+            - اگر ورودی نامعتبر باشد پاسخ 400 با کلیدهای `error: "validation_error"` و جزییات اعتبارسنجی بازگردانده می‌شود.
+            - اگر Refresh Token نامعتبر یا منقضی باشد پاسخ 401 با `error` و `message` از AuthService برمی‌گردد.
+            - در صورت بروز استثناهای داخلی، پاسخ 500 با `error: "internal_error"` و پیام خطای سیستمی بازگردانده می‌شود.
+    
+    پاسخ‌ها (خلاصه):
+        200: { "success": True, "data": <توکن‌ها یا داده‌های مرتبط> }
+        400: { "error": "validation_error", "message": "...", "details": <خطاهای اعتبارسنجی> }
+        401: { "success": False, "error": <کد خطای سرویس>, "message": <پیام سرویس> }
+        500: { "success": False, "error": "internal_error", "message": "خطای سیستمی در تازه‌سازی توکن" }
     """
     try:
         # اعتبارسنجی ورودی
@@ -292,16 +319,29 @@ def refresh_token(request):
 @permission_classes([IsAuthenticated])
 def logout(request):
     """
-    خروج از سیستم
+    خروج کاربر از جلسه فعلی یا از همه دستگاه‌ها با استفاده از توکنِ رفرش.
     
-    Request Body:
-        - refresh: Refresh Token برای مسدود کردن
-        - logout_all_devices: خروج از همه دستگاه‌ها (اختیاری)
-        
-    Returns:
-        200: خروج موفق
-        400: خطای ورودی
-        500: خطای سرور
+    این تابع درخواست POST را می‌پذیرد، ورودی را از طریق LogoutSerializer اعتبارسنجی می‌کند و سپس از AuthService برای خروج استفاده می‌کند. در صورت موفقیت، توکن رفرش داده‌شده (و در صورت درخواست، همه جلسات کاربر) نامعتبر می‌شود.
+    
+    ورودی (در بدنه درخواست):
+        - refresh: (str) توکن رفرش که باید باطل شود.
+        - logout_all_devices: (bool، اختیاری) اگر True باشد، تمامی جلسات/دستگاه‌های کاربر نیز خاتمه داده می‌شوند.
+    
+    رفتار بازگشتی:
+        - 200: خروج موفق
+          ساختار پاسخ: {"success": True, "message": "<متن پیام متناسب با نوع خروج>"}
+        - 400: داده‌های ورودی نامعتبر یا شکست در عملیات خروج
+          ساختار پاسخ در اعتبارسنجی: {"error": "validation_error", "message": "داده‌های ورودی نامعتبر", "details": {...}}
+          ساختار پاسخ در شکست خروج: {"success": False, "error": "logout_failed", "message": "خطا در خروج از سیستم"}
+        - 500: خطای داخلی سرور (استثناها ثبت و یک پیام عمومی بازگردانده می‌شود)
+          ساختار پاسخ: {"success": False, "error": "internal_error", "message": "خطای سیستمی در خروج"}
+    
+    نیازمندی‌ها و فرض‌ها:
+        - کاربر باید احراز هویت شده باشد (request.user موجود و معتبر).
+        - منطق واقعی باطل‌سازیِ توکن و مدیریت جلسات در AuthService.logout قرار دارد.
+    
+    تاثیرات جانبی:
+        - باطل‌شدن توکنِ رفرش و در صورت درخواست، حذف/غیرفعال‌سازی جلسات دیگر کاربر در سیستم.
     """
     try:
         # اعتبارسنجی ورودی

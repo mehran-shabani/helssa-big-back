@@ -16,6 +16,15 @@ class KavenegarService:
     """
     
     def __init__(self):
+        """
+        مقداردهی اولیه سرویس Kavenegar: کلید API را از تنظیمات می‌خواند، کلاینت Kavenegar را مقداردهی می‌کند و مقادیر اختیاری sender و قالب OTP را تنظیم می‌نماید.
+        
+        اگر KAVENEGAR_API_KEY در تنظیمات یافت نشود، ValueError پرتاب می‌شود. پس از موفقیت، فیلدهای نمونه زیر مقداردهی می‌شوند:
+        - self.api_key: مقدار کلید API از تنظیمات
+        - self.api: نمونهٔ KavenegarAPI ساخته‌شده با کلید API
+        - self.sender: مقدار اختیاری KAVENEGAR_SENDER از تنظیمات (در صورت نبود None)
+        - self.otp_template: قالب OTP از KAVENEGAR_OTP_TEMPLATE یا مقدار پیش‌فرض 'verify'
+        """
         self.api_key = getattr(settings, 'KAVENEGAR_API_KEY', None)
         if not self.api_key:
             raise ValueError("KAVENEGAR_API_KEY not found in settings")
@@ -26,15 +35,19 @@ class KavenegarService:
     
     def send_otp(self, phone_number: str, otp_code: str, template: str = None) -> dict:
         """
-        ارسال کد OTP
+        ارسال یک کد یک‌بارمصرف (OTP) با استفاده از API تایید قالبیِ کاوه‌نگار.
         
-        Args:
-            phone_number: شماره موبایل گیرنده
-            otp_code: کد OTP
-            template: نام قالب (اختیاری)
-            
+        این متد یک OTP را با فراخوانی verify_lookup در Kavenegar ارسال می‌کند. اگر قالب (template) مشخص نشود، قالب پیش‌فرض سرویس استفاده می‌شود. ورودی‌ها در پارامترهای API به‌صورت receptor (شماره گیرنده)، token (کد OTP) و template ارسال می‌شوند. پاسخ موفق شامل شناسه پیام، وضعیت و متن وضعیت است. در صورت بروز خطا، خروجی یک دیکشنری با فیلدهای مربوط به خطا برمی‌گردد (بدون بالا بردن خطا).
+        
+        Parameters:
+            phone_number (str): شماره موبایل گیرنده (قابل استفاده با فرمت محلی یا بین‌المللی؛ پیش‌نیاز فرمتر خارجی با متد format_phone_number در سطح سرویس).
+            otp_code (str): کد یک‌بارمصرف که در قالب به عنوان `token` قرار می‌گیرد.
+            template (str, optional): نام قالب کاوه‌نگار برای ارسال (اگر مشخص نشود از تنظیم پیش‌فرض سرویس استفاده می‌شود).
+        
         Returns:
-            dict: نتیجه ارسال شامل message_id
+            dict: نتیجه عملیات با ساختار مشابه یکی از موارد زیر:
+                - موفق: {'success': True, 'message_id': str, 'status': <int|str>, 'status_text': <str>}
+                - خطا:   {'success': False, 'error': <str>, 'error_code': <int|None>?, 'error_detail': <str>}
         """
         try:
             # استفاده از template پیش‌فرض اگر مشخص نشده
@@ -97,14 +110,26 @@ class KavenegarService:
     
     def send_simple_sms(self, phone_number: str, message: str) -> dict:
         """
-        ارسال پیامک ساده (غیر OTP)
+        ارسال یک پیامک متنی ساده (غیر OTP) به یک شماره گیرنده با استفاده از کلاینت Kavenegar.
         
-        Args:
-            phone_number: شماره موبایل گیرنده
-            message: متن پیام
-            
-        Returns:
-            dict: نتیجه ارسال
+        توضیحات:
+            شماره ورودی باید به فرمت قابل قبول Kavenegar باشد (ترجیحاً از `KavenegarService.format_phone_number` استفاده شود).
+            در صورت وجود مقدار `sender` در تنظیمات سرویس، آن مقدار به‌صورت خودکار به پارامترهای ارسال افزوده می‌شود.
+        
+        پارامترها:
+            phone_number: شماره موبایل گیرنده (رشته) — فرمت مناسب برای Kavenegar.
+            message: متن پیامک که ارسال خواهد شد.
+        
+        بازگشت:
+            dict با ساختار زیر:
+              - success (bool): وضعیت کلی عملیات؛ True در صورت موفقیت.
+              - message_id (str): شناسه پیام که از Kavenegar برمی‌گردد (فقط در صورت موفقیت).
+              - status: وضعیت خام برگشتی از API Kavenegar (فقط در صورت موفقیت).
+              - error (str): پیام خطا به زبان فارسی (فقط در صورت شکست).
+              - error_detail (str): جزئیات خطا/استثنا به صورت رشته‌ای (فقط در صورت شکست).
+        
+        رفتار در خطا:
+            در صورت بروز استثنا، تابع استثنا را بالا نمی‌فرستد بلکه یک دیکشنری با `success: False`، `error` و `error_detail` برمی‌گرداند.
         """
         try:
             params = {
@@ -138,13 +163,25 @@ class KavenegarService:
     
     def get_message_status(self, message_id: str) -> dict:
         """
-        دریافت وضعیت پیام ارسال شده
+        وضعیت یک پیام ارسالی از طریق Kavenegar را بازیابی می‌کند.
         
-        Args:
-            message_id: شناسه پیام
-            
-        Returns:
-            dict: وضعیت پیام
+        پارامترها:
+            message_id (str): شناسه پیام در سرویس Kavenegar (messageid) که برای بازیابی وضعیت لازم است.
+        
+        بازگشت:
+            dict: نتیجه عملیات با ساختار زیر:
+                - موفقیت‌آمیز:
+                    {
+                        'success': True,
+                        'status': <کد وضعیت از API>,
+                        'statustext': <متن وضعیت از API>
+                    }
+                - در صورت خطا:
+                    {
+                        'success': False,
+                        'error': 'خطا در دریافت وضعیت پیام',
+                        'error_detail': <جزئیات خطای قابل بررسی به صورت رشته>
+                    }
         """
         try:
             response = self.api.sms_status({'messageid': message_id})
@@ -165,14 +202,28 @@ class KavenegarService:
     
     def send_voice_otp(self, phone_number: str, otp_code: str) -> dict:
         """
-        ارسال OTP به صورت تماس صوتی
+        ارسال کد یک‌بارمصرف از طریق تماس صوتی.
         
-        Args:
-            phone_number: شماره موبایل
-            otp_code: کد OTP
-            
+        تابع یک پیام صوتی تولید می‌کند که در آن ارقام OTP با فاصله از هم خوانده می‌شوند (مثلاً "1 2 3 4" برای "1234") و درخواست ایجاد تماس متنی-به-صدا (TTS) را به سرویس کاوه‌نگار ارسال می‌کند. در صورت موفقیت، شناسه پیام و وضعیت بازگشتی از API را برمی‌گرداند؛ در صورت خطا، اطلاعات خطا را در قالب دیکشنری بازمی‌گرداند.
+        
+        Parameters:
+            phone_number (str): شماره گیرنده تماس به فرمت مورد انتظار سرویس کاوه‌نگار.
+            otp_code (str): کد OTP که قرار است قرائت شود (اعداد به‌عنوان رشته).
+        
         Returns:
-            dict: نتیجه ارسال
+            dict: نتیجه عملیات با یکی از ساختارهای زیر:
+                - موفق:
+                    {
+                        'success': True,
+                        'message_id': <str>,   # شناسه پیام برگشتی از API
+                        'status': <any>        # وضعیت برگشتی از API
+                    }
+                - ناموفق:
+                    {
+                        'success': False,
+                        'error': <str>,        # پیام خطای خلاصه (به فارسی)
+                        'error_detail': <str>  # جزئیات خطا (استثنا به صورت رشته)
+                    }
         """
         try:
             # تبدیل کد به متن قابل خواندن
@@ -210,13 +261,21 @@ class KavenegarService:
     @staticmethod
     def format_phone_number(phone_number: str) -> str:
         """
-        فرمت کردن شماره تلفن برای کاوه‌نگار
+        شماره تلفن را برای ارسال به کاوه‌نگار نرمال‌سازی و قالب‌بندی می‌کند.
         
-        Args:
-            phone_number: شماره تلفن
-            
-        Returns:
-            str: شماره فرمت شده
+        توضیحات:
+        - فاصله‌ها و خط تیره‌ها را حذف می‌کند.
+        - پیش‌شماره‌های بین‌المللی معمول ایران را به شکل محلی تبدیل می‌کند:
+          - اگر با '+98' شروع شود، به '0' + باقی‌مانده تبدیل می‌شود.
+          - اگر با '0098' شروع شود، به '0' + باقی‌مانده تبدیل می‌شود.
+          - اگر با '98' شروع شود، به '0' + باقی‌مانده تبدیل می‌شود.
+        - سایر رشته‌ها بدون تغییر (به جز حذف فاصله و '-') بازگردانده می‌شوند.
+        
+        پارامترها:
+            phone_number (str): شماره ورودی (می‌تواند شامل فاصله، خط تیره یا پیش‌شماره بین‌المللی باشد).
+        
+        بازگشت:
+            str: شماره تلفن فرمت‌شده مطابق با قالب مورد انتظار کاوه‌نگار (معمولاً با صفر اول).
         """
         # حذف فاصله‌ها و کاراکترهای اضافی
         phone_number = phone_number.strip().replace(' ', '').replace('-', '')

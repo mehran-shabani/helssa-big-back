@@ -54,7 +54,20 @@ class OTPRequestSerializer(serializers.Serializer):
     )
     
     def validate_phone_number(self, value):
-        """اعتبارسنجی شماره موبایل"""
+        """
+        یک رشته شماره موبایل را پاک‌سازی و اعتبارسنجی می‌کند.
+        
+        این متد ورودی را trim کرده و فاصله‌ها و خط تیره‌ها را حذف می‌کند، سپس بررسی می‌کند که شماره پس از پاک‌سازی با '09' شروع شده و دقیقاً 11 رقم باشد. در صورت معتبر بودن، نسخهٔ پاک‌شدهٔ رشته برگردانده می‌شود.
+        
+        Parameters:
+            value (str): رشتهٔ ورودی که نمایانگر شماره موبایل است؛ می‌تواند شامل فاصله یا خط تیره باشد.
+        
+        Returns:
+            str: شماره موبایل پاک‌شده و به‌فرمت استاندارد (بدون فاصله یا خط تیره).
+        
+        Raises:
+            serializers.ValidationError: اگر شماره با '09' شروع نشود یا طول آن 11 رقم نباشد.
+        """
         # حذف فاصله‌ها و کاراکترهای اضافی
         value = value.strip().replace(' ', '').replace('-', '')
         
@@ -108,7 +121,18 @@ class OTPVerifySerializer(serializers.Serializer):
     )
     
     def validate_otp_code(self, value):
-        """اعتبارسنجی کد OTP"""
+        """
+        اعتبارسنجی کد یک‌بارمصرف (OTP): بررسی می‌کند که مقدار وارد شده فقط شامل ارقام و دقیقاً ۶ رقم باشد.
+        
+        Parameters:
+            value (str): رشته کد OTP ورودی.
+        
+        Returns:
+            str: همان مقدار ورودی در صورت موفقیت‌آمیز بودن اعتبارسنجی.
+        
+        Raises:
+            serializers.ValidationError: در صورتی که مقدار شامل کاراکتر غیرعددی باشد یا طول آن برابر با ۶ نباشد.
+        """
         # بررسی عددی بودن
         if not value.isdigit():
             raise serializers.ValidationError('کد OTP باید فقط شامل اعداد باشد')
@@ -155,7 +179,17 @@ class UserInfoSerializer(serializers.ModelSerializer):
         read_only_fields = fields
     
     def get_full_name(self, obj):
-        """نام کامل کاربر"""
+        """
+        بازگشت نام کامل کاربر یا نام کاربری در صورت نبود نام و نام خانوادگی.
+        
+        این متد نام و نام خانوادگی را با یک فاصله بین آنها ترکیب می‌کند و رشتهٔ نتیجه را پس از حذف فضاهای اضافی برمی‌گرداند. اگر هر دو فیلد first_name و last_name خالی باشند، مقدار username بازگردانده می‌شود.
+        
+        Parameters:
+            obj: شیء کاربر (موجودیتی که دارای فیلدهای `first_name`, `last_name`, و `username` است).
+        
+        Returns:
+            str: نام کامل (مثلاً "علی رضایی") یا در صورت نبود نام/نام‌خانوادگی، نام کاربری.
+        """
         return f"{obj.first_name} {obj.last_name}".strip() or obj.username
 
 
@@ -232,11 +266,34 @@ class OTPStatusSerializer(serializers.ModelSerializer):
         read_only_fields = fields
     
     def get_remaining_attempts(self, obj):
-        """تعداد تلاش‌های باقی‌مانده"""
+        """
+        تعداد تلاش‌های معتبر باقی‌مانده برای تأیید OTP را محاسبه می‌کند.
+        
+        این متد مقدار صحیحی برمی‌گرداند که برابر با ماکزیممِ صفر و (۳ منهای تعداد تلاش‌های ثبت‌شده در `obj.attempts`) است. اگر `obj.attempts` برابر یا بیشتر از ۳ باشد، مقدار بازگشتی ۰ خواهد بود.
+        
+        Parameters:
+            obj: شیئی مدل یا مشابه که دارای صفت عددی `attempts` است (تعداد تلاش‌های انجام‌شده).
+        
+        Returns:
+            int: تعداد تلاش‌های باقی‌مانده (همیشه عددی غیرمنفی).
+        """
         return max(0, 3 - obj.attempts)
     
     def get_expires_in_seconds(self, obj):
-        """زمان باقی‌مانده تا انقضا"""
+        """
+        زمان باقی‌مانده تا انقضای شیء OTP را بر حسب ثانیه برمی‌گرداند.
+        
+        پارامترها:
+            obj: نمونه‌ای از مدل OTPRequest (یا هر شیئی دارای فیلدهای `expires_at` و `is_expired`) که زمان انقضای آن محاسبه می‌شود.
+        
+        توضیحات:
+            - اگر `obj.is_expired` مقدار True داشته باشد تابع 0 برمی‌گرداند.
+            - در غیر این صورت اختلاف بین `obj.expires_at` و زمان کنونی (با استفاده از timezone ایزوله‌شدهٔ Django) به ثانیه محاسبه شده و به صورت عدد صحیح بازگردانده می‌شود.
+            - مقادیر منفی به 0 محدود می‌شوند تا مقدار منفی برای زمان باقی‌مانده برنگردد.
+        
+        بازگشتی:
+            int: تعداد ثانیه‌های باقی‌مانده تا انقضا (صفر یا عدد مثبت).
+        """
         from django.utils import timezone
         if obj.is_expired:
             return 0
@@ -341,7 +398,20 @@ class RegisterSerializer(serializers.ModelSerializer):
         ]
     
     def validate_phone_number(self, value):
-        """بررسی یکتا بودن شماره موبایل"""
+        """
+        بررسی یکتا بودن شماره موبایل در سیستم و بازگرداندن مقدار ورودی در صورت آزاد بودن.
+        
+        این متد بررسی می‌کند که مقدار `value` (شماره موبایل، فرضاً در قالب رشته) قبلاً به‌عنوان username یک کاربر در پایگاه‌داده ثبت نشده باشد. اگر شماره موجود باشد، یک ValidationError پرتاب می‌شود؛ در غیر این صورت همان مقدار ورودی بازگردانده می‌شود.
+        
+        Parameters:
+            value (str): شماره موبایل برای بررسی یکتایی (انتظار می‌رود قبل از فراخوانی، به فرمت موردنظر—مثلاً بدون فضا/خط تیره—نرمال شده باشد).
+        
+        Returns:
+            str: همان مقدار `value` در صورت آزاد بودن.
+        
+        Raises:
+            serializers.ValidationError: در صورت وجود رکورد کاربری با username برابر `value`.
+        """
         if User.objects.filter(username=value).exists():
             raise serializers.ValidationError(
                 'این شماره موبایل قبلاً ثبت شده است'
@@ -349,7 +419,21 @@ class RegisterSerializer(serializers.ModelSerializer):
         return value
     
     def create(self, validated_data):
-        """ایجاد کاربر جدید"""
+        """
+        ایجاد و بازگردانی یک نمونه کاربر جدید در پایگاه داده.
+        
+        این متد از validated_data مقدار `phone_number` را جدا می‌کند و آن را به‌عنوان `username`
+        برای ایجاد حساب کاربری با فراخوانی `User.objects.create_user` استفاده می‌نماید. سایر
+        فیلدهای موجود در validated_data مستقیماً به متد ایجاد کاربر پاس داده می‌شوند.
+        
+        Parameters:
+            validated_data (dict): دیکشنری اعتبارسنجی‌شده که باید شامل `phone_number` و هر
+            فیلد معتبر مدل کاربر برای create_user باشد. مقدار `phone_number` از این دیکشنری
+            حذف و به‌عنوان username مصرف می‌شود.
+        
+        Returns:
+            User: نمونهٔ ایجادشدهٔ مدل کاربر.
+        """
         phone_number = validated_data.pop('phone_number')
         
         user = User.objects.create_user(

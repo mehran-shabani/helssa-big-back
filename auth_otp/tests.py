@@ -23,10 +23,23 @@ class OTPModelTests(TestCase):
     """تست‌های مدل OTP"""
     
     def setUp(self):
+        """
+        یک مقداردهی اولیهٔ مشترک برای تست‌ها انجام می‌دهد.
+        
+        این متد برای هر تست اجرا می‌شود و مقدار پیش‌فرض شماره تماس آزمایشی را در صفت `self.phone_number` قرار می‌دهد تا در تمام تست‌های این کلاس قابل استفاده باشد (مثلاً هنگام ایجاد OTPRequest یا فراخوانی APIهای مرتبط).
+        """
         self.phone_number = '09123456789'
     
     def test_otp_request_creation(self):
-        """تست ایجاد درخواست OTP"""
+        """
+        تست ایجاد یک OTPRequest جدید و ارزیابی خواص مهم آن.
+        
+        این تست یک رکورد OTPRequest با phone_number و purpose ایجاد می‌کند و موارد زیر را بررسی می‌کند:
+        - otp_code شش رقمی و تنها شامل اعداد باشد.
+        - expires_at تقریباً ۳ دقیقه بعد از زمان فعلی تنظیم شده باشد (خطای مجاز کمتر از ۵ ثانیه).
+        
+        توضیح جانبی: این تست یک رکورد در پایگاه‌داده ایجاد می‌کند (side effect).
+        """
         otp_request = OTPRequest.objects.create(
             phone_number=self.phone_number,
             purpose='login'
@@ -42,7 +55,15 @@ class OTPModelTests(TestCase):
         self.assertLess(time_diff, 5)  # تفاوت کمتر از 5 ثانیه
     
     def test_otp_is_expired_property(self):
-        """تست خاصیت is_expired"""
+        """
+        بررسی صحیح بودن ویژگی `is_expired` در مدل OTPRequest.
+        
+        این تست اطمینان می‌دهد که:
+        - وقتی `expires_at` در آینده قرار دارد، `is_expired` مقدار False برمی‌گرداند.
+        - وقتی `expires_at` به زمان گذشته تغییر داده شود، `is_expired` مقدار True برمی‌گرداند.
+        
+        برای این منظور یک نمونه OTPRequest با `expires_at` در آینده ساخته می‌شود و سپس زمان انقضا به گذشته تنظیم و ذخیره می‌گردد تا رفتار ویژگی بازبینی شود.
+        """
         # OTP منقضی نشده
         otp_request = OTPRequest.objects.create(
             phone_number=self.phone_number,
@@ -96,6 +117,15 @@ class OTPServiceTests(TestCase):
     """تست‌های سرویس OTP"""
     
     def setUp(self):
+        """
+        مقادیر اولیه برای هر تست را مقداردهی می‌کند.
+        
+        این متد قبل از اجرای هر مورد تست اجرا می‌شود و دو مقدار کلیدی را آماده می‌سازد:
+        - phone_number: شماره تلفن نمونه برای استفاده در تست‌های مرتبط با OTP.
+        - otp_service: نمونه‌ای از OTPService که عملیات ارسال، اعتبارسنجی و پاک‌سازی OTP را فراهم می‌کند.
+        
+        این مقداردهی تضمین می‌کند که هر تست با حالت آغازین تمیز و قابل پیش‌بینی اجرا شود.
+        """
         self.phone_number = '09123456789'
         self.otp_service = OTPService()
     
@@ -143,7 +173,15 @@ class OTPServiceTests(TestCase):
         self.assertEqual(result['error'], 'rate_limit_exceeded')
     
     def test_verify_otp_success(self):
-        """تست تأیید موفق OTP"""
+        """
+        تست واحد برای سناریوی موفقیت‌آمیز تأیید OTP: ارسال مقدار صحیح OTP برای شماره‌ی از پیش ساخته‌شده و اطمینان از بازگشت نتیجه موفق و علامت‌گذاری درخواست OTP به‌عنوان استفاده‌شده.
+        
+        شرح جزئی‌تر:
+        - یک شیء OTPRequest با otp_code برابر '123456' و هدف 'login' در پایگاه‌داده ایجاد می‌کند.
+        - متد otp_service.verify_otp را با همان phone_number، otp_code و purpose فراخوانی می‌کند.
+        - انتظار دارد که فراخوانی با موفقیت (success == True) بازگردد و result شامل همان نمونه OTPRequest ایجادشده باشد.
+        - پس از فراخوانی، رکورد OTPRequest را از دیتابیس تازه‌سازی می‌کند و بررسی می‌کند که فیلد is_used به‌صورت True تنظیم شده است (اثر جانبی مهم: مصرف شدن OTP).
+        """
         # ایجاد OTP
         otp_request = OTPRequest.objects.create(
             phone_number=self.phone_number,
@@ -250,6 +288,11 @@ class OTPAPITests(APITestCase):
     """تست‌های API احراز هویت OTP"""
     
     def setUp(self):
+        """
+        یک مقداردهی اولیهٔ مشترک برای تست‌ها انجام می‌دهد.
+        
+        این متد برای هر تست اجرا می‌شود و مقدار پیش‌فرض شماره تماس آزمایشی را در صفت `self.phone_number` قرار می‌دهد تا در تمام تست‌های این کلاس قابل استفاده باشد (مثلاً هنگام ایجاد OTPRequest یا فراخوانی APIهای مرتبط).
+        """
         self.phone_number = '09123456789'
     
     @patch('auth_otp.services.kavenegar_service.KavenegarAPI')
@@ -277,7 +320,16 @@ class OTPAPITests(APITestCase):
         self.assertIn('otp_id', response.data['data'])
     
     def test_send_otp_invalid_phone(self):
-        """تست API ارسال OTP با شماره نامعتبر"""
+        """
+        بررسی اینکه endpoint ارسال OTP هنگام دریافت شماره تلفن نامعتبر پاسخ اعتبارسنجی مناسب می‌دهد.
+        
+        این تست یک درخواست POST به مسیر ارسال OTP با یک `phone_number` نامعتبر ارسال می‌کند و انتظار دارد:
+        - کد وضعیت HTTP برابر با 400 (Bad Request) باشد.
+        - فیلد `success` در پاسخ False باشد.
+        - فیلد `error` مقدار `'validation_error'` را داشته باشد.
+        
+        هدف: اطمینان از اینکه ورودی‌های نامعتبر توسط API شناسایی شده و پاسخ خطای مربوطه با فرمت مشخص بازگردانده می‌شود.
+        """
         url = reverse('auth_otp:otp_send')
         data = {
             'phone_number': '123456',  # شماره نامعتبر
@@ -335,7 +387,15 @@ class OTPAPITests(APITestCase):
         self.assertIn('access', response.data['data'])
     
     def test_logout_api(self):
-        """تست API خروج"""
+        """
+        آزمون پایان جلسه (logout) از طریق API: یک کاربر آزمون ایجاد می‌کند، برایش توکن‌های JWT تولید می‌کند، درخواست POST به endpoint خروج با توکن refresh ارسال می‌نماید و انتظار دارد پاسخ موفق (HTTP 200) بازگردد و توکن refresh در لیست سیاه (blacklist) ثبت شده باشد.
+        
+        شرح جزئی‌تر:
+        - کاربر تستی با user_type='patient' ایجاد می‌شود.
+        - با استفاده از AuthService توکن‌های access و refresh تولید می‌شوند.
+        - توکن access در هدر Authorization قرار می‌گیرد و درخواست logout با بدنه شامل refresh ارسال می‌شود.
+        - آزمون وضعیت پاسخ، فیلد موفقیت در بدنه پاسخ و اینکه توکن refresh پس از فراخوانی API در TokenBlacklist قرار گرفته را بررسی می‌کند.
+        """
         # ایجاد کاربر و ورود
         user = User.objects.create_user(
             username=self.phone_number,
@@ -389,7 +449,14 @@ class CleanupTasksTests(TransactionTestCase):
         self.assertTrue(OTPRequest.objects.filter(id=new_otp.id).exists())
     
     def test_cleanup_expired_blacklist(self):
-        """تست پاکسازی توکن‌های منقضی از blacklist"""
+        """
+        آزمایش پاکسازی خودکار توکن‌های منقضی از TokenBlacklist.
+        
+        این تست یک کاربر نمونه می‌سازد، یک توکن منقضی و یک توکن معتبر در مدل TokenBlacklist ایجاد می‌کند، سپس متد AuthService.cleanup_expired_blacklist() را اجرا می‌کند و بررسی می‌نماید که:
+        - مقدار بازگشتی معادل تعداد توکن‌های حذف‌شده (۱) است.
+        - رکورد توکن منقضی از دیتابیس حذف شده است.
+        - رکورد توکن معتبر همچنان در دیتابیس باقی مانده است.
+        """
         user = User.objects.create_user(
             username='09123456789',
             user_type='patient'
