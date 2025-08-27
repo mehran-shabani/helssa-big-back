@@ -1,5 +1,4 @@
 """
-اعتبارسنج ساختار برای ایجنت‌ها
 Structure Validator for Agents
 """
 

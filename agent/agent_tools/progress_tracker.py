@@ -1,5 +1,4 @@
 """
-ردیاب پیشرفت برای ایجنت‌ها
 Progress Tracker for Agents
 """
 
