@@ -16,6 +16,19 @@ class KavenegarService:
     """
     
     def __init__(self):
+        """
+        مقداردهی اولیه سرویس کاوه‌نگار: کلید API را از تنظیمات می‌خواند، نمونهٔ KavenegarAPI را می‌سازد و مقادیر sender و الگوی OTP را مقداردهی می‌کند.
+        
+        جزئیات:
+        - از تنظیمات Django مقدار KAVENEGAR_API_KEY را می‌خواند و آن را در self.api_key قرار می‌دهد. در صورت نبودن این مقدار، ValueError با پیام "KAVENEGAR_API_KEY not found in settings" پرتاب می‌شود.
+        - با استفاده از api_key یک نمونهٔ KavenegarAPI در self.api ساخته می‌شود (وابستگی به کلاینت کتابخانه ka‎venegar).
+        - مقدار فرستنده را از KAVENEGAR_SENDER می‌خواند و در self.sender قرار می‌دهد (در صورت عدم وجود None خواهد بود).
+        - الگوی پیش‌فرض OTP را از KAVENEGAR_OTP_TEMPLATE می‌خواند و در self.otp_template قرار می‌دهد؛ اگر این تنظیم موجود نباشد مقدار پیش‌فرض 'verify' استفاده می‌شود.
+        
+        عوارض جانبی:
+        - پرتاب ValueError در صورت نبود KAVENEGAR_API_KEY.
+        - ایجاد و ذخیرهٔ نمونهٔ کلاینت KavenegarAPI در وضعیت شیء.
+        """
         self.api_key = getattr(settings, 'KAVENEGAR_API_KEY', None)
         if not self.api_key:
             raise ValueError("KAVENEGAR_API_KEY not found in settings")
@@ -26,15 +39,26 @@ class KavenegarService:
     
     def send_otp(self, phone_number: str, otp_code: str, template: str = None) -> dict:
         """
-        ارسال کد OTP
+        ارسال کد اعتبارسنجی (OTP) با استفاده از سرویس Kavenegar.
         
-        Args:
-            phone_number: شماره موبایل گیرنده
-            otp_code: کد OTP
-            template: نام قالب (اختیاری)
-            
+        این متد یک کد OTP را با API تایید کاوه‌نگار (verify_lookup) به شماره‌ی مقصد ارسال می‌کند. اگر آرگومان template مشخص نشده باشد، قالب پیش‌فرض سرویس (self.otp_template) استفاده می‌شود.
+        
+        Parameters:
+            phone_number (str): شماره دریافت‌کننده؛ باید در قالبی که سرویس کاوه‌نگار می‌پذیرد باشد (می‌توان از staticmethod format_phone_number برای نرمال‌سازی استفاده کرد).
+            otp_code (str): رشته‌ی کد OTP که باید ارسال شود.
+            template (str, optional): نام قالب verify برای ارسال OTP؛ در صورت عدم تعیین، از self.otp_template استفاده می‌شود.
+        
         Returns:
-            dict: نتیجه ارسال شامل message_id
+            dict: ساختاری با اطلاعات نتیجه ارسال. میدان‌های ممکن:
+                - success (bool): نشان‌دهندهٔ موفقیت درخواست.
+                - message_id (str): شناسهٔ پیام برگشتی از API (در صورت موفقیت).
+                - status: کد وضعیت بازگشتی از API (در صورت موفقیت).
+                - status_text (str): توضیح وضعیت از API (در صورت موفقیت).
+                - error (str): پیام خطای قابل‌نمایش به فارسی (در صورت شکست).
+                - error_code: کد خطای API اگر موجود باشد.
+                - error_detail (str): جزئیات خطا (متن استثناء) برای عیب‌یابی.
+        
+        توجه: متد تمام استثناء‌ها را داخل خود هندل می‌کند و به‌جای پرتاب استثناء، نتیجهٔ خطا را به‌صورت دیکشنری بازمی‌گرداند.
         """
         try:
             # استفاده از template پیش‌فرض اگر مشخص نشده
@@ -97,14 +121,22 @@ class KavenegarService:
     
     def send_simple_sms(self, phone_number: str, message: str) -> dict:
         """
-        ارسال پیامک ساده (غیر OTP)
+        ارسال یک پیامک متنی ساده (غیر OTP) به گیرنده مشخص با استفاده از کلاینت Kavenegar.
         
-        Args:
-            phone_number: شماره موبایل گیرنده
-            message: متن پیام
-            
-        Returns:
-            dict: نتیجه ارسال
+        توضیحات:
+            پیام با استفاده از متد sms_send کلاینت Kavenegar ارسال می‌شود. در صورت تنظیم بودن صفت sender در نمونهٔ سرویس، آن به پارامترهای ارسال اضافه خواهد شد. تابع خطاها را داخل خود مدیریت کرده و به‌جای پرتاب استثنا، یک دیکشنری وضعیت بازمی‌گرداند.
+        
+        پارامترها:
+            phone_number (str): شماره گیرنده؛ باید به شکلی که توسط سرویس پیامکی پذیرفته می‌شود (مثلاً فرمت محلی/بین‌المللی) ارائه شود.
+            message (str): متن پیام ارسالی.
+        
+        مقدار بازگشتی:
+            dict: ساختاری با کلیدهای زیر
+                - success (bool): نشان‌دهندهٔ موفقیت عملیات.
+                - message_id (str): شناسهٔ پیام در صورت موفقیت.
+                - status: وضعیت بازگشتی از API در صورت موفقیت.
+                - error (str): متن خطا به زبان فارسی در صورت عدم موفقیت.
+                - error_detail (str): توضیحات تکمیلی خطا (رشتهٔ نمایشی از استثنا) در صورت عدم موفقیت.
         """
         try:
             params = {
@@ -138,13 +170,29 @@ class KavenegarService:
     
     def get_message_status(self, message_id: str) -> dict:
         """
-        دریافت وضعیت پیام ارسال شده
+        وضعیت یک پیام ارسال‌شده را از سرویس کاوِن‌نگار بازیابی می‌کند.
         
-        Args:
-            message_id: شناسه پیام
-            
+        جزئیات:
+        - این متد از API داخلی (self.api.sms_status) برای دریافت وضعیت پیام با شناسهٔ ارائه‌شده استفاده می‌کند.
+        - در صورت موفقیت، دیکشنری شامل وضعیت بازگردانده می‌شود.
+        - در صورت بروز هر خطا، خطا لاگ شده و دیکشنری حاوی اطلاعات خطا بازگردانده می‌شود.
+        
+        Parameters:
+            message_id (str): شناسهٔ پیام که توسط کاوِن‌نگار هنگام ارسال پیام بازگردانده شده است.
+        
         Returns:
-            dict: وضعیت پیام
+            dict: در حالت موفق:
+                {
+                    'success': True,
+                    'status': <کد وضعیت از پاسخ کاوِن‌نگار>,
+                    'statustext': <توضیح متنی وضعیت>
+                }
+                در حالت خطا:
+                {
+                    'success': False,
+                    'error': 'خطا در دریافت وضعیت پیام',
+                    'error_detail': <رشتهٔ توضیح خطای داخلی>
+                }
         """
         try:
             response = self.api.sms_status({'messageid': message_id})
@@ -165,14 +213,18 @@ class KavenegarService:
     
     def send_voice_otp(self, phone_number: str, otp_code: str) -> dict:
         """
-        ارسال OTP به صورت تماس صوتی
+        ارسال کد یک‌بارمصرف (OTP) به‌صورت تماس صوتی و بازگرداندن نتیجهٔ ساختاری.
         
-        Args:
-            phone_number: شماره موبایل
-            otp_code: کد OTP
-            
+        این متد کد عددی را به شکل قابل خواندن برای تولید پیام صوتی آماده می‌کند، درخواست ایجاد تماس صوتی با متن پیام را به سرویس کاون‌نگار می‌فرستد و نتیجهٔ عملیات را به‌صورت دیکشنری بازمی‌گرداند. در حالت موفق مقدار‌های `success`, `message_id` و `status` برگشت داده می‌شوند؛ در صورت بروز خطا مقدار `success` برابر False و کلیدهای `error` و `error_detail` برای توضیحات خطا برگردانده می‌شوند.
+        
+        Parameters:
+            phone_number (str): شماره گیرنده به فرمت مورد انتظار (پیش از ارسال معمولاً با `format_phone_number` نرمال‌سازی شود).
+            otp_code (str): کد OTP به‌صورت رشتهٔ عددی (مثلاً "123456").
+        
         Returns:
-            dict: نتیجه ارسال
+            dict: ساختاری که وضعیت عملیات را نشان می‌دهد.
+                - در موفقیت: {'success': True, 'message_id': str, 'status': ...}
+                - در خطا: {'success': False, 'error': str, 'error_detail': str}
         """
         try:
             # تبدیل کد به متن قابل خواندن
@@ -210,13 +262,17 @@ class KavenegarService:
     @staticmethod
     def format_phone_number(phone_number: str) -> str:
         """
-        فرمت کردن شماره تلفن برای کاوه‌نگار
+        شماره تلفن را برای استفاده در API کاوه‌نگار نرمال‌سازی می‌کند.
         
-        Args:
-            phone_number: شماره تلفن
-            
+        این تابع فضاها و خط تیره‌ها را حذف کرده و پیش‌شماره‌های بین‌المللی رایج ایران را به قالب محلی با صفر پیش‌شماره تبدیل می‌کند. به‌طور مشخص:
+        - حذف فاصله‌ها و کاراکتر '-'.
+        - تبدیل پیش‌وندهای '+98'، '0098' یا '98' به '0' در ابتدا (مثلاً '+98912...' → '0912...').
+        
+        Parameters:
+            phone_number (str): شماره تلفن ورودی که ممکن است حاوی فاصله، خط تیره یا پیش‌شماره بین‌المللی باشد.
+        
         Returns:
-            str: شماره فرمت شده
+            str: شماره تلفن نرمال‌شده متناسب با قالب مورد انتظار کاوه‌نگار.
         """
         # حذف فاصله‌ها و کاراکترهای اضافی
         phone_number = phone_number.strip().replace(' ', '').replace('-', '')

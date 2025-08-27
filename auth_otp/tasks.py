@@ -15,9 +15,27 @@ logger = logging.getLogger(__name__)
 @shared_task(name='auth_otp.tasks.cleanup_expired_otp')
 def cleanup_expired_otp():
     """
-    پاکسازی OTP های منقضی شده
+    پاکسازی و حذف درخواست‌های OTP منقضی شده.
     
-    این تسک به صورت دوره‌ای اجرا می‌شود و OTP های قدیمی را حذف می‌کند
+    این تسک پس از فراخوانی OTPService.cleanup_expired_otps() تمامی OTPهای منقضی را حذف می‌کند و برای استفاده در اجراهای دوره‌ای (مثلاً از طریق Celery) طراحی شده است. در صورت اجرای موفق، تعداد آیتم‌های حذف‌شده را برمی‌گرداند؛ در صورت بروز خطا، پیام خطا را بازمی‌گرداند. زمان اجرای عملیات در قالب ISO 8601 در خروجی ثبت می‌شود.
+    
+    Return:
+        dict: یک دیکشنری با یکی از ساختارهای زیر:
+            - موفق:
+                {
+                    'status': 'success',
+                    'deleted_count': int,            # تعداد رکوردهای حذف‌شده
+                    'timestamp': str                 # زمان اجرای عملیات به صورت ISO 8601
+                }
+            - خطا:
+                {
+                    'status': 'error',
+                    'error': str,                    # پیام خطا
+                    'timestamp': str                 # زمان وقوع خطا به صورت ISO 8601
+                }
+    
+    Side effects:
+        - فراخوانی متد OTPService.cleanup_expired_otps() که ممکن است رکوردها را از پایگاه‌داده حذف کند.
     """
     try:
         logger.info("Starting OTP cleanup task")
@@ -44,9 +62,23 @@ def cleanup_expired_otp():
 @shared_task(name='auth_otp.tasks.cleanup_expired_tokens')
 def cleanup_expired_tokens():
     """
-    پاکسازی توکن‌های منقضی از blacklist
+    پاکسازی توکن‌های منقضی از لیست سیاه (blacklist).
     
-    این تسک توکن‌هایی که زمان انقضایشان گذشته را از blacklist حذف می‌کند
+    این تسک پس‌زمینه، رکوردهای توکنِ قرار گرفته در blacklist را که تاریخ انقضای آن‌ها گذشته است حذف می‌کند و تعداد حذف‌شده را بازمی‌گرداند. خروجی تابع یک دیکشنری ساخت‌یافته شامل وضعیت اجرای تسک، شمار توکن‌های حذف‌شده و زمان اجرای عملیات است. در صورت بروز خطا، به‌جای پرتاب استثنا، یک دیکشنری با کلیدهای وضعیت 'error'، پیام خطا و زمان بازگردانده می‌شود.
+    
+    Returns:
+        dict: در حالت موفق:
+            {
+                'status': 'success',
+                'deleted_count': int,         # تعداد توکن‌های حذف‌شده از blacklist
+                'timestamp': str             # زمان (ISO 8601) تولید نتیجه
+            }
+            در حالت خطا:
+            {
+                'status': 'error',
+                'error': str,                # پیام خطای تولیدشده
+                'timestamp': str             # زمان (ISO 8601) تولید نتیجه
+            }
     """
     try:
         logger.info("Starting token blacklist cleanup task")
@@ -73,9 +105,22 @@ def cleanup_expired_tokens():
 @shared_task(name='auth_otp.tasks.check_rate_limits')
 def check_rate_limits():
     """
-    بررسی و بروزرسانی محدودیت‌های نرخ
+    بررسی و به‌روزرسانی پنجره‌های نرخ (rate limits) و گزارش وضعیت تغییرات.
     
-    این تسک محدودیت‌های نرخ را بررسی و در صورت نیاز ریست می‌کند
+    این تسک همهٔ رکوردهای OTPRateLimit را بارگذاری می‌کند، برای هر رکورد متد check_and_update_windows() را اجرا می‌کند، سپس بر اساس مقدارهای minute_count و hour_count شمارش می‌کند که کدام رکوردها در پنجره‌ها ریست یا به‌روزرسانی شده‌اند و همچنین مشخص می‌کند کدام رکوردها از حالت مسدود خارج شده‌اند. هر نمونه پس از بررسی ذخیره می‌شود (side effect: فراخوانی save() روی هر OTPRateLimit). در پایان یک ساختار خلاصه با شمارش‌ها و timestamp بازگردانده می‌شود. در صورت بروز استثنا، یک دیکشنری خطا با پیام و timestamp بازگردانده می‌شود.
+    
+    Return:
+        dict: در صورت موفقیت ساختاری با کلیدهای زیر بازمی‌گرداند:
+            - status (str): 'success'
+            - total_checked (int): تعداد کل رکوردهای بررسی‌شده
+            - updated_count (int): تعداد رکوردهایی که پنجره‌شان ریست یا به‌روزرسانی شده (minute_count یا hour_count برابر 0)
+            - unblocked_count (int): تعداد رکوردهایی که از حالت مسدود خارج شده‌اند (is_blocked == False و blocked_until تنظیم شده)
+            - timestamp (str): زمان تولید نتیجه به صورت ISO 8601
+    
+        در صورت خطا:
+            - status (str): 'error'
+            - error (str): پیام خطا
+            - timestamp (str): زمان وقوع خطا به صورت ISO 8601
     """
     try:
         from .models import OTPRateLimit
@@ -127,9 +172,28 @@ def check_rate_limits():
 @shared_task(name='auth_otp.tasks.send_otp_async')
 def send_otp_async(phone_number, purpose='login', sent_via='sms'):
     """
-    ارسال OTP به صورت غیرهمزمان
+    OTP را به صورت غیرهمزمان ارسال می‌کند و نتیجه را به صورت ساختارمند بازمی‌گرداند.
     
-    برای موارد خاص که نیاز به ارسال در background دارید
+    جزئیات:
+    - این تابع درخواست ارسال یک کد یک‌بارمصرف (OTP) را با استفاده از سرویس OTPService انجام می‌دهد و برای اجرا در پس‌زمینه مناسب است.
+    - تابع با استفاده از phone_number مقصد را مشخص می‌کند، purpose منظور استفاده یا هدف OTP را تعیین می‌کند (مثلاً 'login') و sent_via کانال ارسال را مشخص می‌کند (معمولاً 'sms' یا 'call').
+    - خروجی یک دیکشنری ساختاریافته است که وضعیت عملیات و اطلاعات تکمیلی را شامل می‌شود؛ در حالت بروز استثنا هم خطا گرفته شده و در قالب پاسخ بازگردانده می‌شود.
+    - اثری جانبی: درخواست ارسال واقعی OTP را به سرویس ارسال (مثلاً درگاه پیامک/تماس) ارسال می‌کند.
+    
+    پارامترها:
+        phone_number (str): شماره تلفن مقصد، بهتر است در فرمت بین‌المللی قرار داشته باشد.
+        purpose (str, optional): هدف استفاده از OTP (پیش‌فرض: 'login').
+        sent_via (str, optional): کانال ارسال OTP، مثلاً 'sms' یا 'call' (پیش‌فرض: 'sms').
+    
+    مقدار بازگشتی:
+        dict: دیکشنری با کلیدهای زیر
+            - status (str): یکی از 'success' (ارسال موفق)، 'failed' (ارسال ناموفق اما پردازش بدون استثنا)، یا 'error' (خطای غیرمنتظره و ثبت‌شده).
+            - result (any): مقدار بازگشتی یا پیام خطای سرویس در صورت وضعیت 'success' یا 'failed'.
+            - error (str, optional): متن خطا در صورت وقوع استثنای داخلی (فقط زمانی که status == 'error' موجود است).
+            - timestamp (str): زمان ایجاد نتیجه به صورت ISO 8601.
+    
+    توضیحات اضافی:
+    - تابع خود استثناها را گرفته و آن‌ها را به صورت مقدار بازگشتی گزارش می‌کند؛ بنابراین هیچ استثنای بیرونی پرتاب نمی‌شود.
     """
     try:
         from .services import OTPService
@@ -166,9 +230,26 @@ def send_otp_async(phone_number, purpose='login', sent_via='sms'):
 @shared_task(name='auth_otp.tasks.generate_otp_report')
 def generate_otp_report(start_date=None, end_date=None):
     """
-    تولید گزارش استفاده از OTP
+    تولید گزارش خلاصهٔ استفاده و وضعیت درخواست‌ها و تأییدیه‌های OTP در یک بازهٔ زمانی مشخص.
     
-    این تسک آمار استفاده از سیستم OTP را تولید می‌کند
+    این تابع آمارهایی را از مدل‌های OTPRequest و OTPVerification استخراج می‌کند و گزارشی شامل تعداد کل درخواست‌ها، درخواست‌های استفاده‌شده، تعداد ارسال‌ها برحسب روش (sms/call)، آمار تأییدها، تفکیک بر اساس `purpose` و نرخ موفقیت (درصد درخواست‌های استفاده‌شده نسبت به کل) تولید می‌کند. در صورت عدم تعیین، بازهٔ پیش‌فرض انتهای آن برابر زمان فعلی و شروع آن هفت روز قبل است. تابع خروجی‌ای از نوع dict برمی‌گرداند که در صورت موفقیت شامل کلیدهای `period`, `otp_stats`, `verification_stats`, `purpose_breakdown`, `success_rate`, و `generated_at` است؛ در صورت خطا دیکشنری‌ای با `status: 'error'`, `error` و `timestamp` بازگردانده می‌شود.
+    
+    Parameters:
+        start_date (datetime.datetime | None): زمان شروع بازهٔ گزارش. اگر None باشد، به‌صورت پیش‌فرض برابر با end_date - 7 روز قرار می‌گیرد.
+        end_date (datetime.datetime | None): زمان پایان بازهٔ گزارش. اگر None باشد، به‌صورت پیش‌فرض برابر با زمان فعلی (timezone.now()) قرار می‌گیرد.
+    
+    Returns:
+        dict: در حالت موفقیت، دیکشنری گزارش شامل:
+            - period: {'start': ISO8601, 'end': ISO8601}
+            - otp_stats: مجموع شمارش‌ها (total_requests, used_requests, sms_requests, call_requests)
+            - verification_stats: شمارش‌های تأیید (total_verifications, active_sessions)
+            - purpose_breakdown: لیستی از شمارش‌ها گروه‌بندی‌شده بر اساس `purpose`
+            - success_rate: درصد استفاده‌شدگی OTP (عدد بین 0 تا 100)
+            - generated_at: timestamp تولید گزارش (ISO8601)
+        در صورت خطا، دیکشنری شامل:
+            - status: 'error'
+            - error: پیام خطا
+            - timestamp: زمان وقوع خطا (ISO8601)
     """
     try:
         from .models import OTPRequest, OTPVerification
