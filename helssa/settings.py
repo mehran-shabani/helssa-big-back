@@ -40,6 +40,14 @@ INSTALLED_APPS = [
     'django.contrib.messages',
     'django.contrib.staticfiles',
     
+    # Third party apps
+    'rest_framework',
+    'django_ratelimit',
+    'encrypted_model_fields',
+    
+    # Local apps
+    'auth_otp',
+    'devops',
 ]
 
 MIDDLEWARE = [
