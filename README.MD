@@ -1,9 +1,3 @@
-\<p align="center">
-
-&#x20; \<img src="images/logo.png" alt="Helssa logo" width="160" />
-
-\</p>
-
 # Helssa — Intelligent Telemedicine Platform
 
 *End-to-end, agent-assisted, FHIR-ready telemedicine suite for clinicians and patients.*
