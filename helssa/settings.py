@@ -40,6 +40,9 @@ INSTALLED_APPS = [
     'django.contrib.messages',
     'django.contrib.staticfiles',
     
+    # Project apps
+    'auth_otp',
+    'analytics',
 ]
 
 MIDDLEWARE = [
@@ -123,3 +126,12 @@ STATIC_URL = 'static/'
 # https://docs.djangoproject.com/en/5.2/ref/settings/#default-auto-field
 
 DEFAULT_AUTO_FIELD = 'django.db.models.BigAutoField'
+
+# Analytics settings
+ANALYTICS_ENABLED = True
+ANALYTICS_PERFORMANCE_TRACKING_ENABLED = True
+ANALYTICS_USER_ACTIVITY_TRACKING_ENABLED = True
+ANALYTICS_ALERTS_ENABLED = True
+ANALYTICS_METRICS_RETENTION_DAYS = 30
+ANALYTICS_USER_ACTIVITY_RETENTION_DAYS = 90
+ANALYTICS_PERFORMANCE_RETENTION_DAYS = 30
