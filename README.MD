@@ -1,3 +1,5 @@
+![Helssa logo](images/logo.png)
+
 # Helssa — Intelligent Telemedicine Platform
 
 *End-to-end, agent-assisted, FHIR-ready telemedicine suite for clinicians and patients.*
