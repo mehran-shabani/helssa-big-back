@@ -23,10 +23,23 @@ class OTPModelTests(TestCase):
     """تست‌های مدل OTP"""
     
     def setUp(self):
+        """
+        مقدمه‌ای برای هر تست: شماره تلفن نمونه را قبل از اجرای هر مورد تست مقداردهی می‌کند.
+        
+        این متد توسط چارچوب تست (setUp) قبل از هر تست اجرا می‌شود و صفت instance `self.phone_number` را با مقدار نمونه `'09123456789'` مقداردهی می‌کند تا در تست‌های مختلف مربوط به OTP و احراز هویت به‌عنوان شمارهٔ ورودی استاندارد استفاده شود.
+        """
         self.phone_number = '09123456789'
     
     def test_otp_request_creation(self):
-        """تست ایجاد درخواست OTP"""
+        """
+        تست ایجاد یک OTPRequest و اعتبارسنجی ویژگی‌های آن.
+        
+        این تست یک رکورد OTPRequest با شماره تلفن و منظور ورود ایجاد می‌کند و بررسی می‌کند که:
+        - کد OTP تولید‌شده شش رقمی و فقط از ارقام تشکیل شده باشد.
+        - مقدار expires_at حدوداً ۳ دقیقه پس از زمان فعلی باشد (تفاوت کمتر از ۵ ثانیه).
+        
+        توجه: این تست یک نمونه در دیتابیس ایجاد می‌کند (side effect).
+        """
         otp_request = OTPRequest.objects.create(
             phone_number=self.phone_number,
             purpose='login'
@@ -213,7 +226,17 @@ class AuthServiceTests(TestCase):
         self.assertEqual(user.id, user2.id)
     
     def test_generate_tokens(self):
-        """تست تولید توکن‌های JWT"""
+        """
+        اعتبارسنجی تولید مجموعه توکن‌های احراز هویت (JWT) برای یک کاربر جدید.
+        
+        این تست بررسی می‌کند که AuthService.generate_tokens برای یک کاربر جدید دیکشنری‌ای شامل کلیدهای زیر بازمی‌گرداند:
+        - 'access': توکن دسترسی (access token)
+        - 'refresh': توکن تجدید (refresh token)
+        - 'token_type': نوع توکن که باید مقدار 'Bearer' باشد
+        - 'expires_in': مدت زمان عمر توکن (به‌طور ضمنی بررسی وجود کلید، نه مقدار دقیق)
+        
+        تست هیچ مقدار خاصی برای توکن‌ها را بررسی نمی‌کند، فقط حضور کلیدهای مورد انتظار و مقدار صحیح 'token_type' را تضمین می‌کند.
+        """
         user = User.objects.create_user(
             username='09123456789',
             user_type='patient'
@@ -250,11 +273,25 @@ class OTPAPITests(APITestCase):
     """تست‌های API احراز هویت OTP"""
     
     def setUp(self):
+        """
+        مقدمه‌ای برای هر تست: شماره تلفن نمونه را قبل از اجرای هر مورد تست مقداردهی می‌کند.
+        
+        این متد توسط چارچوب تست (setUp) قبل از هر تست اجرا می‌شود و صفت instance `self.phone_number` را با مقدار نمونه `'09123456789'` مقداردهی می‌کند تا در تست‌های مختلف مربوط به OTP و احراز هویت به‌عنوان شمارهٔ ورودی استاندارد استفاده شود.
+        """
         self.phone_number = '09123456789'
     
     @patch('auth_otp.services.kavenegar_service.KavenegarAPI')
     def test_send_otp_api(self, mock_kavenegar):
-        """تست API ارسال OTP"""
+        """
+        آزمون endpoint ارسال OTP از طریق API.
+        
+        این تست فراخوانی POST به مسیر 'auth_otp:otp_send' را با شماره تلفن و منظور (purpose) شبیه‌سازی می‌کند و موارد زیر را راستی‌آزمایی می‌کند:
+        - پاسخ HTTP با کد 201 (Created) بازگردانده شود.
+        - فیلد success در بدنه پاسخ True باشد.
+        - شناسهٔ تولید شده OTP ('otp_id') در داده‌های پاسخ وجود داشته باشد.
+        
+        برای جداسازی از سرویس خارجی ارسال پیامک، اتصال به Kavenegar با یک ماک (mock_kavenegar) فراهم و رفتار آن با پاسخ موفق شبیه‌سازی می‌شود تا فراخوانی سرویس پیامک در جریان تست کنترل شود.
+        """
         # Mock Kavenegar
         mock_api_instance = MagicMock()
         mock_api_instance.verify_lookup.return_value = {
@@ -335,7 +372,15 @@ class OTPAPITests(APITestCase):
         self.assertIn('access', response.data['data'])
     
     def test_logout_api(self):
-        """تست API خروج"""
+        """
+        تأیید می‌کند که endpoint خروج (logout) توکن رفرش را بلک‌لیست می‌کند و درخواست با توکن دسترسی معتبر پذیرفته می‌شود.
+        
+        در این تست:
+        - یک کاربر جدید ساخته می‌شود و برای او توکن‌های دسترسی و رفرش تولید می‌گردد.
+        - هدر Authorization با توکن access تنظیم شده و یک درخواست POST به endpoint خروج ارسال می‌شود.
+        - انتظار می‌رود پاسخ HTTP 200 و فیلد `success` برابر True باشد.
+        - در نهایت بررسی می‌شود که توکن رفرش ارسال‌شده در بلک‌لیست قرار گرفته باشد (TokenBlacklist.is_blacklisted بازگشت True).
+        """
         # ایجاد کاربر و ورود
         user = User.objects.create_user(
             username=self.phone_number,

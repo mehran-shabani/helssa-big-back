@@ -54,7 +54,20 @@ class OTPRequestSerializer(serializers.Serializer):
     )
     
     def validate_phone_number(self, value):
-        """اعتبارسنجی شماره موبایل"""
+        """
+        اعتبارسنجی و نرمال‌سازی شماره موبایل ایرانی.
+        
+        این تابع ورودی را به‌عنوان یک رشته شماره موبایل دریافت می‌کند، فاصله‌ها و خط تیره‌ها را حذف و فرمت را بررسی می‌کند تا مطمئن شود شماره با '09' شروع شده و دقیقاً 11 رقم دارد. در صورت معتبر بودن، نسخهٔ نرمال‌شدهٔ شماره (بدون فاصله یا '-') برگردانده می‌شود.
+        
+        Parameters:
+            value (str): شماره موبایل ورودی که ممکن است شامل فاصله یا '-' باشد.
+        
+        Returns:
+            str: شماره موبایل نرمال‌شده (بدون فاصله و خط تیره).
+        
+        Raises:
+            serializers.ValidationError: اگر شماره با '09' شروع نکند یا طول آن برابر 11 رقم نباشد، خطا برگردانده می‌شود.
+        """
         # حذف فاصله‌ها و کاراکترهای اضافی
         value = value.strip().replace(' ', '').replace('-', '')
         
@@ -108,7 +121,22 @@ class OTPVerifySerializer(serializers.Serializer):
     )
     
     def validate_otp_code(self, value):
-        """اعتبارسنجی کد OTP"""
+        """
+        اعتبارسنجی کد شش‌رقمی OTP.
+        
+        پارامترها:
+            value (str): مقدار کد OTP که باید فقط شامل اعداد بوده و دقیقاً ۶ رقم باشد.
+        
+        رفتار:
+            - اگر مقدار شامل کاراکتر غیرعددی باشد، ValidationError با پیام مناسب برمی‌گرداند.
+            - اگر طول مقدار برابر با ۶ نباشد، ValidationError با پیام مناسب برمی‌گرداند.
+        
+        بازگشت:
+            مقدار ورودی در صورت معتبر بودن (str).
+        
+        خطاها:
+            serializers.ValidationError: در صورت غیرعددی بودن یا طول نامناسب کد.
+        """
         # بررسی عددی بودن
         if not value.isdigit():
             raise serializers.ValidationError('کد OTP باید فقط شامل اعداد باشد')
@@ -155,7 +183,15 @@ class UserInfoSerializer(serializers.ModelSerializer):
         read_only_fields = fields
     
     def get_full_name(self, obj):
-        """نام کامل کاربر"""
+        """
+        بازمی‌گرداند نام کامل نمایشی کاربر؛ ترکیب `first_name` و `last_name` و در صورت خالی بودن هر دو، از `username` استفاده می‌کند.
+        
+        Parameters:
+            obj (User): نمونهٔ مدل کاربر که دارای فیلدهای `first_name`, `last_name`, و `username` است.
+        
+        Returns:
+            str: رشته‌ای شامل نام کامل (همچون "نام خانوادگی") یا در صورت نبود نام/نام‌خانوادگی، نام کاربری.
+        """
         return f"{obj.first_name} {obj.last_name}".strip() or obj.username
 
 
@@ -232,11 +268,31 @@ class OTPStatusSerializer(serializers.ModelSerializer):
         read_only_fields = fields
     
     def get_remaining_attempts(self, obj):
-        """تعداد تلاش‌های باقی‌مانده"""
+        """
+        تعداد تلاش‌های مجاز باقی‌مانده برای تایید OTP را محاسبه می‌کند.
+        
+        این تابع با استفاده از مقدار `obj.attempts` تعداد تلاش‌های انجام‌شده را از حداکثر مجاز (۳ تلاش) کم می‌کند و مقدار غیرمنفی برمی‌گرداند (حداقل ۰). به عبارتی اگر تلاش‌ها بیش از یا مساوی ۳ باشد، نتیجه ۰ خواهد بود.
+        
+        Parameters:
+            obj: نمونه‌ای از مدل OTPRequest یا شی‌ای با صفت `attempts` (int) که تعداد تلاش‌های انجام‌شده را نگهداری می‌کند.
+        
+        Returns:
+            int: تعداد تلاش‌های باقی‌مانده تا حداکثر (۰ تا ۳).
+        """
         return max(0, 3 - obj.attempts)
     
     def get_expires_in_seconds(self, obj):
-        """زمان باقی‌مانده تا انقضا"""
+        """
+        بازمی‌گرداند تعداد ثانیه‌های باقی‌مانده تا زمان انقضای شیٔ OTP.
+        
+        در صورت دریافت یک نمونهٔ مدل OTP (obj) این متد زمان فعلی سیستم را با فیلد `expires_at` مقایسه می‌کند و تعداد ثانیه‌های صحیح باقیمانده تا انقضا را محاسبه می‌کند. اگر پیش‌تر منقضی شده یا مقدار منفی به‌دست آید، مقدار 0 بازگردانده می‌شود.
+        
+        پارامترها:
+            obj: نمونه‌ای از مدل OTPRequest یا هر شیئی که دارای فیلد‌های `expires_at` (DateTime) و `is_expired` (bool) باشد.
+        
+        بازگشت:
+            int: تعداد ثانیه‌های باقیمانده تا انقضا (همیشه عدد غیرمنفی).
+        """
         from django.utils import timezone
         if obj.is_expired:
             return 0
@@ -341,7 +397,20 @@ class RegisterSerializer(serializers.ModelSerializer):
         ]
     
     def validate_phone_number(self, value):
-        """بررسی یکتا بودن شماره موبایل"""
+        """
+        بررسی می‌کند که شماره موبایل (مقدار ورودی) قبلاً به‌عنوان username در مدل User ثبت نشده باشد.
+        
+        اگر مقدار تکراری باشد، اعتبارسنجی ناموفق بوده و یک ValidationError برگردانده می‌شود؛ در غیر این صورت همان مقدار برگشت داده می‌شود.
+        
+        Parameters:
+            value (str): شماره موبایل (فرمت انتظار: رشته‌ای که قبلاً برای username استفاده شده است).
+        
+        Returns:
+            str: همان مقدار ورودی در صورت یکتا بودن.
+        
+        Raises:
+            rest_framework.serializers.ValidationError: اگر کاربری با همان username (شماره موبایل) موجود باشد.
+        """
         if User.objects.filter(username=value).exists():
             raise serializers.ValidationError(
                 'این شماره موبایل قبلاً ثبت شده است'
@@ -349,7 +418,19 @@ class RegisterSerializer(serializers.ModelSerializer):
         return value
     
     def create(self, validated_data):
-        """ایجاد کاربر جدید"""
+        """
+        یک کاربر جدید در سیستم ایجاد می‌کند و آن را برمی‌گرداند.
+        
+        دسکریپشن:
+        - شماره تلفن دریافتی از validated_data (کلید `phone_number`) را خارج می‌کند و به‌عنوان فیلد `username` برای ساخت کاربر استفاده می‌نماید.
+        - باقی‌مانده‌ی مقادیر موجود در validated_data به‌عنوان فیلدهای مدل کاربر به متد `create_user` منتقل می‌شوند.
+        
+        پارامترها:
+        - validated_data: دیکشنری داده‌های اعتبارسنجی‌شده‌ی serializer که شامل `phone_number` و سایر فیلدهای کاربر است. (توضیح پارامتر فقط برای مشخص کردن نقش `phone_number` اضافه شده است.)
+        
+        مقدار بازگشتی:
+        - User: نمونهٔ ایجادشدهٔ مدل کاربر.
+        """
         phone_number = validated_data.pop('phone_number')
         
         user = User.objects.create_user(
