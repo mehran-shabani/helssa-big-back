@@ -312,7 +312,7 @@ class TokenBlacklistAdmin(admin.ModelAdmin):
             str: پیش‌نمایش توکن (حداکثر ۲۰ کاراکتر به‌علاوه '...') برای نمایش در رابط ادمین بدون افشای مقدار کامل.
 
         """
-        return f"{obj.token[:20]}..."
+        return f"{obj.token[:20]}..." if len(obj.token) > 20 else obj.token
     get_token_preview.short_description = 'توکن'
     
     def is_expired_display(self, obj):
