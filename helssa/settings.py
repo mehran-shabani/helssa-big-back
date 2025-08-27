@@ -40,6 +40,15 @@ INSTALLED_APPS = [
     'django.contrib.messages',
     'django.contrib.staticfiles',
     
+    # Third party apps
+    'rest_framework',
+    'rest_framework_simplejwt',
+    'corsheaders',
+    
+    # Local apps
+    'unified_auth',
+    'auth_otp',
+    'billing',
 ]
 
 MIDDLEWARE = [
