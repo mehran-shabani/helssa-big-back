@@ -78,7 +78,7 @@ def otp_status(request, otp_id):
 # ====================================
 
 @api_view(['GET'])
-@permission_classes([AllowAny])
+@permission_classes([IsAuthenticated])
 def rate_limit_status(request, phone_number):
     """
     دریافت وضعیت محدودیت نرخ برای شماره
