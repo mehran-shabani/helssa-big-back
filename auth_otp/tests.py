@@ -24,14 +24,17 @@ class OTPModelTests(TestCase):
     
     def setUp(self):
         """
+
         یک مقداردهی اولیهٔ مشترک برای تست‌ها انجام می‌دهد.
         
         این متد برای هر تست اجرا می‌شود و مقدار پیش‌فرض شماره تماس آزمایشی را در صفت `self.phone_number` قرار می‌دهد تا در تمام تست‌های این کلاس قابل استفاده باشد (مثلاً هنگام ایجاد OTPRequest یا فراخوانی APIهای مرتبط).
+
         """
         self.phone_number = '09123456789'
     
     def test_otp_request_creation(self):
         """
+
         تست ایجاد یک OTPRequest جدید و ارزیابی خواص مهم آن.
         
         این تست یک رکورد OTPRequest با phone_number و purpose ایجاد می‌کند و موارد زیر را بررسی می‌کند:
@@ -39,6 +42,7 @@ class OTPModelTests(TestCase):
         - expires_at تقریباً ۳ دقیقه بعد از زمان فعلی تنظیم شده باشد (خطای مجاز کمتر از ۵ ثانیه).
         
         توضیح جانبی: این تست یک رکورد در پایگاه‌داده ایجاد می‌کند (side effect).
+
         """
         otp_request = OTPRequest.objects.create(
             phone_number=self.phone_number,
@@ -251,7 +255,17 @@ class AuthServiceTests(TestCase):
         self.assertEqual(user.id, user2.id)
     
     def test_generate_tokens(self):
-        """تست تولید توکن‌های JWT"""
+        """
+        اعتبارسنجی تولید مجموعه توکن‌های احراز هویت (JWT) برای یک کاربر جدید.
+        
+        این تست بررسی می‌کند که AuthService.generate_tokens برای یک کاربر جدید دیکشنری‌ای شامل کلیدهای زیر بازمی‌گرداند:
+        - 'access': توکن دسترسی (access token)
+        - 'refresh': توکن تجدید (refresh token)
+        - 'token_type': نوع توکن که باید مقدار 'Bearer' باشد
+        - 'expires_in': مدت زمان عمر توکن (به‌طور ضمنی بررسی وجود کلید، نه مقدار دقیق)
+        
+        تست هیچ مقدار خاصی برای توکن‌ها را بررسی نمی‌کند، فقط حضور کلیدهای مورد انتظار و مقدار صحیح 'token_type' را تضمین می‌کند.
+        """
         user = User.objects.create_user(
             username='09123456789',
             user_type='patient'
@@ -289,7 +303,8 @@ class OTPAPITests(APITestCase):
     
     def setUp(self):
         """
-        یک مقداردهی اولیهٔ مشترک برای تست‌ها انجام می‌دهد.
+
+        مقداردهی اولیه سرویس کاوه‌نگار: کلید API را از تنظیمات می‌خواند، نمونهٔ KavenegarAPI را می‌سازد و مقادیر sender و الگوی OTP را مقداردهی می‌کند.
         
         این متد برای هر تست اجرا می‌شود و مقدار پیش‌فرض شماره تماس آزمایشی را در صفت `self.phone_number` قرار می‌دهد تا در تمام تست‌های این کلاس قابل استفاده باشد (مثلاً هنگام ایجاد OTPRequest یا فراخوانی APIهای مرتبط).
         """
@@ -297,7 +312,16 @@ class OTPAPITests(APITestCase):
     
     @patch('auth_otp.services.kavenegar_service.KavenegarAPI')
     def test_send_otp_api(self, mock_kavenegar):
-        """تست API ارسال OTP"""
+        """
+        آزمون endpoint ارسال OTP از طریق API.
+        
+        این تست فراخوانی POST به مسیر 'auth_otp:otp_send' را با شماره تلفن و منظور (purpose) شبیه‌سازی می‌کند و موارد زیر را راستی‌آزمایی می‌کند:
+        - پاسخ HTTP با کد 201 (Created) بازگردانده شود.
+        - فیلد success در بدنه پاسخ True باشد.
+        - شناسهٔ تولید شده OTP ('otp_id') در داده‌های پاسخ وجود داشته باشد.
+        
+        برای جداسازی از سرویس خارجی ارسال پیامک، اتصال به Kavenegar با یک ماک (mock_kavenegar) فراهم و رفتار آن با پاسخ موفق شبیه‌سازی می‌شود تا فراخوانی سرویس پیامک در جریان تست کنترل شود.
+        """
         # Mock Kavenegar
         mock_api_instance = MagicMock()
         mock_api_instance.verify_lookup.return_value = {
@@ -388,6 +412,7 @@ class OTPAPITests(APITestCase):
     
     def test_logout_api(self):
         """
+
         آزمون پایان جلسه (logout) از طریق API: یک کاربر آزمون ایجاد می‌کند، برایش توکن‌های JWT تولید می‌کند، درخواست POST به endpoint خروج با توکن refresh ارسال می‌نماید و انتظار دارد پاسخ موفق (HTTP 200) بازگردد و توکن refresh در لیست سیاه (blacklist) ثبت شده باشد.
         
         شرح جزئی‌تر:
@@ -395,6 +420,7 @@ class OTPAPITests(APITestCase):
         - با استفاده از AuthService توکن‌های access و refresh تولید می‌شوند.
         - توکن access در هدر Authorization قرار می‌گیرد و درخواست logout با بدنه شامل refresh ارسال می‌شود.
         - آزمون وضعیت پاسخ، فیلد موفقیت در بدنه پاسخ و اینکه توکن refresh پس از فراخوانی API در TokenBlacklist قرار گرفته را بررسی می‌کند.
+
         """
         # ایجاد کاربر و ورود
         user = User.objects.create_user(

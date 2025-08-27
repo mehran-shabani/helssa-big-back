@@ -54,6 +54,7 @@ class OTPRequestAdmin(admin.ModelAdmin):
     
     def otp_code_display(self, obj):
         """
+
         نمایش محافظت‌شدهٔ کد OTP برای نمایش در ستون‌های پنل ادمین.
         
         این متد یک رشتهٔ قابل‌نمایش برمی‌گرداند که وضعیت یا نمایشی امن از کد OTP را ارائه می‌دهد:
@@ -66,6 +67,7 @@ class OTPRequestAdmin(admin.ModelAdmin):
         
         مقدار بازگشتی:
             str: رشتهٔ نمایشی؛ در دو حالت اول حاوی HTML امن (تولیدشده توسط `format_html`) و در حالت آخر یک متن ماسک‌شده است.
+
         """
         if obj.is_used:
             return format_html('<span style="color: gray;">استفاده شده</span>')
@@ -78,6 +80,7 @@ class OTPRequestAdmin(admin.ModelAdmin):
     
     def is_expired_display(self, obj):
         """
+
         یک خط خلاصه:
             نمایش HTML وضعیت انقضأ یک رکورد به‌صورت نماد رنگی.
         
@@ -89,6 +92,7 @@ class OTPRequestAdmin(admin.ModelAdmin):
         
         مقدار بازگشتی:
             str: یک رشته HTML ایمن‌شده (از طریق `format_html`) که نماد وضعیت را شامل می‌شود و برای نمایش در ستون ادمین مناسب است.
+
         """
         if obj.is_expired:
             return format_html('<span style="color: red;">✗</span>')
@@ -139,6 +143,7 @@ class OTPVerificationAdmin(admin.ModelAdmin):
     
     def get_phone_number(self, obj):
         """
+
         شماره تلفن مرتبط با درخواست OTP مربوط به رکورد تأیید را برمی‌گرداند.
         
         پارامترها:
@@ -154,6 +159,7 @@ class OTPVerificationAdmin(admin.ModelAdmin):
     
     def deactivate_sessions(self, request, queryset):
         """
+
         غیرفعال‌سازی نشست‌های انتخاب‌شده در پنل ادمین.
         
         این عملیات برای رکوردهای انتخاب‌شده در queryset یک به‌روزرسانی دسته‌ای انجام می‌دهد و همهٔ نمونه‌هایی را که فیلد `is_active` آنها برابر True است به `False` تغییر می‌دهد. پس از اجرا تعداد نشست‌هایی که وضعیت‌شان تغییر کرده با استفاده از `message_user` به کاربر ادمین اطلاع‌رسانی می‌شود.
@@ -209,9 +215,11 @@ class OTPRateLimitAdmin(admin.ModelAdmin):
     
     def unblock_numbers(self, request, queryset):
         """
+
         رفع مسدودیت دسته‌ای برای رکوردهای انتخاب‌شدهٔ محدودیت نرخ (rate limit).
         
-        برای رکوردهای انتخاب‌شده در پنل ادمین، فقط آن‌هایی که در حال حاضر is_blocked=True هستند در پایگاه‌داده به‌روزرسانی می‌شوند: is_blocked به False تنظیم می‌شود، blocked_until پاک می‌گردد (None) و failed_attempts به 0 بازنشانی می‌شود. پس از انجام عملیات، تعداد رکوردهای تغییر یافته به‌صورت پیام مدیریتی در رابط ادمین نمایش داده می‌شود.
+        برای رکوردهای انتخاب‌شده در پنل ادمین، فقط آن‌هایی که در حال حاضر is_blocked=True هستند در پایگاه‌داده به‌روزرسانی می‌شوند: is_blocked به False تنظیم می‌شود، blocked_until پاک می‌گردد (None) و failed_attempts به 0 بازنشانی می‌شود. پس از انجام عملیات، تعداد رکوردهای تغییر یافته به‌صورت پیام مدیریتی در رابط ادمین نمایش داده          
+
         """
         count = queryset.filter(is_blocked=True).update(
             is_blocked=False,
@@ -223,6 +231,7 @@ class OTPRateLimitAdmin(admin.ModelAdmin):
     
     def reset_counters(self, request, queryset):
         """
+
         ریست‌شدن شمارنده‌های نرخ محدودیت برای رکوردهای انتخاب‌شده.
         
         این عملیات تمام فیلدهای شمارشی مربوط به پنجره‌های زمانی را برای تمامی رکوردهای موجود در queryset به مقدار صفر بازنشانی می‌کند و زمان شروع پنجره‌های minute/hour/daily را برابر با زمان فعلی سرور قرار می‌دهد. پس از اجرای به‌روزرسانی، تعداد رکوردهای اصلاح‌شده به‌صورت پیام به کاربر ادمین گزارش می‌شود.
@@ -236,6 +245,7 @@ class OTPRateLimitAdmin(admin.ModelAdmin):
         
         بازگشت:
             هیچ‌چیز (None).
+
         """
         now = timezone.now()
         count = queryset.update(
@@ -289,6 +299,7 @@ class TokenBlacklistAdmin(admin.ModelAdmin):
     
     def get_token_preview(self, obj):
         """
+
         یک پیش‌نمایش امن از مقدار توکن برمی‌گرداند.
         
         شرح:
@@ -299,12 +310,14 @@ class TokenBlacklistAdmin(admin.ModelAdmin):
         
         Returns:
             str: پیش‌نمایش توکن (حداکثر ۲۰ کاراکتر به‌علاوه '...') برای نمایش در رابط ادمین بدون افشای مقدار کامل.
+
         """
         return f"{obj.token[:20]}..."
     get_token_preview.short_description = 'توکن'
     
     def is_expired_display(self, obj):
         """
+
         نمایش وضعیت انقضا به‌صورت برچسب HTML رنگی.
         
         برمی‌گرداند یک رشته HTML ایمن (با استفاده از format_html) که وضعیت انقضای شیٔ داده‌شده را نمایش می‌دهد: اگر زمان کنونی (timezone.now()) بزرگ‌تر از obj.expires_at باشد، برچسب «منقضی» به رنگ خاکستری و در غیر این صورت «فعال» به رنگ سبز بازگردانده می‌شود.
@@ -314,6 +327,7 @@ class TokenBlacklistAdmin(admin.ModelAdmin):
         
         بازگشت:
             str: رشته HTML ایمن که برای نمایش در رابط ادمین مناسب است.
+
         """
         if timezone.now() > obj.expires_at:
             return format_html('<span style="color: gray;">منقضی</span>')
@@ -323,11 +337,13 @@ class TokenBlacklistAdmin(admin.ModelAdmin):
     
     def has_add_permission(self, request):
         """
+
         همیشه اجازهٔ افزودن دستی را در رابط ادمین غیرفعال می‌کند.
         
         این متد نادیده‌گیر (override)ِ ModelAdmin.has_add_permission است و به‌طور قطعی ایجاد رکورد جدید از طریق پنل مدیریت Django را غیرمجاز می‌کند (مثلاً برای TokenBlacklist که نباید دستی ساخته شود). این رفتار تنها دسترسی ادمین برای افزودن را قطع می‌کند و تأثیری بر ایجاد یا مدیریت رکوردها از طریق کد یا مهاجرت‌ها ندارد.
         
         Returns:
             bool: همیشه False — افزودن از طریق ادمین مجاز نیست.
+
         """
         return False

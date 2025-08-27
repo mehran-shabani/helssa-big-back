@@ -31,6 +31,7 @@ class Command(BaseCommand):
         - افزودن گزینه `--otp-age-hours` (int, پیش‌فرض 24): حداقل سن پیامک/OTP (بر حسب ساعت) که برای حذف در نظر گرفته می‌شود؛ رکوردهایی که زمان ایجادشان برابر یا بیشتر از این مقدار قدیمی‌تر باشد به‌عنوان قابل حذف در نظر گرفته می‌شوند.
         
         این متد به پارسر آرگومان‌ها (argparse) گزینه‌های مورد نیاز برای اجرای ایمن/آزمایشی و کنترل آستانه سنی OTP را اضافه می‌کند.
+
         """
         parser.add_argument(
             '--dry-run',
@@ -47,6 +48,7 @@ class Command(BaseCommand):
     
     def handle(self, *args, **options):
         """
+
         اجرای فرمان پاکسازی OTPها و توکن‌های منقضی شده.
         
         این متد نقطه ورود فرمان مدیریت است؛ گزینه‌های ورودیِ `options` را خوانده، عملیات پاکسازی OTPهای قدیمی و توکن‌های منقضی‌شده در blacklist را اجرا (یا در حالت dry-run تنها شمارش می‌کند) و خلاصه نتایج را به خروجی می‌نویسد. در حالت غیر dry-run حذف واقعی با استفاده از متدهای داخلی `_cleanup_otps` و `_cleanup_tokens` انجام می‌شود.
@@ -58,6 +60,7 @@ class Command(BaseCommand):
         عوارض جانبی:
         - نوشتن پیام‌ها و خلاصه به stdout با استایل‌های مناسب.
         - در حالت غیر dry-run، اجرای حذف واقعی از طریق `_cleanup_otps` و `_cleanup_tokens` که تعداد حذف‌شده‌ها را بازمی‌گردانند.
+    - بسته به مقدار `dry_run` ممکن است رکوردهایی از پایگاه داده حذف شوند (از طریق `_cleanup_otps` و `_cleanup_tokens`).
         """
         dry_run = options['dry_run']
         otp_age_hours = options['otp_age_hours']
@@ -88,6 +91,7 @@ class Command(BaseCommand):
     
     def _cleanup_otps(self, dry_run, age_hours):
         """
+
         یک خطی:
         پاک‌سازی یا شمارش OTPهای قدیمی بسته به حالت dry-run.
         
@@ -119,6 +123,7 @@ class Command(BaseCommand):
     def _cleanup_tokens(self, dry_run):
         """
         یک‌خطی:
+
         توکن‌های منقضی‌شده در لیست سیاه را یا شمارش می‌کند (dry-run) یا حذف می‌کند.
         
         توضیح مفصل:
@@ -129,6 +134,7 @@ class Command(BaseCommand):
         
         بازگشتی:
             int: تعداد توکن‌های منقضی که در حالت dry-run شمارش شدند یا تعداد توکن‌هایی که حذف شدند.
+      int: تعداد توکن‌هایی که شناسایی شده‌اند (در حالت dry-run تعداد قابل حذف، در حالت واقعی تعداد حذف‌شده).
         """
         if dry_run:
             from auth_otp.models import TokenBlacklist

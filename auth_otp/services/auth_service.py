@@ -29,6 +29,7 @@ class AuthService:
     @staticmethod
     def create_user_if_not_exists(phone_number: str, user_type: str = 'patient') -> Tuple[User, bool]:
         """
+
         ایجاد یا واکشی یک کاربر براساس شماره تلفن و بازگرداندن نشانگر ایجاد جدید
         
         این تابع تلاش می‌کند کاربری با مقدار `phone_number` به‌عنوان `username` در مدل کاربر پیدا کند. اگر موجود باشد، آن کاربر برگردانده می‌شود و نشانگر `is_new` برابر False خواهد بود. در غیر این صورت کاربری جدید با `username=phone_number`، `user_type` مشخص‌شده و وضعیت فعال (`is_active=True`) ایجاد می‌شود و `is_new` برابر True برمی‌گردد.
@@ -39,6 +40,21 @@ class AuthService:
         
         Returns:
             Tuple[User, bool]: تاپل شامل نمونه کاربر و یک بولین که نشان می‌دهد آیا کاربر جدید ایجاد شده (`True`) یا از قبل موجود بوده (`False`) .
+
+        یک کاربر را با username برابر phone_number بازیابی می‌کند یا در صورت نبود، یک کاربر فعال جدید می‌سازد.
+        
+        شرح:
+        - تلاش می‌کند کاربری را با username برابر شمارهٔ موبایل پیدا کند؛ در صورت وجود، همان کاربر بازگردانده می‌شود.
+        - اگر کاربر پیدا نشود، یک کاربر جدید با username=phone_number، user_type مشخص و is_active=True ایجاد می‌کند و آن را بازمی‌گرداند.
+        - در صورت ایجاد کاربر جدید، یک پیام اطلاعاتی در لاگ ثبت می‌شود.
+        
+        پارامترها:
+            phone_number (str): شماره موبایل که به‌عنوان username استفاده می‌شود.
+            user_type (str): نوع کاربر جدید در صورت ایجاد (پیش‌فرض 'patient').
+        
+        بازگشتی:
+            Tuple[User, bool]: تاپل شامل شیء User و یک بولن که نشان می‌دهد آیا کاربر جدید ایجاد شده (True) یا کاربر موجود بازگردانده شده (False).
+
         """
         try:
             user = User.objects.get(username=phone_number)
@@ -57,6 +73,7 @@ class AuthService:
     @staticmethod
     def generate_tokens(user: User) -> Dict[str, any]:
         """
+
         تولید توکن‌های JWT دسترسی و تازه‌سازی برای یک کاربر و بازگرداندن متادیتای مرتبط.
         
         این تابع یک RefreshToken برای کاربر ایجاد کرده و Claims اضافی `user_type` و `phone_number` را به آن می‌افزاید. زمان انقضای توکن‌ها از تنظیمات `SIMPLE_JWT` خوانده می‌شود و در صورت نبودن مقدار پیش‌فرض برای زمان دسترسی و تازه‌سازی به‌ترتیب ۵ دقیقه و ۷ روز در نظر گرفته می‌شود.
@@ -72,6 +89,28 @@ class AuthService:
             - expires_in (int): طول عمر توکن دسترسی بر حسب ثانیه.
             - access_expires_at (str): زمان انقضای توکن دسترسی به صورت ISO 8601.
             - refresh_expires_at (str): زمان انقضای توکن تازه‌سازی به صورت ISO 8601.
+
+        تولید توکن‌های JWT (دسترسی و رفرش) برای یک کاربر و بازگرداندن متادیتای مرتبط.
+        
+        توضیحات:
+            این تابع یک RefreshToken برای کاربر می‌سازد، دو claim اضافی `user_type` و `phone_number`
+            را به توکن رفرش اضافه می‌کند و سپس یک توکن دسترسی (access) و رفرش (refresh) به‌صورت رشته‌ای
+            بازمی‌گرداند. همچنین زمان عمر توکن دسترسی به ثانیه و زمان پایان اعتبار هر دو توکن به‌صورت
+            ISO-8601 ارائه می‌شود.
+        
+        پارامترها:
+            user: نمونهٔ مدل User که برای آن توکن‌ها تولید می‌شود. فیلد `user_type` و `username`
+                  (شماره تلفن) از این شیء برای افزودن claimها استفاده می‌شود.
+        
+        بازگشتی:
+            dict شامل کلیدهای زیر:
+              - access (str): توکن دسترسی به‌صورت رشته.
+              - refresh (str): توکن رفرش به‌صورت رشته.
+              - token_type (str): نوع توکن (مثلاً 'Bearer').
+              - expires_in (int): مدت زمان اعتبار توکن دسترسی بر حسب ثانیه.
+              - access_expires_at (str): زمان پایان اعتبار توکن دسترسی به‌صورت رشته ISO-8601.
+              - refresh_expires_at (str): زمان پایان اعتبار توکن رفرش به‌صورت رشته ISO-8601.
+
         """
         refresh = RefreshToken.for_user(user)
         
@@ -111,6 +150,7 @@ class AuthService:
         session_key: str = None
     ) -> OTPVerification:
         """
+<<< <<<< coderabbitai/docstrings/90aa429
         ایجاد و ذخیره یک رکورد OTPVerification که مرتبط با درخواست OTP، کاربر و جفت توکن‌های دسترسی/ریفرش است.
         
         این تابع یک ورودی OTPVerification در دیتابیس می‌سازد و مقادیر زیر را تنظیم می‌کند:
@@ -127,7 +167,7 @@ class AuthService:
             user: نمونه User مرتبط با این تأیید.
             tokens (dict): دیکشنری شامل کلیدهای 'access' و 'refresh' با مقادیر توکن متناظر.
             device_id (str, optional): شناسه دستگاه؛ در صورت نبودن یک UUID تولید می‌شود.
-            device_name (str, optional): نام دستگاه؛ پیش‌فرض 'Unknown Device'.
+             device_name (str, optional): نام دستگاه؛ پیش‌فرض 'Unknown Device'.
             session_key (str, optional): کلید نشست مرتبط؛ پیش‌فرض رشته خالی.
         
         Returns:
@@ -153,6 +193,7 @@ class AuthService:
     @staticmethod
     def refresh_access_token(refresh_token: str) -> Tuple[bool, Dict[str, any]]:
         """
+
         یک Refresh Token را اعتبارسنجی و از آن یک Access Token جدید (و در صورت تنظیمات، Refresh Token جدید) صادر می‌کند.
         
         شرح:
@@ -172,6 +213,31 @@ class AuthService:
                 - expires_in (int): زمان انقضا به ثانیه برای Access Token.
                 - refresh (str, اختیاری): در صورت فعال بودن چرخش توکن، Refresh Token جدید.
             در صورت شکست مقدار False و یک دیکشنری خطا با کلیدهای 'error' و 'message' بازگردانده می‌شود.    
+
+        تازه‌سازی توکن دسترسی (Access Token) با استفاده از یک Refresh Token.
+        
+        این تابع یک Refresh Token را اعتبارسنجی می‌کند، اطمینان می‌دهد که توکن در فهرست سیاه نیست و کاربر مربوطه وجود دارد و فعال است، سپس یک Access Token جدید می‌سازد. بسته به تنظیمات SIMPLE_JWT می‌تواند عمل «چرخش» (rotation) را انجام دهد: توکن رفرش قدیمی را (در صورت فعال بودن BLACKLIST_AFTER_ROTATION) در لیست سیاه قرار می‌دهد و یک Refresh Token جدید برای کاربر صادر می‌کند. در صورت موفقیت، مقدار بازگشتی شامل توکن‌های مربوطه و زمان انقضای Access به ثانیه است؛ در غیر این‌صورت یک دیکشنری خطا با کد و پیام مناسب بازگردانده می‌شود.
+        
+        پارامترها:
+            refresh_token (str): رشته‌ی Refresh Token که باید برای صدور Access جدید استفاده شود.
+        
+        مقدار بازگشتی:
+            Tuple[bool, Dict[str, any]]: 
+                - در صورت موفقیت: (True, payload) که payload شامل کلیدهای زیر است:
+                    - 'access' (str): Access Token جدید
+                    - 'refresh' (str, اختیاری): Refresh Token جدید (در صورت فعال بودن چرخش)
+                    - 'token_type' (str): معمولاً 'Bearer'
+                    - 'expires_in' (int): زمان باقی‌مانده‌ی اعتبار Access به ثانیه
+                - در صورت خطا: (False, error_dict) که error_dict حداقل شامل:
+                    - 'error' (str): کد خطا مانند 'token_blacklisted', 'user_inactive', 'user_not_found', 'invalid_token', 'internal_error'
+                    - 'message' (str): توضیح کوتاه به فارسی
+        
+        حالات خطا مهم:
+            - اگر توکن در لیست سیاه باشد، خطای 'token_blacklisted' بازگردانده می‌شود.
+            - اگر کاربر مرتبط وجود نداشته یا غیرفعال باشد، خطاهای 'user_not_found' یا 'user_inactive' بازگردانده می‌شوند.
+            - در صورت نامعتبر بودن توکن، 'invalid_token' بازگردانده می‌شود.
+            - خطاهای داخلی سیستم با 'internal_error' گزارش می‌شوند.
+
         """
         try:
             # بررسی blacklist
@@ -262,6 +328,7 @@ class AuthService:
         reason: str = ''
     ) -> bool:
         """
+
         توکن مشخص را در جدول سیاه‌فهرست ذخیره می‌کند تا از استفادهٔ مجدد آن جلوگیری شود.
         
         این تابع با محاسبهٔ زمان انقضای توکن بر پایهٔ تنظیمات SIMPLE_JWT (یا مقدار پیش‌فرض: دسترسی ۵ دقیقه، رفرش ۷ روز)، یک ردیف TokenBlacklist ایجاد می‌کند که شامل مقدار توکن، نوع آن ('access' یا 'refresh')، کاربر مرتبط، دلیل و زمان انقضا است. عملیات موفق منجر به ثبت لاگ اطلاعاتی و بازگشت True می‌شود؛ در صورت بروز هرگونه خطا مقدار False بازگردانده می‌شود.
@@ -312,6 +379,7 @@ class AuthService:
     @staticmethod
     def logout(user: User, refresh_token: str = None, logout_all: bool = False) -> bool:
         """
+
         خروج کاربر از جلسه(ها) و لغو توکن‌های مربوطه.
         
         اگر logout_all=True باشد، همه رکوردهای فعال OTPVerification کاربر غیرفعال شده و توکن‌های access و refresh مربوطه به فهرست سیاه افزوده می‌شوند.
@@ -384,6 +452,7 @@ class AuthService:
     @staticmethod
     def get_active_sessions(user: User) -> list:
         """
+
         بازگرداندن فهرست نشست‌های فعال کاربر به صورت ساخت‌یافته.
         
         این تابع تمام رکوردهای OTPVerification مرتبط با کاربر که هنوز فعال هستند را واکشی کرده و برای هر نشست یک دیکشنری حاوی شناسه نشست، شناسه و نام دستگاه، زمان تأیید (verified_at) به شکل ISO، زمان آخرین فعالیت (فعلاً برابر با verified_at) و اطلاعات شبکه/عامل کاربر (ip_address و user_agent) تولید می‌کند. خروجی مناسب برای نمایش لیست جلسات در API یا رابط مدیریت نشست‌ها است.
@@ -428,6 +497,7 @@ class AuthService:
     @staticmethod
     def revoke_session(user: User, session_id: str) -> bool:
         """
+
         خلاصه: یک نشست فعال کاربر را با شناسه داده‌شده لغو می‌کند.
         
         توضیح: اگر نشست (OTPVerification) فعال متناظر با session_id و کاربر وجود داشته باشد، توکن‌های دسترسی و تازه‌سازی مربوطه را در فهرست سیاه قرار می‌دهد و رکورد verification را غیرفعال می‌کند. این عملیات باعث خاتمه فوری نشست مذکور می‌شود و از استفاده مجدد توکن‌های موجود جلوگیری می‌کند.
@@ -446,6 +516,7 @@ class AuthService:
         نکات خطا:
             - اگر نشست یافت نشود، تابع False برمی‌گرداند بدون اینکه استثنا بالا بیاید.
             - در صورت خطاهای غیرمنتظره، تابع False برمی‌گرداند.
+
         """
         try:
             verification = OTPVerification.objects.get(
@@ -492,9 +563,15 @@ class AuthService:
     @staticmethod
     def cleanup_expired_blacklist():
         """
+
         پاکسازی رکوردهای منقضی‌شده از جدول TokenBlacklist و بازگرداندن تعداد حذف‌شده‌ها.
         
         این تابع تمامی رکوردهای لیست سیاه توکن را که فیلد `expires_at` آنها قبل از زمان فعلی است حذف می‌کند و تعداد رکوردهای حذف‌شده را برمی‌گرداند.
+
+        یکپارچه‌سازی و حذف ورودی‌های منقضی‌شده از جدول TokenBlacklist.
+        
+        این تابع رکوردهای TokenBlacklist را که فیلد `expires_at` آنها کمتر از زمان جاری (timezone.now()) است حذف می‌کند و تعداد رکوردهای حذف‌شده را برمی‌گرداند. حذف به‌صورت دائمی در دیتابیس انجام می‌شود؛ در صورت حذف شدن هر رکورد، یک پیام لاگ اطلاع‌رسانی ثبت می‌شود.
+
         
         Returns:
             int: تعداد رکوردهای حذف‌شده از TokenBlacklist.

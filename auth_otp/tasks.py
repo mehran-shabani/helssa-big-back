@@ -15,6 +15,7 @@ logger = logging.getLogger(__name__)
 @shared_task(name='auth_otp.tasks.cleanup_expired_otp')
 def cleanup_expired_otp():
     """
+
     پاکسازی دوره‌ای OTP‌های منقضی‌شده و بازگشت گزارش اجرای تسک.
     
     این تابع به‌عنوان یک تسک پس‌زمینه اجرا می‌شود و تمام OTPهایی را که براساس منطق داخل سرویس OTPService منقضی شده‌اند حذف می‌کند. عملیات حذف توسط OTPService.cleanup_expired_otps() انجام می‌شود و تعداد رکوردهای حذف‌شده گزارش می‌شود. خطاها مستقیماً پرتاب نمی‌شوند؛ در صورت بروز استثنا، تابع آن را لاگ کرده و نتیجه‌ای با وضعیت خطا برمی‌گرداند.
@@ -25,6 +26,7 @@ def cleanup_expired_otp():
             - deleted_count (int): تعداد OTP‌های حذف‌شده (فقط در صورت موفقیت).
             - error (str): پیام خطا (فقط در صورت خطا).
             - timestamp (str): زمان اجرای تسک به فرمت ISO.
+
     """
     try:
         logger.info("Starting OTP cleanup task")
@@ -51,6 +53,7 @@ def cleanup_expired_otp():
 @shared_task(name='auth_otp.tasks.cleanup_expired_tokens')
 def cleanup_expired_tokens():
     """
+
     تسک پس‌زمینه برای حذف توکن‌های منقضی از لیست سیاه.
     
     این تابع فراخوانی‌ای به AuthService.cleanup_expired_blacklist انجام می‌دهد تا ورودی‌های لیست سیاه (blacklist) که تاریخ انقضای آن‌ها گذشته است حذف شوند، و سپس یک نتیجه ساختاری بازمی‌گرداند. در اجرای موفق، دیکشنری‌ای با کلیدهای زیر برمی‌گردد:
@@ -64,6 +67,7 @@ def cleanup_expired_tokens():
     - timestamp: زمان وقوع خطا به صورت ISO
     
     تأثیر جانبی: تغییر در داده‌های persistent (حذف رکوردهای blacklist) از طریق AuthService.
+
     """
     try:
         logger.info("Starting token blacklist cleanup task")
@@ -90,6 +94,7 @@ def cleanup_expired_tokens():
 @shared_task(name='auth_otp.tasks.check_rate_limits')
 def check_rate_limits():
     """
+
     بررسی و بروزرسانی پنجره‌های محدودیت نرخ (rate limits) برای OTP.
     
     این تسک تمام رکوردهای OTPRateLimit را بارگذاری می‌کند، برای هر رکورد متد
@@ -108,6 +113,7 @@ def check_rate_limits():
     توجه:
         - این تابع صراحتاً استثناها را پرتاب نمی‌کند؛ خطاها گرفته و به صورت دیکشنری بازگردانده می‌شوند.
         - تابع وابسته به مدل `OTPRateLimit` است و از آن در زمان اجرا وارد می‌شود.
+
     """
     try:
         from .models import OTPRateLimit
@@ -159,6 +165,7 @@ def check_rate_limits():
 @shared_task(name='auth_otp.tasks.send_otp_async')
 def send_otp_async(phone_number, purpose='login', sent_via='sms'):
     """
+
     ارسال یک OTP در پس‌زمینه و بازگرداندن وضعیت اجرا.
     
     این تابع با استفاده از سرویس OTPService یک کد یک‌بار مصرف (OTP) برای شماره تلفن مشخص ارسال می‌کند و برای اجرا در تسک‌های پس‌زمینه مناسب است. تابع وضعیت ارسال را ثبت کرده و یک دیکشنری نتیجه شامل وضعیت، خروجی سرویس و زمان اجرای عملیات را بازمی‌گرداند. در صورت بروز استثناء، استثناء گرفته شده و یک پاسخ با وضعیت 'error' و پیام خطا بازگردانده می‌شود.
@@ -178,6 +185,7 @@ def send_otp_async(phone_number, purpose='login', sent_via='sms'):
     توجه:
         - تابع خود استثناء‌ها را مدیریت می‌کند و آنها را به صورت یک پاسخ خطاداده (status='error') تبدیل می‌کند، بنابراین فراخواننده نیازی به مدیریت استثناء برای مقاصد رایج ندارد.
         - جزئیات دقیق رفتار و فرمت خروجی در result وابسته به پیاده‌سازی OTPService.send_otp است.
+
     """
     try:
         from .services import OTPService
@@ -214,6 +222,7 @@ def send_otp_async(phone_number, purpose='login', sent_via='sms'):
 @shared_task(name='auth_otp.tasks.generate_otp_report')
 def generate_otp_report(start_date=None, end_date=None):
     """
+
     تولید گزارش استفاده از سیستم OTP برای یک بازهٔ زمانی مشخص.
     
     توضیحات:
@@ -239,6 +248,7 @@ def generate_otp_report(start_date=None, end_date=None):
     وضاحت‌های اضافی:
         - بازه‌ها شامل مرزهای شروع و پایان هستند (>= start_date و <= end_date).
         - تابع استثناءها را درون خود مدیریت می‌کند و به‌جای پرتاب، ساختار خطا را بازمی‌گرداند.
+
     """
     try:
         from .models import OTPRequest, OTPVerification

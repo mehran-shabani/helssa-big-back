@@ -17,6 +17,7 @@ class KavenegarService:
     
     def __init__(self):
         """
+
         مقداردهی اولیه سرویس Kavenegar: کلید API را از تنظیمات می‌خواند، کلاینت Kavenegar را مقداردهی می‌کند و مقادیر اختیاری sender و قالب OTP را تنظیم می‌نماید.
         
         اگر KAVENEGAR_API_KEY در تنظیمات یافت نشود، ValueError پرتاب می‌شود. پس از موفقیت، فیلدهای نمونه زیر مقداردهی می‌شوند:
@@ -24,7 +25,7 @@ class KavenegarService:
         - self.api: نمونهٔ KavenegarAPI ساخته‌شده با کلید API
         - self.sender: مقدار اختیاری KAVENEGAR_SENDER از تنظیمات (در صورت نبود None)
         - self.otp_template: قالب OTP از KAVENEGAR_OTP_TEMPLATE یا مقدار پیش‌فرض 'verify'
-        """
+       """
         self.api_key = getattr(settings, 'KAVENEGAR_API_KEY', None)
         if not self.api_key:
             raise ValueError("KAVENEGAR_API_KEY not found in settings")
@@ -35,6 +36,7 @@ class KavenegarService:
     
     def send_otp(self, phone_number: str, otp_code: str, template: str = None) -> dict:
         """
+
         ارسال یک کد یک‌بارمصرف (OTP) با استفاده از API تایید قالبیِ کاوه‌نگار.
         
         این متد یک OTP را با فراخوانی verify_lookup در Kavenegar ارسال می‌کند. اگر قالب (template) مشخص نشود، قالب پیش‌فرض سرویس استفاده می‌شود. ورودی‌ها در پارامترهای API به‌صورت receptor (شماره گیرنده)، token (کد OTP) و template ارسال می‌شوند. پاسخ موفق شامل شناسه پیام، وضعیت و متن وضعیت است. در صورت بروز خطا، خروجی یک دیکشنری با فیلدهای مربوط به خطا برمی‌گردد (بدون بالا بردن خطا).
@@ -110,6 +112,7 @@ class KavenegarService:
     
     def send_simple_sms(self, phone_number: str, message: str) -> dict:
         """
+
         ارسال یک پیامک متنی ساده (غیر OTP) به یک شماره گیرنده با استفاده از کلاینت Kavenegar.
         
         توضیحات:
@@ -163,6 +166,7 @@ class KavenegarService:
     
     def get_message_status(self, message_id: str) -> dict:
         """
+
         وضعیت یک پیام ارسالی از طریق Kavenegar را بازیابی می‌کند.
         
         پارامترها:
@@ -202,6 +206,7 @@ class KavenegarService:
     
     def send_voice_otp(self, phone_number: str, otp_code: str) -> dict:
         """
+
         ارسال کد یک‌بارمصرف از طریق تماس صوتی.
         
         تابع یک پیام صوتی تولید می‌کند که در آن ارقام OTP با فاصله از هم خوانده می‌شوند (مثلاً "1 2 3 4" برای "1234") و درخواست ایجاد تماس متنی-به-صدا (TTS) را به سرویس کاوه‌نگار ارسال می‌کند. در صورت موفقیت، شناسه پیام و وضعیت بازگشتی از API را برمی‌گرداند؛ در صورت خطا، اطلاعات خطا را در قالب دیکشنری بازمی‌گرداند.
@@ -261,6 +266,7 @@ class KavenegarService:
     @staticmethod
     def format_phone_number(phone_number: str) -> str:
         """
+
         شماره تلفن را برای ارسال به کاوه‌نگار نرمال‌سازی و قالب‌بندی می‌کند.
         
         توضیحات:
@@ -276,6 +282,7 @@ class KavenegarService:
         
         بازگشت:
             str: شماره تلفن فرمت‌شده مطابق با قالب مورد انتظار کاوه‌نگار (معمولاً با صفر اول).
+
         """
         # حذف فاصله‌ها و کاراکترهای اضافی
         phone_number = phone_number.strip().replace(' ', '').replace('-', '')

@@ -30,6 +30,7 @@ logger = logging.getLogger(__name__)
 @permission_classes([AllowAny])
 def otp_status(request, otp_id):
     """
+
     دریافت وضعیت یک درخواست OTP بر اساس شناسه.
     
     جزییات:
@@ -42,6 +43,7 @@ def otp_status(request, otp_id):
     - HTTP 200: بدنه شامل {'success': True, 'data': ...} حاوی داده‌های سریالایز شده OTP.
     - HTTP 404: بدنه شامل {'error': 'not_found', 'message': 'OTP یافت نشد'} وقتی آیتم پیدا نشود.
     - HTTP 500: بدنه شامل {'success': False, 'error': 'internal_error', 'message': 'خطای سیستمی'} در صورت وقوع خطای غیرمنتظره.
+
     """
     try:
         otp_request = OTPRequest.objects.filter(id=otp_id).first()
@@ -85,6 +87,7 @@ def otp_status(request, otp_id):
 @permission_classes([IsAuthenticated])
 def rate_limit_status(request, phone_number):
     """
+
     دریافت و برگرداندن وضعیت محدودیت ارسال OTP برای یک شماره موبایل.
     
     این نما (view) شماره موبایل را با KavenegarService نرمال‌سازی می‌کند، رکورد مربوط به OTPRateLimit را دریافت یا ایجاد می‌کند، پنجره‌های شمارش محدودیت را به‌روز می‌کند و وضعیت فعلی ارسال OTP را محاسبه می‌نماید. به صورت ضمنی ممکن است یک رکورد OTPRateLimit جدید در پایگاه داده ایجاد شود و مقادیر شمارش (minute_count، hour_count) و وضعیت بلاک (is_blocked، blocked_until) بسته به منطق مدل به‌روز شوند.
@@ -106,6 +109,7 @@ def rate_limit_status(request, phone_number):
     توضیحات تکمیلی:
         - این نما معمولاً تحت مجوز احراز هویت اجرا می‌شود (IsAuthenticated).
         - هرگونه خطای سیستمی به صورت پاسخ 500 با شناسه خطا بازگردانده می‌شود؛ جزئیات داخلی خطا لاگ می‌شود.
+
     """
     try:
         # بررسی فرمت شماره
@@ -161,6 +165,7 @@ def rate_limit_status(request, phone_number):
 @permission_classes([IsAuthenticated])
 def user_sessions(request):
     """
+
     بازگرداندن فهرست نشست‌های فعال کاربر احرازشده.
     
     این نما (view) نشست‌های فعال مرتبط با کاربر حاضر (request.user) را از AuthService می‌گیرد و آن‌ها را همراه با تعدادشان در قالب یک پاسخ JSON بازمی‌گرداند. در صورت بروز خطای غیرمنتظره، پاسخ خطای سیستمی با کد 500 برگردانده می‌شود.
@@ -184,6 +189,7 @@ def user_sessions(request):
                 "error": "internal_error",
                 "message": "خطای سیستمی"
               }
+
     """
     try:
         sessions = AuthService.get_active_sessions(request.user)
@@ -219,6 +225,7 @@ def user_sessions(request):
 @permission_classes([IsAuthenticated])
 def revoke_session(request, session_id):
     """
+
     درخواست لغو یک نشست کاربر مشخص را پردازش می‌کند.
     
     این تابع با استفاده از AuthService تلاش می‌کند نشست مشخص‌شده توسط `session_id` را برای کاربر جاری (`request.user`) لغو (revoked) کند. اگر عملیات لغو موفق باشد، پاسخ موفقیت‌آمیز (HTTP 200) برمی‌گرداند؛ اگر نشست وجود نداشته یا قبلاً لغو شده باشد، پاسخ خطای یافت‌نشدن (HTTP 404) برمی‌گرداند. در صورت بروز هرگونه خطای داخلی غیرمنتظره، پاسخ خطای سرور (HTTP 500) بازگردانده می‌شود.
@@ -234,6 +241,7 @@ def revoke_session(request, session_id):
     نکات عملیاتی:
         - تابع تصمیم‌گیری و اجرای لغو را به AuthService تفویض می‌کند؛ هرگونه منطق بررسی مجوزها یا وضعیت نشست توسط آن سرویس انجام می‌شود.
         - این تابع خود کاربر را از درخواست می‌گیرد (request.user) و بنابراین باید توسط یک نماینده‌ی احراز هویت‌شده فراخوانی شود تا session_id متعلق به همان کاربر باشد یا AuthService بررسی‌های لازم را انجام دهد.
+
     """
     try:
         success = AuthService.revoke_session(request.user, session_id)
@@ -276,6 +284,7 @@ def revoke_session(request, session_id):
 @permission_classes([AllowAny])
 def register(request):
     """
+
     ثبت‌نام کاربر جدید پس از تأیید موفق OTP.
     
     این تابع یک کاربر جدید ایجاد می‌کند با داده‌های ارسالی در بدنهٔ درخواست؛ قبل از فراخوانی این endpoint باید فرایند OTP برای شمارهٔ مربوطه تکمیل و تأیید شده باشد (مثلاً با یک session یا توکن موقت که نشان‌دهندهٔ تأیید OTP است). ورودی‌های مورد انتظار در request.data:
@@ -295,6 +304,7 @@ def register(request):
     
     نکتهٔ مهم:
     - خود تابع مسئول تأیید OTP نیست؛ باید از مکانیسمی خارج از این تابع (session، توکن موقت یا مشابه) برای اطمینان از اینکه شمارهٔ موبایل پیش‌تر با OTP تأیید شده استفاده شود.
+
     """
     try:
         # این endpoint فقط برای کاربرانی که OTP تأیید کرده‌اند
@@ -343,6 +353,7 @@ def register(request):
 @permission_classes([AllowAny])
 def resend_otp(request):
     """
+
     ارسال مجدد کد OTP با ارجاع مستقیم به همان view اصلی ارسال OTP.
     
     این تابع درخواست را بدون تغییر به send_otp در همان ماژول ارسال می‌کند تا منطق یکسان ارسال/اعتبارسنجی OTP دوباره استفاده شود. برای درخواست باید بدنه شامل فیلدهای زیر باشد:
@@ -357,6 +368,7 @@ def resend_otp(request):
     - 500: خطای داخلی سرور
     
     تاثیر جانبی: ممکن است موجب ایجاد/به‌روزرسانی رکوردهای مرتبط با درخواست‌های OTP و شمارش‌های نرخ محدودیت شود و اقدام ارسال پیامک/تماس برای کاربر را آغاز کند.
+
     """
     # از همان send_otp استفاده می‌کنیم
     from .views import send_otp as send_otp_view

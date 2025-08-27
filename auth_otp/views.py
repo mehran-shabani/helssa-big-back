@@ -36,6 +36,7 @@ logger = logging.getLogger(__name__)
 @permission_classes([AllowAny])
 def send_otp(request):
     """
+
     ارسال کد یک‌بارمصرف (OTP) به شماره موبایل برای اهداف مختلف احراز هویت.
     
     جزئیات:
@@ -66,6 +67,7 @@ def send_otp(request):
         "message": "<human_readable_message>",
         "details": {...}  # در صورت وجود، جزئیات خطا یا خطاهای اعتبارسنجی
     }
+
     """
     try:
         # اعتبارسنجی ورودی
@@ -139,6 +141,7 @@ def send_otp(request):
 @permission_classes([AllowAny])
 def verify_otp(request):
     """
+
     تأیید کد OTP و ورود یا ثبت‌نام کاربر با تولید توکن و ثبت جلسه (verification record).
     
     این تابع ورودی درخواست را با OTPVerifySerializer اعتبارسنجی می‌کند، کد OTP را از طریق OTPService تأیید می‌کند و در صورت موفقیت:
@@ -155,6 +158,8 @@ def verify_otp(request):
     نکات پیاده‌سازی:
     - پارامترهای device_id و device_name از داده‌های اعتبارسنجی‌شده استخراج و session_key از request.session خوانده می‌شود (در صورت وجود).
     - خطاها لاگ می‌شوند و هیچ استثنایی به فراخواننده پرتاب نمی‌شود (همه با پاسخ 500 مدیریت می‌شوند).
+ خطای داخلی سرور — بدنه شامل {'success': False, 'error': 'internal_error', 'message': 'خطای سیستمی در تأیید کد'}.
+
     """
     try:
         # اعتبارسنجی ورودی
@@ -246,6 +251,7 @@ def verify_otp(request):
 @permission_classes([AllowAny])
 def refresh_token(request):
     """
+
     تازه‌سازی Access Token با استفاده از Refresh Token.
     
     دسکریپشن:
@@ -262,6 +268,7 @@ def refresh_token(request):
         400: { "error": "validation_error", "message": "...", "details": <خطاهای اعتبارسنجی> }
         401: { "success": False, "error": <کد خطای سرویس>, "message": <پیام سرویس> }
         500: { "success": False, "error": "internal_error", "message": "خطای سیستمی در تازه‌سازی توکن" }
+
     """
     try:
         # اعتبارسنجی ورودی
@@ -319,6 +326,7 @@ def refresh_token(request):
 @permission_classes([IsAuthenticated])
 def logout(request):
     """
+
     خروج کاربر از جلسه فعلی یا از همه دستگاه‌ها با استفاده از توکنِ رفرش.
     
     این تابع درخواست POST را می‌پذیرد، ورودی را از طریق LogoutSerializer اعتبارسنجی می‌کند و سپس از AuthService برای خروج استفاده می‌کند. در صورت موفقیت، توکن رفرش داده‌شده (و در صورت درخواست، همه جلسات کاربر) نامعتبر می‌شود.
@@ -342,6 +350,7 @@ def logout(request):
     
     تاثیرات جانبی:
         - باطل‌شدن توکنِ رفرش و در صورت درخواست، حذف/غیرفعال‌سازی جلسات دیگر کاربر در سیستم.
+
     """
     try:
         # اعتبارسنجی ورودی
