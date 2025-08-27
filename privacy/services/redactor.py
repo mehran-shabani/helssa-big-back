@@ -154,12 +154,18 @@ class PIIRedactor:
                 
                 # لاگ کردن دسترسی
                 if log_access and pattern_info.get('field_id'):
-                    self._log_redaction(
-                        user_id=user_id,
-                        field_id=pattern_info['field_id'],
-                        original_value=original_value,
-                        context=context
-                    )
+                    try:
+                        # بررسی وجود field قبل از لاگ
+                        from ..models import DataField
+                        if DataField.objects.filter(id=pattern_info['field_id']).exists():
+                            self._log_redaction(
+                                user_id=user_id,
+                                field_id=pattern_info['field_id'],
+                                original_value=original_value,
+                                context=context
+                            )
+                    except Exception as e:
+                        logger.warning(f"خطا در لاگ کردن: {str(e)}")
         
         return redacted_text, matches_found
     
