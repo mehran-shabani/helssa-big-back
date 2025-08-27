@@ -1,4 +1,4 @@
-![Helssa logo](images/logo.png)
+![Helssa logo](images/logo.png)                             ![Math & Med](images/mm.png)
 
 # Helssa — Intelligent Telemedicine Platform
 
