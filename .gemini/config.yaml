@@ -1,12 +1,12 @@
 have_fun: true
 code_review:
-disable: false
-comment_severity_threshold: HIGH
-max_review_comments: 200
-pull_request_opened:
-help: true
-summary: false
-code_review: true
+  disable: false
+  comment_severity_threshold: HIGH
+  max_review_comments: 200
+  pull_request_opened:
+    help: true
+    summary: false
+    code_review: true
 ignore_patterns:
 - '**/node_modules/**'
 - '**/.next/**'
@@ -19,7 +19,6 @@ ignore_patterns:
 - '**/.dart_tool/**'
 - '**/build/**'
 - '**/android/**/build/**'
-- '**/ios/**/Pods/**'
 - '**/.venv/**'
 - '**/venv/**'
 - '**/__pycache__/**'
