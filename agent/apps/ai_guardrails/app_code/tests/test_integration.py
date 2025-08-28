@@ -14,11 +14,10 @@ User = get_user_model()
 
 
 class GuardrailsIntegrationTest(TestCase):
-    def setUp(self):
+    def setUp(self) -> None:
         self.client = APIClient()
-        self.user = User.objects.create_user(username='testuser', password='testpass')
+        self.user = User.objects.create_user(username='testuser', password='testpass')  # noqa: S106
         self.client.force_authenticate(user=self.user)
-
         # یک قانون رد-فلگ ساده
         RedFlagRule.objects.create(
             name='pii_national_code',
