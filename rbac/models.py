@@ -678,11 +678,10 @@ class DoctorProfile(models.Model):
         verbose_name = 'پروفایل پزشک'
         verbose_name_plural = 'پروفایل‌های پزشکان'
         indexes = [
-            models.Index(fields=['medical_license_number']),
-            models.Index(fields=['medical_council_number']),
-            models.Index(fields=['specialty']),
-            models.Index(fields=['is_available', 'vacation_mode']),
-        ]
+         indexes = [
+             models.Index(fields=['specialty']),
+             models.Index(fields=['is_available', 'vacation_mode']),
+         ]
         
     def __str__(self):
         """
