@@ -53,7 +53,7 @@ class DoctorAPIIngressCore:
             doctor_profile = user.doctor_profile
             if required_verification and not doctor_profile.is_verified:
                 return False, "پروفایل پزشک تایید نشده است"
-        except:
+        except User.doctor_profile.RelatedObjectDoesNotExist:
             return False, "پروفایل پزشک یافت نشد"
         
         return True, ""
