@@ -498,10 +498,8 @@ class UserSessionAdmin(admin.ModelAdmin):
     ]
     
     readonly_fields = [
-        'id', 'access_token', 'refresh_token',
-        'created_at', 'last_activity', 'is_expired'
+        'id', 'created_at', 'last_activity', 'is_expired'
     ]
-    
     fieldsets = (
         ('کاربر', {
             'fields': ('user',)
