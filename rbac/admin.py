@@ -7,7 +7,6 @@ from django.contrib import admin
 from django.contrib.auth.admin import UserAdmin as BaseUserAdmin
 from django.utils.html import format_html
 from django.urls import reverse
-from django.utils import timezone
 from django.db.models import Count, Q
 from .models import (
     UnifiedUser, PatientProfile, DoctorProfile,
