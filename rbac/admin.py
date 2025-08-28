@@ -271,20 +271,59 @@ class DoctorProfileAdmin(admin.ModelAdmin):
 class RoleAdmin(admin.ModelAdmin):
     """مدیریت نقش‌ها"""
     
+# --- in rbac/admin.py ---
+
+class RoleAdmin(admin.ModelAdmin):
     list_display = [
         'display_name', 'name', 'priority',
         'is_system', 'is_active', 'get_permissions_count',
         'get_users_count'
     ]
-    
-    list_filter = ['is_active', 'is_system', 'created_at']
-    
+    list_filter = ['is_active', 'is_system', 'created_at', 'permissions']
+
     search_fields = ['name', 'display_name', 'description']
-    
     readonly_fields = ['created_at', 'updated_at']
-    
     filter_horizontal = ['permissions']
-    
+
+    def get_permissions_count(self, obj):
+        count = obj.permissions.count()
+-        return format_html(
+-            '<a href="{}?role__id={}">{}</a>',
+-            reverse('admin:rbac_permission_changelist'),
+-            obj.id,
+-            count
+        return format_html(
+            '<a href="{}?roles__id__exact={}">{}</a>',
+            reverse('admin:rbac_permission_changelist'),
+            obj.id,
+            count
+        )
+
+
+class PermissionAdmin(admin.ModelAdmin):
+    list_display = [
+        'name', 'resource', 'action',
+        'is_active', 'created_at', 'get_roles_count'
+    ]
+    list_filter = ['resource', 'action', 'is_active', 'created_at', 'roles']
+
+    search_fields = ['name', 'description']
+    readonly_fields = ['created_at', 'updated_at']
+    filter_horizontal = ['roles']
+
+    def get_roles_count(self, obj):
+        count = obj.roles.count()
+-        return format_html(
+-            '<a href="{}?permissions__id={}">{}</a>',
+-            reverse('admin:rbac_role_changelist'),
+-            obj.id,
+-            count
+        return format_html(
+            '<a href="{}?permissions__id__exact={}">{}</a>',
+            reverse('admin:rbac_role_changelist'),
+            obj.id,
+            count
+        )
     fieldsets = (
         ('اطلاعات اصلی', {
             'fields': (
