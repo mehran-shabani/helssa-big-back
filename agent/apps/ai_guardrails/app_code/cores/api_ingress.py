@@ -3,6 +3,10 @@
 API Ingress Core for Application
 """
 
-from app_standards.four_cores import APIIngressCore
+from app_standards.four_cores import APIIngressCore as BaseAPIIngressCore
 
-# پیاده‌سازی خاص اپلیکیشن را اینجا اضافه کنید
+class APIIngress(BaseAPIIngressCore):
+    """Facade مخصوص این اپ؛ آماده برای هوک‌ کردن ولیدیشن/لاگ/ریت‌لیمیت."""
+    pass
+
+__all__ = ["APIIngress"]
