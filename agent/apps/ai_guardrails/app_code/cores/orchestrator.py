@@ -24,9 +24,10 @@ class GuardrailsOrchestrator(CentralOrchestrator):
         if direction in ['input', 'output']:
             active_policies = active_policies.filter(Q(applies_to=direction) | Q(applies_to='both'))
 
-        matches: List[Dict[str, Any]] = []
-        reasons: List[str] = []
+        matches: list[dict[str, Any]] = []
+        reasons: list[str] = []
         max_severity = 0
+        first_matched_rule = None  # RedFlagRule | None
 
         rules = RedFlagRule.objects.filter(is_active=True)
         for rule in rules:
