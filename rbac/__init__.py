@@ -3,4 +3,5 @@
 مدیریت کاربران یکپارچه، نقش‌ها و دسترسی‌ها
 """
 
-default_app_config = 'rbac.apps.RbacConfig'
+# (file: rbac/__init__.py)
+# The `default_app_config` line has been removed per Django’s automatic AppConfig discovery.
