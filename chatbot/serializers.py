@@ -42,7 +42,13 @@ class ChatbotSessionSerializer(serializers.ModelSerializer):
     
     def get_conversation_count(self, obj):
         """
-        دریافت تعداد مکالمات جلسه
+        تعداد مکالمات مرتبط با یک جلسه چت‌بات را برمی‌گرداند.
+        
+        پارامترها:
+            obj (ChatbotSession): نمونه‌ی جلسه‌ای که شمارش مکالمات مرتبط با آن انجام می‌شود.
+        
+        برگردانده:
+            int: تعداد مدل‌های Conversation مرتبط با جلسه (استفاده از رابطه معکوس `conversations`).
         """
         return obj.conversations.count()
 
@@ -67,7 +73,18 @@ class MessageSerializer(serializers.ModelSerializer):
     
     def validate_content(self, value):
         """
-        اعتبارسنجی محتوای پیام
+        اعتبارسنجی و تمیزسازی محتوای پیام کاربر.
+        
+        این متد محتوای ورودی را بررسی می‌کند: مقدار باید غیرخالی پس از حذف فضاهای اطراف باشد و طول آن نباید از ۴۰۰۰ کاراکتر بیشتر باشد. در صورت معتبر بودن، رشتهٔ پیغام با حذف فاصله‌های انتها و ابتدا بازگردانده می‌شود.
+        
+        Parameters:
+            value (str): متن پیام ورودی که باید اعتبارسنجی و trim شود.
+        
+        Returns:
+            str: متن پیام پس از حذف فاصله‌های جانبی.
+        
+        Raises:
+            serializers.ValidationError: اگر پیام خالی باشد یا تنها شامل فضا باشد، یا طول آن بیش از ۴۰۰۰ کاراکتر باشد.
         """
         if not value or not value.strip():
             raise serializers.ValidationError("محتوای پیام نمی‌تواند خالی باشد.")
@@ -151,7 +168,20 @@ class SendMessageRequestSerializer(serializers.Serializer):
     
     def validate_message(self, value):
         """
-        اعتبارسنجی پیام
+        اعتبارسنجی متن پیام ارسال‌شده توسط کاربر.
+        
+        پارامترها:
+            value (str): متن پیام ورودی؛ امکان دارد شامل فضاهای خالی اطراف باشد.
+        
+        توضیحات:
+            پیام باید دارای حداقل یک کاراکتر غیرِ فاصله باشد. فضای خالی آغاز و پایان پیام حذف (strip) می‌شود
+            و مقدار مرتب‌شده بازگردانده می‌گردد.
+        
+        بازگشت:
+            str: متن پیام پردازش‌شده (بدون فاصله‌های زائد).
+        
+        خطاها:
+            serializers.ValidationError: اگر پیام خالی یا صرفاً شامل فاصله باشد، با پیام خطای فارسی پرتاب می‌شود.
         """
         if not value or not value.strip():
             raise serializers.ValidationError("پیام نمی‌تواند خالی باشد.")

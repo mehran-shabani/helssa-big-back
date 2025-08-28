@@ -103,14 +103,25 @@ class ChatbotSession(models.Model):
     
     def __str__(self):
         """
-        نمایش متنی جلسه چت‌بات
+        نمایش متنیِ قابل‌خواندن از جلسه چت‌بات شامل نوع جلسه، نام/نمایش کاربر و وضعیت.
+        
+        این رشته برای نمایش در رابط‌های مدیریتی، لاگ‌ها و هنگام تبدیل شی به رشته استفاده می‌شود و فرمت آن:
+        "جلسه {session_type} - {user} ({status})" است.
+        
+        Returns:
+            str: نمایش خلاصه و مختصر جلسه
         """
         return f"جلسه {self.session_type} - {self.user} ({self.status})"
     
     @property
     def is_active(self):
         """
-        بررسی فعال بودن جلسه
+        بررسی می‌کند که آیا جلسه‌ی چت‌بات در حال حاضر فعال است.
+        
+        این متد True برمی‌گرداند اگر وضعیت جلسه برابر 'active' باشد و زمان انقضا (expires_at) یا تعیین نشده باشد یا هنوز نگذشته باشد. در غیر این صورت False بازمی‌گردد.
+        
+        Returns:
+            bool: True اگر جلسه فعال و هنوز منقضی نشده باشد، در غیر این صورت False.
         """
         return self.status == 'active' and (
             not self.expires_at or timezone.now() < self.expires_at
@@ -119,7 +130,9 @@ class ChatbotSession(models.Model):
     @property
     def duration(self):
         """
-        مدت زمان جلسه
+        یک خطی: مدت‌زمان جاری یا تکمیل‌شدهٔ جلسه را برمی‌گرداند.
+        
+        توضیح: اگر جلسه قبلاً پایان یافته باشد، اختلاف زمانی بین `ended_at` و `started_at` را بازمی‌گرداند؛ در غیر این صورت اختلاف بین زمان فعلی (با استفاده از `django.utils.timezone.now()`) و `started_at` را برمی‌گرداند. مقدار بازگردانده‌شده یک شیء `datetime.timedelta` است که نشان‌دهنده طول جلسه است.
         """
         if self.ended_at:
             return self.ended_at - self.started_at
@@ -127,7 +140,9 @@ class ChatbotSession(models.Model):
     
     def end_session(self):
         """
-        پایان دادن به جلسه
+        پایان دادن به جلسهٔ جاری با علامت‌گذاری آن به‌عنوان تکمیل‌شده و ثبت زمان پایان.
+        
+        این متد وضعیت جلسه را به 'completed' تغییر می‌دهد، فیلد ended_at را با زمان فعلی سرور (timezone.now()) تنظیم می‌کند و فقط همین دو فیلد را در پایگاه‌داده ذخیره می‌کند (با استفاده از update_fields) تا از به‌روزرسانی غیرضروری سایر فیلدها جلوگیری شود. این عمل تغییر دائمی در مدل ایجاد می‌کند و مقداردهی مجدد ended_at را به زمان فراخوانی محدود می‌کند.
         """
         self.status = 'completed'
         self.ended_at = timezone.now()
@@ -218,7 +233,11 @@ class Conversation(models.Model):
     
     def __str__(self):
         """
-        نمایش متنی مکالمه
+        یک نمایش متنی قابل‌فهم از Conversation که برای رابط‌های مدیریتی و لاگ‌ها استفاده می‌شود.
+        
+        اگر عنوان (title) موجود باشد آن را نشان می‌دهد، در غیر این صورت از مقدار پیش‌فرض `مکالمه {conversation_type}` استفاده می‌کند و در انتها نام کاربر مرتبط با جلسه را می‌افزاید.
+        برمی‌گرداند:
+            رشته‌ای به صورت "<عنوان یا نوع مکالمه> - <کاربر جلسه>"
         """
         title = self.title or f"مکالمه {self.conversation_type}"
         return f"{title} - {self.session.user}"
@@ -226,14 +245,24 @@ class Conversation(models.Model):
     @property
     def message_count(self):
         """
-        تعداد پیام‌های مکالمه
+        تعداد کل پیام‌های مرتبط با این مکالمه را برمی‌گرداند.
+        
+        این property/متد تعداد رکوردهای مرتبط در رابطه `messages` را به‌صورت مستقیم از پایگاه‌داده می‌شمارد و یک عدد صحیح برمی‌گرداند.
+        
+        Returns:
+            int: تعداد پیام‌ها
         """
         return self.messages.count()
     
     @property
     def last_message_time(self):
         """
-        زمان آخرین پیام
+        بازگرداندن زمان آخرین پیام مرتبط با این Conversation.
+        
+        این متد زمان ایجاد آخرین پیام (با استفاده از رابطه‌ی related_name='messages' و مرتب‌سازی بر پایهٔ فیلد `created_at`) را برمی‌گرداند. اگر هیچ پیامی وجود نداشته باشد، مقدار `started_at` مکالمه بازگردانده می‌شود. مقدار برگشتی یک شیء datetime است (معمولاً timezone-aware مطابق تنظیمات Django).
+        
+        Returns:
+            datetime: زمان آخرین پیام یا زمان شروع مکالمه در صورت نبود پیام.
         """
         last_message = self.messages.order_by('-created_at').first()
         return last_message.created_at if last_message else self.started_at
@@ -347,7 +376,12 @@ class Message(models.Model):
     
     def __str__(self):
         """
-        نمایش متنی پیام
+        یک نمایش متنی مختصر از پیام.
+        
+        نمایش شامل نوع فرستنده (`sender_type`) و پیش‌نمایش محتوای پیام است. اگر طول `content` بیش از ۵۰ کاراکتر باشد، محتوای نمایش‌داده‌شده با `...` کوتاه می‌شود تا حداکثر ۵۰ کاراکتر اولیه نشان داده شود.
+        
+        Returns:
+            str: رشته‌ای به شکل "<sender_type>: <content_preview>" که برای نمایش در لیست‌ها یا لاگ‌ها مناسب است.
         """
         content_preview = self.content[:50] + '...' if len(self.content) > 50 else self.content
         return f"{self.sender_type}: {content_preview}"
@@ -355,14 +389,19 @@ class Message(models.Model):
     @property
     def is_from_user(self):
         """
-        بررسی اینکه پیام از کاربر ارسال شده
+        بررسی می‌کند که فرستنده پیام کاربر است یا خیر.
+        
+        Returns:
+            bool: True اگر فیلد `sender_type` برابر رشته‌ی `'user'` باشد، در غیر این صورت False.
         """
         return self.sender_type == 'user'
     
     @property
     def is_from_bot(self):
         """
-        بررسی اینکه پیام از ربات ارسال شده
+        بررسی می‌کند که فرستنده پیام ربات باشد.
+        
+        این پراپرتی/متد بولی True برمی‌گرداند اگر فیلد `sender_type` برابر با رشته `'bot'` باشد و در غیر این صورت False بازمی‌گرداند.
         """
         return self.sender_type == 'bot'
 
@@ -457,6 +496,11 @@ class ChatbotResponse(models.Model):
     
     def __str__(self):
         """
-        نمایش متنی پاسخ
+        یک نمایش متنی خوانا از پاسخ بات را برمی‌گرداند.
+        
+        نمایش شامل دسته‌بندی (category)، کاربر هدف (target_user) و اولویت (priority) است و برای نمایش در رابط مدیریتی، گزارش‌ها یا لاگ‌ها مناسب است.
+        
+        Returns:
+            str: رشته‌ای به شکل "`<category> - <target_user> (اولویت: <priority>)`".
         """
         return f"{self.category} - {self.target_user} (اولویت: {self.priority})"
