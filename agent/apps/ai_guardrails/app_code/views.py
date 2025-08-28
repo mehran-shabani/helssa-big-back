@@ -7,14 +7,17 @@ from rest_framework import status
 from rest_framework.decorators import api_view, permission_classes
 from rest_framework.permissions import IsAuthenticated
 from rest_framework.response import Response
-from app_standards.four_cores import APIIngressCore, CentralOrchestrator
+import logging
+from rest_framework.request import Request
+from app_standards.four_cores import APIIngressCore
 from .cores.orchestrator import GuardrailsOrchestrator
 from .serializers import (
     EvaluateContentSerializer,
-    EvaluationResultSerializer,
+    EvaluationResultSerializer,  # اگر ازش برای validate خروجی استفاده می‌کنی نگه دار؛ وگرنه حذفش کن
     GuardrailPolicySerializer,
     RedFlagRuleSerializer,
 )
+logger = logging.getLogger("ai_guardrails")
 from .models import GuardrailPolicy, RedFlagRule
 from django.core.paginator import Paginator
 from django.conf import settings
