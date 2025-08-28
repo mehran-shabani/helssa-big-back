@@ -1,3 +1,4 @@
+# ruff: noqa: RUF002, RUF003
 """
 هماهنگ‌کننده مرکزی برای اپلیکیشن
 Central Orchestrator for Application
