@@ -14,33 +14,44 @@ from typing import Optional
 class UnifiedUserManager(BaseUserManager):
     """مدیر کاربر یکپارچه"""
     
-    def create_user(
-        self, 
-        phone_number: str, 
-        first_name: str, 
-        last_name: str,
-        password: Optional[str] = None,
-        **extra_fields
-    ):
-        """ایجاد کاربر عادی"""
-        if not phone_number:
-            raise ValueError('شماره تلفن الزامی است')
-            
-        user = self.model(
-            phone_number=phone_number,
-            first_name=first_name,
-            last_name=last_name,
-            **extra_fields
-        )
-        
-        if password:
-            user.set_password(password)
-        else:
-            user.set_unusable_password()
-            
-        user.save(using=self._db)
-        return user
-        
+class UserManager(BaseUserManager):
+     def create_user(
+         self,
+         phone_number: str,
+         first_name: str,
+         last_name: str,
+         password: Optional[str] = None,
+         **extra_fields
+     ) -> "UnifiedUser":
+         """ایجاد کاربر عادی"""
+         if not phone_number:
+             raise ValueError('شماره تلفن الزامی است')
+ 
+         user = self.model(
+             phone_number=phone_number,
+             first_name=first_name,
+             last_name=last_name,
+             **extra_fields
+         )
+ 
+         if password:
+             user.set_password(password)
+         else:
+             user.set_unusable_password()
+ 
+         user.save(using=self._db)
+         return user
+ 
+     def create_superuser(
+         self,
+         phone_number: str,
+         first_name: str,
+         last_name: str,
+         password: str,
+         **extra_fields
+     ) -> "UnifiedUser":
+         """ایجاد کاربر ادمین"""
+         # existing superuser creation logic…
     def create_superuser(
         self, 
         phone_number: str,
