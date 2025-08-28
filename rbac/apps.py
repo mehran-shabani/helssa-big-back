@@ -11,9 +11,9 @@ class RbacConfig(AppConfig):
     name = 'rbac'
     verbose_name = 'مدیریت نقش‌ها و دسترسی‌ها'
     
-    def ready(self):
+    def ready(self) -> None:
         """
         اجرای کدهای مورد نیاز هنگام بارگذاری اپلیکیشن
         """
         # ثبت سیگنال‌ها در صورت نیاز
-        pass
+        ...
