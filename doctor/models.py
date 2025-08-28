@@ -512,7 +512,7 @@ class DoctorRating(BaseModel):
             # اگر doctor_profile وجود دارد، امتیاز را بروزرسانی کن
             try:
                 self.doctor.doctor_profile.update_rating()
-            except:
+            except User.doctor_profile.RelatedObjectDoesNotExist:
                 pass
 
 
