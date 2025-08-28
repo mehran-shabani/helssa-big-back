@@ -55,7 +55,7 @@ class EvaluateContentSerializer(serializers.Serializer):
     """
     ورودی ارزیابی محتوای AI
     """
-    content = serializers.CharField(min_length=1, max_length=5000)
+    content = serializers.CharField(min_length=1, max_length=settings.AI_GUARDRAILS.get('MAX_CONTENT_LENGTH', 5000))
     direction = serializers.ChoiceField(choices=['input', 'output', 'both'], default='both')
     context = serializers.DictField(required=False)
 
