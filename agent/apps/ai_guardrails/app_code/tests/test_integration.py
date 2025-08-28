@@ -39,15 +39,15 @@ class GuardrailsIntegrationTest(TestCase):
             created_by=self.user,
         )
 
-    def test_evaluate_block_on_pii(self):
+    def test_evaluate_block_on_pii(self) -> None:
         url = reverse('ai_guardrails:evaluate')
         payload = {
             'content': 'کد ملی من 1234567890 است',
             'direction': 'input'
         }
         response = self.client.post(url, payload, format='json')
-        self.assertEqual(response.status_code, 200)
-        self.assertIn('action', response.data)
-        self.assertEqual(response.data['action'], 'block')
-        self.assertFalse(response.data['allowed'])
+        assert response.status_code == 200
+        assert 'action' in response.data
+        assert response.data['action'] == 'block'
+        assert response.data['allowed'] is False
 
