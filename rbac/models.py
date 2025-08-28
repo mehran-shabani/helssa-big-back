@@ -438,12 +438,12 @@ class DoctorProfile(models.Model):
     """
     
     user = models.OneToOneField(
-        UnifiedUser, 
-        on_delete=models.CASCADE, 
+        UnifiedUser,
+        on_delete=models.CASCADE,
         related_name='doctor_profile',
+        limit_choices_to={'user_type': 'doctor'},
         verbose_name='کاربر'
     )
-    
     medical_license_number = models.CharField(
         max_length=20, 
         unique=True,
