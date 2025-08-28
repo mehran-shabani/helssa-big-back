@@ -150,20 +150,10 @@ class PatientProfileAdmin(admin.ModelAdmin):
         }),
     )
     
-    def get_patient_name(self, obj):
-        """نمایش نام بیمار"""
-        return obj.user.get_full_name()
-    get_patient_name.short_description = 'نام بیمار'
-    
-    def get_phone(self, obj):
-        """نمایش شماره تلفن"""
-        return obj.user.phone_number
-    get_phone.short_description = 'شماره تلفن'
-    
     def get_bmi(self, obj):
         """نمایش BMI"""
         bmi = obj.bmi
-        if bmi:
+        if bmi is not None:
             if bmi < 18.5:
                 color = 'blue'
                 status = 'کم‌وزن'
@@ -182,7 +172,6 @@ class PatientProfileAdmin(admin.ModelAdmin):
             )
         return '-'
     get_bmi.short_description = 'BMI'
-
 
 @admin.register(DoctorProfile)
 class DoctorProfileAdmin(admin.ModelAdmin):
