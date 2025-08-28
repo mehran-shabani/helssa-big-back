@@ -16,13 +16,13 @@ class GuardrailPolicy(BaseModel):
     سیاست‌های گاردریل برای اعمال محدودیت‌ها و قوانین ایمنی محتوای AI
     """
 
-    ENFORCEMENT_CHOICES = [
+    ENFORCEMENT_CHOICES: ClassVar[list[tuple[str, str]]] = [
         ("block", "مسدودسازی"),
         ("warn", "هشدار"),
         ("log", "ثبت فقط")
     ]
 
-    APPLY_CHOICES = [
+    APPLY_CHOICES: ClassVar[list[tuple[str, str]]] = [
         ("input", "ورودی"),
         ("output", "خروجی"),
         ("both", "هردو")
