@@ -263,9 +263,6 @@ class UnifiedUser(AbstractBaseUser, PermissionsMixin):
         verbose_name='آخرین فعالیت'
     )
     
-# In helssa/settings.py (or your main settings file)
-# Ensure Django uses the new UnifiedUser instead of the default User model
-AUTH_USER_MODEL = 'rbac.UnifiedUser'
     objects = UnifiedUserManager()
     
     class Meta:
