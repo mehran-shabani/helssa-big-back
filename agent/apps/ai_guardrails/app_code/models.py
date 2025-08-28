@@ -58,6 +58,22 @@ class GuardrailPolicy(BaseModel):
     def __str__(self) -> str:
         return f"{self.name} ({self.enforcement_mode})"
 
+    def clean(self):
+        """
+        اعتبارسنجی داده‌های conditions برای تضمین صحت ساختار
+        """
+        from django.core.exceptions import ValidationError
+        super().clean()
+        if not isinstance(self.conditions, dict):
+            raise ValidationError("Conditions must be a dictionary.")
+
+        severity_min = self.conditions.get('severity_min')
+        if severity_min is not None:
+            if not isinstance(severity_min, int):
+                raise ValidationError({'conditions': "severity_min must be an integer."})
+            if not (0 <= severity_min <= 100):
+                raise ValidationError({'conditions': "severity_min must be between 0 and 100."})
+
 
 class RedFlagRule(BaseModel):
     """

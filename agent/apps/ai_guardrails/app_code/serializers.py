@@ -6,6 +6,7 @@ Application Serializers
 from rest_framework import serializers
 from app_standards.serializers.base_serializers import BaseModelSerializer
 from .models import GuardrailPolicy, RedFlagRule, PolicyViolationLog
+from django.conf import settings
 from typing import List, Dict, Any
 
 class GuardrailPolicySerializer(BaseModelSerializer):
@@ -55,7 +56,10 @@ class EvaluateContentSerializer(serializers.Serializer):
     """
     ورودی ارزیابی محتوای AI
     """
-    content = serializers.CharField(min_length=1, max_length=settings.AI_GUARDRAILS.get('MAX_CONTENT_LENGTH', 5000))
+    content = serializers.CharField(
+        min_length=1,
+        max_length=getattr(settings, 'AI_GUARDRAILS', {}).get('MAX_CONTENT_LENGTH', 5000)
+    )
     direction = serializers.ChoiceField(choices=['input', 'output', 'both'], default='both')
     context = serializers.DictField(required=False)
 

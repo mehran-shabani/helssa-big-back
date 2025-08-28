@@ -59,7 +59,7 @@ class GuardrailsOrchestrator(CentralOrchestrator):
 
         # تصمیم بر اساس سیاست‌ها (اولین سیاست با اولویت بالاتر اعمال می‌شود)
         action = 'allow'
-        applied_policy_name = ''
+        applied_policy = None
         for policy in active_policies:
             threshold = int(policy.conditions.get('severity_min', 0)) if isinstance(policy.conditions, dict) else 0
             if max_severity >= threshold and matches:
@@ -69,7 +69,7 @@ class GuardrailsOrchestrator(CentralOrchestrator):
                     action = 'warn'
                 else:
                     action = 'allow'
-                applied_policy_name = policy.name
+                applied_policy = policy
                 break
 
         allowed = action == 'allow'
@@ -77,10 +77,12 @@ class GuardrailsOrchestrator(CentralOrchestrator):
 
         # ثبت لاگ نقض سیاست در صورت نیاز
         if action in ['block', 'warn'] and matches:
+            first_matched_rule_name = matches[0]['rule']
+            matched_rule = next((r for r in rules if r.name == first_matched_rule_name), None)
             PolicyViolationLog.objects.create(
                 user=user if getattr(user, 'is_authenticated', False) else None,
-                policy=GuardrailPolicy.objects.filter(name=applied_policy_name).first() if applied_policy_name else None,
-                rule=RedFlagRule.objects.filter(name=matches[0]['rule']).first(),
+                policy=applied_policy,
+                rule=matched_rule,
                 content_snapshot=content[:1000],
                 direction=direction if direction in ['input', 'output'] else 'input',
                 context={'reasons': reasons},
@@ -98,7 +100,7 @@ class GuardrailsOrchestrator(CentralOrchestrator):
             'risk_score': risk_score,
             'reasons': reasons,
             'matches': matches,
-            'applied_policy': applied_policy_name,
+            'applied_policy': applied_policy.name if applied_policy else '',
         }
 
 

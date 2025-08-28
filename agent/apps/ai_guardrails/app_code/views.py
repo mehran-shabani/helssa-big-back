@@ -17,9 +17,19 @@ from .serializers import (
 )
 from .models import GuardrailPolicy, RedFlagRule
 from django.core.paginator import Paginator
+from django.conf import settings
+from app_standards.views.permissions import RateLimitPermission
+
+
+class AiRequestsRateLimitPermission(RateLimitPermission):
+    rate = settings.RATE_LIMIT_AI_GUARDRAILS.get('ai_requests', '20/minute')
+
+
+class ApiCallsRateLimitPermission(RateLimitPermission):
+    rate = settings.RATE_LIMIT_AI_GUARDRAILS.get('api_calls', '100/minute')
 
 @api_view(['POST'])
-@permission_classes([IsAuthenticated])
+@permission_classes([IsAuthenticated, AiRequestsRateLimitPermission])
 def evaluate(request):
     """
     ارزیابی محتوای ورودی/خروجی با گاردریل‌ها
@@ -45,7 +55,7 @@ def evaluate(request):
 
 
 @api_view(['GET', 'POST'])
-@permission_classes([IsAuthenticated])
+@permission_classes([IsAuthenticated, ApiCallsRateLimitPermission])
 def policies(request):
     """
     لیست/ایجاد سیاست‌های گاردریل
@@ -74,7 +84,7 @@ def policies(request):
 
 
 @api_view(['GET', 'POST'])
-@permission_classes([IsAuthenticated])
+@permission_classes([IsAuthenticated, ApiCallsRateLimitPermission])
 def rules(request):
     """
     لیست/ایجاد قوانین رد-فلگ
