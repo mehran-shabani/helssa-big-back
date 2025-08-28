@@ -6,10 +6,10 @@ Application Models
 from django.db import models
 from django.contrib.auth import get_user_model
 from app_standards.models.base_models import BaseModel
-from typing import Optional, Dict, Any
+from typing import ClassVar
+from django.core.validators import MinValueValidator, MaxValueValidator
 
 User = get_user_model()
-
 
 class GuardrailPolicy(BaseModel):
     """
