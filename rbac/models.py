@@ -426,7 +426,8 @@ class PatientProfile(models.Model):
         """محاسبه شاخص توده بدنی"""
         if self.height and self.weight:
             height_m = float(self.height) / 100
-            return float(self.weight) / (height_m ** 2)
+            if height_m > 0:
+                return float(self.weight) / (height_m ** 2)
         return None
 
 
