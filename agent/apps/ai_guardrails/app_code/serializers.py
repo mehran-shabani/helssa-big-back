@@ -22,6 +22,14 @@ class GuardrailPolicySerializer(BaseModelSerializer):
         ]
         read_only_fields = ['id', 'created_at', 'updated_at', 'created_by']
 
+    def validate_conditions(self, value):
+        sev = value.get('severity_min')
+        if sev is not None:
+            if not isinstance(sev, int) or not (0 <= sev <= 100):
+                raise serializers.ValidationError(
+                    "conditions.severity_min باید عدد بین 0 و 100 باشد"
+                )
+        return value
 
 class RedFlagRuleSerializer(BaseModelSerializer):
     """
