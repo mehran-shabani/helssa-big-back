@@ -39,6 +39,7 @@ INSTALLED_APPS = [
     'django.contrib.sessions',
     'django.contrib.messages',
     'django.contrib.staticfiles',
+
     
     # Third party apps
     'rest_framework',
@@ -47,6 +48,8 @@ INSTALLED_APPS = [
     # Local apps
     'auth_otp',
     'patient',
+    'rbac',  
+
 ]
 
 MIDDLEWARE = [
@@ -131,6 +134,7 @@ STATIC_URL = 'static/'
 
 DEFAULT_AUTO_FIELD = 'django.db.models.BigAutoField'
 
+
 # REST Framework Configuration
 REST_FRAMEWORK = {
     'DEFAULT_AUTHENTICATION_CLASSES': [
@@ -212,3 +216,7 @@ PATIENT_SETTINGS = {
 # STT Configuration (Optional)
 # OPENAI_API_KEY = 'your-openai-api-key'
 # LOCAL_STT_URL = 'http://localhost:8000'
+
+# Custom User Model
+AUTH_USER_MODEL = 'rbac.UnifiedUser'
+
