@@ -792,10 +792,16 @@ class UserRole(models.Model):
         db_table = 'user_roles'
         verbose_name = 'نقش کاربر'
         verbose_name_plural = 'نقش‌های کاربران'
-        unique_together = [['user', 'role']]
         indexes = [
             models.Index(fields=['user', 'is_active']),
             models.Index(fields=['expires_at']),
+        ]
+        constraints = [
+            models.UniqueConstraint(
+                fields=['user', 'role'],
+                condition=models.Q(is_active=True),
+                name='uniq_active_user_role'
+            ),
         ]
         
     def __str__(self):
