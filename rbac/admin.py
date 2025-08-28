@@ -84,12 +84,27 @@ class UnifiedUserAdmin(BaseUserAdmin):
     ordering = ['-created_at']
     
     def get_full_name(self, obj):
-        """نمایش نام کامل"""
+        """
+        بازگرداندن نام کامل یک کاربر برای نمایش در پنل ادمین.
+        
+        پارامترها:
+            obj: نمونه‌ی کاربری (یا آبجکتی که متد `get_full_name()` را پیاده‌سازی کرده است) که نام کامل آن استخراج می‌شود.
+        
+        بازگشت:
+            str: رشته‌ی نام کامل همانند خروجی `obj.get_full_name()`؛ در صورت مقداردهی خالی یا پیاده‌سازی متفاوت متد، مقدار برگشتی مطابق با آن خواهد بود.
+        """
         return obj.get_full_name()
     get_full_name.short_description = 'نام کامل'
     
     def get_queryset(self, request):
-        """بهینه‌سازی کوئری"""
+        """
+        کوئری‌ست پیش‌پردازش‌شده برای جلوگیری از N+1 و بهینه‌سازی بارگذاری داده‌های مرتبط.
+        
+        این متد یک queryset پایه از سوپرکلاس می‌گیرد و روابط یک‌به‌یک مربوط به پروفایل‌های بیمار و پزشک را با select_related و رابطه‌های چند‌تایی نقش‌های کاربر را با prefetch_related پیش‌بارگذاری می‌کند تا هنگام دسترسی به patient_profile، doctor_profile یا user_roles__role در نمای ادمین از اجرای کوئری‌های اضافی جلوگیری شود.
+        
+        Returns:
+            QuerySet: queryset بهینه‌شده برای استفاده در لیست ادمین.
+        """
         qs = super().get_queryset(request)
         return qs.select_related(
             'patient_profile', 'doctor_profile'
@@ -151,7 +166,14 @@ class PatientProfileAdmin(admin.ModelAdmin):
     )
     
     def get_bmi(self, obj):
-        """نمایش BMI"""
+        """
+        نمایش مقدار BMI به‌صورت قالب‌بندی‌شده و رنگی برای نمایش در لیست ادمین.
+        
+        اگر مقدار BMI موجود باشد، یک رشته HTML امن (`<span>`) بازمی‌گرداند که مقدار BMI با یک رقم اعشار و وضعیت فارسی («کم‌وزن»، «نرمال»، «اضافه وزن»، «چاق») را نمایش می‌دهد و رنگ متن بر اساس بازه BMI تعیین می‌شود (آبی، سبز، نارنجی، قرمز). در صورت نبود مقدار BMI، علامت `'-'` بازگردانده می‌شود.
+        
+        Returns:
+            str: رشته‌ای امن برای قرارگیری در قالب ادمین (HTML) یا `'-'` اگر BMI موجود نباشد.
+        """
         bmi = obj.bmi
         if bmi is not None:
             if bmi < 18.5:
@@ -247,12 +269,39 @@ class DoctorProfileAdmin(admin.ModelAdmin):
     )
     
     def get_doctor_name(self, obj):
-        """نمایش نام پزشک"""
+        """
+        یک خطی: نام نمایش‌داده‌شدهٔ پزشک را با پیش‌وند فارسی "دکتر" بازمی‌گرداند.
+        
+        توضیحات:
+            این متد نام کامل کاربر مرتبط با شیء پروفایل پزشک را با پیش‌وند "دکتر " قالب‌بندی می‌کند و به صورت یک رشته برمی‌گرداند.
+        
+        پارامترها:
+            obj: نمونه‌ای از مدل DoctorProfile که انتظار می‌رود صفت `user` مرتبط و متدی به‌نام `get_full_name()` داشته باشد.
+        
+        بازگشت:
+            str: رشته‌ای شامل پیش‌وند "دکتر " به‌همراه مقدار بازگشتی از `obj.user.get_full_name()`.
+        """
         return f"دکتر {obj.user.get_full_name()}"
     get_doctor_name.short_description = 'نام پزشک'
     
     def get_success_rate(self, obj):
-        """نمایش نرخ موفقیت"""
+        """
+        نمایش نرخ موفقیت پزشک به‌صورت درصد رنگ‌کدشده.
+        
+        پارامترها:
+            obj: نمونه‌ای که دارای صفت `success_rate` (مقدار عددی بین ۰ تا ۱۰۰) است.
+        
+        توضیحات:
+            - مقدار `success_rate` را به یک رشته درصد با یک رقم اعشار تبدیل و با تگ HTML `<span>` برمی‌گرداند.
+            - بازه‌های رنگ‌بندی:
+                - >= 90: سبز
+                - >= 70 و < 90: نارنجی
+                - < 70: قرمز
+            - مقدار بازگشتی با `format_html` امن‌سازی شده و برای نمایش در لیست ادمین مناسب است.
+        
+        بازگشت:
+            str: یک رشته HTML حاوی درصد قالب‌بندی‌شده و رنگ‌دار، مثلاً `'<span style="color: green;">92.3%</span>'`.
+        """
         rate = obj.success_rate
         if rate >= 90:
             color = 'green'
@@ -286,6 +335,15 @@ class RoleAdmin(admin.ModelAdmin):
     filter_horizontal = ['permissions']
 
     def get_permissions_count(self, obj):
+        """
+        تعداد مجوزهای مرتبط با شیء (role) را برمی‌شمارد و برمی‌گرداند.
+        
+        پارامترها:
+            obj: نمونهٔ مدل (معمولاً یک Role) که رابطهٔ `permissions` روی آن تعریف شده است.
+        
+        بازگشت:
+            int: تعداد آیتم‌های مرتبط در relation `permissions`.
+        """
         count = obj.permissions.count()
 -        return format_html(
 -            '<a href="{}?role__id={}">{}</a>',

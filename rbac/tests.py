@@ -19,7 +19,11 @@ class UnifiedUserModelTest(TestCase):
     """تست‌های مدل کاربر یکپارچه"""
     
     def setUp(self):
-        """آماده‌سازی داده‌های تست"""
+        """
+        یک‌خطی: مقداردهی اولیه‌ی داده‌های نمونه کاربر برای استفاده در تست‌ها.
+        
+        شرح: یک دیکشنری نمونه در self.user_data ایجاد می‌کند که شامل فیلدهای متداول کاربر است: phone_number (شماره موبایل معتبر)، first_name، last_name، email و password. این داده‌ها به‌عنوان ورودی یکنواخت برای ایجاد کاربران عادی و ادمین در تست‌های این ماژول استفاده می‌شوند و فرض می‌شود مقادیر برای اعتبارسنجی‌های مدل (مانند فرمت شماره موبایل و یکتایی در موارد مربوطه) مناسب باشند.
+        """
         self.user_data = {
             'phone_number': '09123456789',
             'first_name': 'علی',
@@ -85,7 +89,15 @@ class PatientProfileTest(TestCase):
     """تست‌های پروفایل بیمار"""
     
     def setUp(self):
-        """آماده‌سازی داده‌های تست"""
+        """
+        ایجاد پیش‌شرط‌های تست: دو کاربر نمونه در پایگاه‌داده می‌سازد و به ویژگی‌های نمونه‌ی تست اختصاص می‌دهد.
+        
+        این متد قبل از اجرای هر تست فراخوانی می‌شود و دو نمونه کاربر را ایجاد می‌کند:
+        - self.patient_user: کاربر از نوع 'patient' با شماره تلفن '09123456789' و نام 'رضا احمدی'.
+        - self.doctor_user: کاربر از نوع 'doctor' با شماره تلفن '09123456788' و نام 'دکتر حسینی'.
+        
+        این نمونه‌ها توسط سایر تست‌ها برای بررسی پروفایل‌ها، نقش‌ها و مجوزها مورد استفاده قرار می‌گیرند. کاربران با استفاده از User.objects.create_user ساخته می‌شوند و در پایگاه‌داده ثبت می‌گردند.
+        """
         self.patient_user = User.objects.create_user(
             phone_number='09123456789',
             first_name='رضا',
@@ -148,7 +160,17 @@ class PatientProfileTest(TestCase):
         self.assertIsNone(profile.bmi)
     
     def test_medical_record_number_uniqueness(self):
-        """تست یکتایی شماره پرونده پزشکی"""
+        """
+        تأیید می‌کند که فیلد `medical_record_number` در مدل `PatientProfile` یکتا است و تلاش برای ایجاد دو پروفایل با همان شماره پرونده منجر به خطای بانک اطلاعاتی می‌شود.
+        
+        شرح:
+        - ابتدا یک PatientProfile با `medical_record_number='MRN123456'` برای کاربر نمونه ایجاد می‌شود.
+        - سپس یک کاربر بیمار دیگر ساخته می‌شود.
+        - تلاش برای ایجاد PatientProfile دوم با همان `medical_record_number` درون بلوک `assertRaises(IntegrityError)` انجام می‌شود تا از بروز `IntegrityError` (قید یکتایی در سطح پایگاه‌داده) اطمینان حاصل شود.
+        
+        تأثیرات جانبی:
+        - دو ردیف کاربر در جدول کاربران و یک یا صفر ردیف در جدول PatientProfile بسته به اجرای آزمون در پایگاه‌داده ایجاد می‌شود.
+        """
         PatientProfile.objects.create(
             user=self.patient_user,
             medical_record_number='MRN123456'
@@ -172,7 +194,11 @@ class DoctorProfileTest(TestCase):
     """تست‌های پروفایل پزشک"""
     
     def setUp(self):
-        """آماده‌سازی داده‌های تست"""
+        """
+        یک کاربر با نقش دکتر در پایگاه‌دادهٔ تست ایجاد می‌کند و آن را در self.doctor_user قرار می‌دهد.
+        
+        این متد در آغاز هر تست اجرا می‌شود تا یک کاربر نمونه با فیلدهای phone_number، first_name، last_name و user_type='doctor' در دیتابیس تست ساخته شود؛ تست‌ها می‌توانند از self.doctor_user برای بررسی ارتباطات، پروفایل‌ها و مجوزها استفاده کنند.
+        """
         self.doctor_user = User.objects.create_user(
             phone_number='09123456789',
             first_name='دکتر',
@@ -196,7 +222,12 @@ class DoctorProfileTest(TestCase):
         self.assertEqual(profile.consultation_fee, 500000)
     
     def test_success_rate_calculation(self):
-        """تست محاسبه نرخ موفقیت"""
+        """
+        آزمایشی که نرخ موفقیت پزشک را بررسی می‌کند.
+        
+        توضیحات:
+        این تست یک نمونه DoctorProfile با 100 مشاوره کلی و 95 مشاوره موفق ایجاد می‌کند و انتظار دارد صفت `success_rate` درصد موفقیت را به‌صورت عدد اعشاری (95.0) بازگرداند. این تست تضمین می‌کند محاسبه نرخ موفقیت به‌درستی به‌عنوان (successful_consultations / total_consultations * 100) گزارش می‌شود.
+        """
         profile = DoctorProfile.objects.create(
             user=self.doctor_user,
             medical_license_number='ML123456',
@@ -226,7 +257,16 @@ class RolePermissionTest(TestCase):
     """تست‌های نقش‌ها و مجوزها"""
     
     def setUp(self):
-        """آماده‌سازی داده‌های تست"""
+        """
+        یک‌بار اجرا می‌شود تا داده‌های مورد نیاز هر تست را در پایگاه‌داده آماده کند.
+        
+        این متد یک کاربر نمونه (در self.user)، یک نقش نمونه (در self.role) و یک مجوز نمونه (در self.permission) ایجاد و ذخیره می‌کند که برای تست‌های واحد در همان کلاس قابل استفاده هستند. مقادیر فیلدهای ایجادشده به‌صورت صریح تعیین شده‌اند:
+        - کاربر: phone_number='09123456789', first_name='تست', last_name='کاربر'
+        - نقش: name='test_role', display_name='نقش تست', description='نقش برای تست'
+        - مجوز: name='تست خواندن', codename='test_read', resource='test_resource', action='read'
+        
+        این متد تغییرات را در پایگاه‌داده پایدار می‌کند و تست‌ها می‌توانند با ارجاع به self.user، self.role و self.permission به این نمونه‌ها دسترسی داشته باشند.
+        """
         self.user = User.objects.create_user(
             phone_number='09123456789',
             first_name='تست',
@@ -262,7 +302,11 @@ class RolePermissionTest(TestCase):
         self.assertFalse(user_role.is_expired)
     
     def test_role_expiration(self):
-        """تست انقضای نقش"""
+        """
+        یک مورد آزمایشی که صحت محاسبهٔ وضعیت انقضای یک UserRole را بررسی می‌کند.
+        
+        این تست یک UserRole را با مقدار `expires_at` در گذشته ایجاد می‌کند و بررسی می‌کند که پراپرتی محاسبه‌شدهٔ `is_expired` برابر با True باشد. این عملکرد به‌صورت مستقیم در دیتابیس یک رکورد ایجاد می‌کند و برای اعتبارسنجی منطق مدل مربوط به انقضاء نقش استفاده می‌شود.
+        """
         past_time = timezone.now() - timedelta(days=1)
         
         user_role = UserRole.objects.create(
@@ -312,7 +356,13 @@ class UserSessionTest(TestCase):
     """تست‌های نشست کاربر"""
     
     def setUp(self):
-        """آماده‌سازی داده‌های تست"""
+        """
+        یک‌خطی:
+        یک نمونه‌ی کاربر تستی در پایگاه‌داده ایجاد و در self.user قرار می‌دهد.
+        
+        توضیح مفصل:
+        این متد پیش‌نیاز مشترک تست‌ها را فراهم می‌کند: با فراخوانی User.objects.create_user یک کاربر جدید با شمارهٔ تلفن '09123456789' و نام و نام‌خانوادگی مشخص ایجاد می‌کند و شیء کاربر ایجادشده را در self.user ذخیره می‌کند تا در متدهای تستی بعدی قابل استفاده باشد. متد پس از اجرا هیچ مقدار بازگشتی ندارد و برای تنظیم وضعیت اولیهٔ تست‌ها استفاده می‌شود.
+        """
         self.user = User.objects.create_user(
             phone_number='09123456789',
             first_name='تست',
@@ -338,7 +388,13 @@ class UserSessionTest(TestCase):
         self.assertFalse(session.is_expired)
     
     def test_session_expiration(self):
-        """تست انقضای نشست"""
+        """
+        یک واحدتستی که بررسی می‌کند یک UserSession با تاریخ انقضای گذشته در وضعیت منقضی‌شده (is_expired == True) قرار می‌گیرد.
+        
+        توضیحات بیشتر:
+        - شیء UserSession با فیلد expires_at در گذشته ساخته می‌شود.
+        - انتظار می‌رود ویژگی کمکی `is_expired` آن جلسه مقدار True بازگرداند.
+        """
         past_time = timezone.now() - timedelta(hours=1)
         
         session = UserSession.objects.create(
@@ -358,7 +414,13 @@ class AuthAuditLogTest(TestCase):
     """تست‌های لاگ امنیتی"""
     
     def setUp(self):
-        """آماده‌سازی داده‌های تست"""
+        """
+        یک‌خطی:
+        یک نمونه‌ی کاربر تستی در پایگاه‌داده ایجاد و در self.user قرار می‌دهد.
+        
+        توضیح مفصل:
+        این متد پیش‌نیاز مشترک تست‌ها را فراهم می‌کند: با فراخوانی User.objects.create_user یک کاربر جدید با شمارهٔ تلفن '09123456789' و نام و نام‌خانوادگی مشخص ایجاد می‌کند و شیء کاربر ایجادشده را در self.user ذخیره می‌کند تا در متدهای تستی بعدی قابل استفاده باشد. متد پس از اجرا هیچ مقدار بازگشتی ندارد و برای تنظیم وضعیت اولیهٔ تست‌ها استفاده می‌شود.
+        """
         self.user = User.objects.create_user(
             phone_number='09123456789',
             first_name='تست',
@@ -401,7 +463,17 @@ class DataMigrationTest(TestCase):
     """تست‌های migration داده‌های اولیه"""
     
     def test_default_roles_created(self):
-        """تست ایجاد نقش‌های پیش‌فرض"""
+        """
+        بررسی وجود نقش‌های پیش‌فرض پس از اجرای مهاجرت‌ها.
+        
+        این تست تأیید می‌کند که مجموعه نقش‌های پیش‌فرض مورد انتظار در مدل Role موجود هستند. فرض تست این است که مایگریشن‌های مربوط به دادهٔ اولیه (seeded defaults) پیش از اجرای تست اعمال شده‌اند. اگر هر یک از نقش‌های زیر وجود نداشته باشد، تست شکست می‌خورد:
+        - patient_basic
+        - patient_premium
+        - doctor_basic
+        - doctor_specialist
+        - admin
+        - staff
+        """
         # این تست فرض می‌کند که migration اجرا شده
         expected_roles = [
             'patient_basic', 'patient_premium',
@@ -417,7 +489,11 @@ class DataMigrationTest(TestCase):
             )
     
     def test_default_permissions_created(self):
-        """تست ایجاد مجوزهای پیش‌فرض"""
+        """
+        بررسی می‌کند که مجوزهای پیش‌فرض مورد انتظار پس از اجرای مایگریشن‌ها/بارگذاری داده‌ها در جدول Permission وجود داشته باشند.
+        
+        این تست برای هر کدنام مجوز در لیست مورد انتظار (`view_own_profile`, `edit_own_profile`, `view_medical_records`, `book_appointment`, `view_patients_list`, `write_prescription`) یک پرس‌وجو انجام می‌دهد و با assertTrue اطمینان می‌دهد که رکورد متناظر در پایگاه‌داده موجود است. در صورت نبود هر یک از مجوزها، تست نام آن را در پیام خطا نمایش می‌دهد.
+        """
         expected_permissions = [
             'view_own_profile', 'edit_own_profile',
             'view_medical_records', 'book_appointment',
@@ -434,7 +510,11 @@ class DataMigrationTest(TestCase):
             )
     
     def test_admin_role_has_all_permissions(self):
-        """تست دسترسی کامل نقش admin"""
+        """
+        اطمینان می‌دهد که نقش 'admin' به همهٔ مجوزهای تعریف‌شده در سیستم دسترسی دارد.
+        
+        در این تست، اگر یک نقش با نام 'admin' وجود داشته باشد، تعداد مجوزهای مرتبط با آن نقش با تعداد کل مجوزهای مدل Permission مقایسه می‌شود و باید برابر باشند. در صورت عدم برابری، آزمون با پیام خطای مشخص شده رد می‌شود. اگر نقش 'admin' وجود نداشته باشد، آزمون از مقایسه صرف‌نظر می‌کند (هیچ ادعایی دربارهٔ ایجاد خودکار نقش انجام نمی‌دهد).
+        """
         admin_role = Role.objects.filter(name='admin').first()
         if admin_role:
             # admin باید به همه مجوزها دسترسی داشته باشد

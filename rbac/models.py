@@ -22,7 +22,24 @@ class UnifiedUserManager(BaseUserManager):
         password: Optional[str] = None,
         **extra_fields
     ) -> "UnifiedUser":
-        """ایجاد کاربر عادی"""
+        """
+        ایجاد یک کاربر جدید و ذخیره آن در پایگاه‌داده.
+        
+        این متد یک نمونه‌ی UnifiedUser با مشخصات داده‌شده می‌سازد، در صورت داشتن مقدار برای password آن را هش و تنظیم می‌کند و در غیر این صورت رمز را غیرقابل‌استفاده قرار می‌دهد، سپس کاربر را با استفاده از همان اتصال پایگاه‌دادهٔ مدیر (manager) ذخیره می‌کند.
+        
+        Parameters:
+            phone_number (str): شماره تلفن کاربر؛ الزامی است و در صورت نبودن مقدار، ValueError پرتاب می‌شود.
+            first_name (str): نام کوچک کاربر.
+            last_name (str): نام خانوادگی کاربر.
+            password (Optional[str]): در صورت ارائه، به‌عنوان رمز عبور قرار می‌گیرد؛ در غیر این صورت رمز غیرقابل‌استفاده تنظیم می‌شود.
+            **extra_fields: فیلدهای اختیاری مدل که مستقیماً به سازنده مدل پاس داده می‌شوند (مثلاً is_active، user_type و غیره).
+        
+        Returns:
+            UnifiedUser: نمونهٔ ساخته‌شده و ذخیره‌شدهٔ کاربر.
+        
+        Raises:
+            ValueError: اگر phone_number خالی باشد.
+        """
         if not phone_number:
             raise ValueError('شماره تلفن الزامی است')
             
@@ -49,7 +66,24 @@ class UnifiedUserManager(BaseUserManager):
         password: str,
         **extra_fields
     ) -> "UnifiedUser":
-        """ایجاد کاربر ادمین"""
+        """
+        یک سوپر‌یوزر (کاربر ادمین) جدید ایجاد و ذخیره می‌کند.
+        
+        این متد فیلدهای پیش‌فرض مورد نیاز برای سوپر‌یوزر را تنظیم می‌کند: `is_staff=True`، `is_superuser=True`، `is_active=True`، `is_verified=True` و `user_type='admin'`، سپس با اعتبارسنجی از درست بودن `is_staff` و `is_superuser`، ساخت کاربر را به `create_user` واگذار می‌کند.
+        
+        Parameters:
+            phone_number: شماره تلفن کاربر (شناسه ورود).
+            first_name: نام کوچک کاربر.
+            last_name: نام خانوادگی کاربر.
+            password: کلمهٔ عبور کاربر.
+            **extra_fields: هر فیلد اضافی مدل که باید هنگام ایجاد کاربر تنظیم شود.
+        
+        Returns:
+            UnifiedUser: نمونهٔ ایجادشدهٔ سوپر‌یوزر.
+        
+        Raises:
+            ValueError: اگر `is_staff` یا `is_superuser` به True تنظیم نشده باشند.
+        """
         extra_fields.setdefault('is_staff', True)
         extra_fields.setdefault('is_superuser', True)
         extra_fields.setdefault('is_active', True)
@@ -246,29 +280,64 @@ AUTH_USER_MODEL = 'rbac.UnifiedUser'
         ]
         
     def __str__(self):
+        """
+        نمایش متنی کاربر شامل نام کامل و شماره تلفن.
+        
+        برمی‌گرداند یک رشته‌ی قابل خواندن برای نمایش‌های مدیریتی/لاگ‌ها که شامل نام و نام خانوادگی و شماره تلفن کاربر به صورت "First Last (09...)" است.
+        """
         return f"{self.first_name} {self.last_name} ({self.phone_number})"
         
     def get_full_name(self) -> str:
-        """دریافت نام کامل کاربر"""
+        """
+        بازگرداندن نام کامل کاربر به فرم "نام خانوادگی".
+        
+        شرح:
+            این متد نام و نام‌خانوادگی شیء کاربر را با یک فاصله بین آن‌ها ترکیب کرده و به‌صورت یک رشته بازمی‌گرداند.
+            در صورتی که یکی از فیلدها خالی باشد، رشتهٔ بازگشتی همچنان شامل یک فاصله خواهد بود (مثلاً "نام " یا " نام‌خانوادگی").
+        
+        Returns:
+            str: نام کامل در قالب "FirstName LastName".
+        """
         return f"{self.first_name} {self.last_name}"
         
     def get_short_name(self) -> str:
-        """دریافت نام کوتاه کاربر"""
+        """
+        بازگرداندن نام کوتاه کاربر (معمولاً نام کوچک).
+        
+        این متد مقدار فیلد `first_name` را برمی‌گرداند. در صورت خالی بودن فیلد، رشتهٔ خالی بازگردانده خواهد شد.
+        Returns:
+            str: نام کوتاه کاربر (مقدار `first_name`).
+        """
         return self.first_name
         
     @property
     def is_patient(self) -> bool:
-        """بررسی بیمار بودن کاربر"""
+        """
+        بررسی می‌کند که کاربر از نوع 'patient' است یا خیر.
+        
+        این متد مقدار بولی برمی‌گرداند که نشان می‌دهد فیلد `user_type` برابر رشته‌ی `'patient'` است؛ بدون تغییر وضعیت شیء و بدون اثرات جانبی.
+        """
         return self.user_type == 'patient'
         
     @property
     def is_doctor(self) -> bool:
-        """بررسی پزشک بودن کاربر"""
+        """
+        بررسی می‌کند که کاربر از نوع پزشک است یا خیر.
+        
+        Returns:
+        	bool: مقدار True در صورتی که فیلد `user_type` برابر با `'doctor'` باشد، در غیر این صورت False.
+        """
         return self.user_type == 'doctor'
         
     @property
     def is_admin(self) -> bool:
-        """بررسی مدیر بودن کاربر"""
+        """
+        بررسی می‌کند که کاربر از نوع مدیر (admin) باشد.
+        
+        این پراپرتی/متد مقدار بولی برمی‌گرداند که نشان می‌دهد فیلد user_type کاربر دقیقاً برابر رشته `'admin'` است یا خیر. هیچ اثر جانبی‌ای ندارد.
+        Returns:
+        	bool: True اگر user_type برابر `'admin'` باشد، در غیر این صورت False.
+        """
         return self.user_type == 'admin'
 
 
@@ -408,11 +477,26 @@ class PatientProfile(models.Model):
         ]
         
     def __str__(self):
+        """
+        نمایش رشته‌ای (human-readable) پروفایل بیمار.
+        
+        این متد یک نمایش کوتاه و قابل‌خواندن برای نمونه‌ی PatientProfile بازمی‌گرداند که شامل عبارت «پروفایل بیمار:» به‌همراه نام کامل کاربر مرتبط است (از user.get_full_name() استفاده می‌کند). این مقدار معمولاً در رابط ادمین، لاگ‌ها و زمان نمایش نمونه‌ها به‌عنوان شناسه‌ی خوانا استفاده می‌شود.
+        
+        Returns:
+            str: رشته نمایشی مانند "پروفایل بیمار: {نام کامل کاربر}"
+        """
         return f"پروفایل بیمار: {self.user.get_full_name()}"
         
     @property
     def bmi(self) -> Optional[float]:
-        """محاسبه شاخص توده بدنی"""
+        """
+        محاسبهٔ شاخص تودهٔ بدنی (BMI) بر اساس قد و وزن کاربر.
+        
+        اگر قد (height) و وزن (weight) موجود و معتبر باشند، قد را به متر تبدیل (از سانتی‌متر) کرده و مقدار BMI را برابر وزن به کیلوگرم تقسیم بر مجذور قد برحسب متر برمی‌گرداند. در صورت نبودن یا نامعتبر بودن هر یک از مقادیر (مثلاً قد صفر یا منفی) مقدار None بازگردانده می‌شود.
+        
+        Returns:
+            Optional[float]: مقدار BMI به‌صورت عدد ممیز شناور یا None اگر محاسبه ممکن نباشد.
+        """
         if self.height and self.weight:
             height_m = float(self.height) / 100
             if height_m > 0:
@@ -601,11 +685,25 @@ class DoctorProfile(models.Model):
         ]
         
     def __str__(self):
+        """
+        نمایش متنی پروفایل پزشک به صورت `{دکتر <نام کامل>} - {تخصص}`.
+        
+        شرح:
+            مقدار بازگشتی رشته‌ای است که نام کامل کاربر مرتبط (با استفاده از `user.get_full_name()`)
+            و مقدار فیلد `specialty` را ترکیب می‌کند تا نمایش کوتاهی از پزشک ارائه دهد.
+        
+        Returns:
+            str: رشتهٔ نمایشی مانند: "دکتر علی رضایی - قلب و عروق".
+        """
         return f"دکتر {self.user.get_full_name()} - {self.specialty}"
         
     @property
     def success_rate(self) -> float:
-        """محاسبه نرخ موفقیت ویزیت‌ها"""
+        """
+        محاسبهٔ درصد موفقیت مشاوره‌ها بر اساس تعداد کل ویزیت‌ها و ویزیت‌های موفق.
+        
+        اگر total_consultations بزرگ‌تر از صفر باشد، مقدار (successful_consultations / total_consultations) * 100 را برمی‌گرداند (قابل تفسیر به‌عنوان درصد بین 0.0 تا 100.0). در غیر این صورت، 0.0 بازمی‌گرداند تا از تقسیم بر صفر جلوگیری شود.
+        """
         if self.total_consultations > 0:
             return (self.successful_consultations / self.total_consultations) * 100
         return 0.0
@@ -677,6 +775,12 @@ class Role(models.Model):
         ordering = ['-priority', 'name']
         
     def __str__(self):
+        """
+        نمایش رشته‌ای شیء Role با استفاده از فیلد display_name.
+        
+        برمی‌گرداند:
+            str: نام نمایشی نقش (display_name) که برای نمایش در رابط مدیریت و لاگ‌ها استفاده می‌شود.
+        """
         return self.display_name
 
 
@@ -734,6 +838,11 @@ class Permission(models.Model):
         ordering = ['resource', 'action']
         
     def __str__(self):
+        """
+        نمایش متنی دسترسی با ترکیب عنوان منبع، عمل و نام.
+        
+        برمی‌گرداند رشته‌ای خوانا به صورت "{resource}:{action} - {name}" که برای لاگ‌زدن، نمایش در رابط کاربری و تشخیص سریع مجوزها استفاده می‌شود.
+        """
         return f"{self.resource}:{self.action} - {self.name}"
 
 
@@ -805,11 +914,24 @@ class UserRole(models.Model):
         ]
         
     def __str__(self):
+        """
+        نمایشی متنی از انتساب نقش به کاربر.
+        
+        برمی‌گرداند یک رشته متشکل از نام کامل کاربر و عنوان قابل‌نمایش نقش به صورت "{نام کامل کاربر} - {عنوان نقش}"، که برای نمایش خلاصه‌ای از رابطه UserRole در رابط‌های مدیریتی و لاگ‌ها مناسب است.
+        
+        Returns:
+            str: رشتهٔ نمایشی ترکیبی از نام کامل کاربر و نمایش نقش.
+        """
         return f"{self.user.get_full_name()} - {self.role.display_name}"
         
     @property
     def is_expired(self) -> bool:
-        """بررسی منقضی شدن نقش"""
+        """
+        بررسی می‌کند که نقش کاربر منقضی شده است یا خیر.
+        
+        اگر فیلد `expires_at` مقداردهی شده باشد، زمان فعلی (به‌صورت timezone-aware) با `expires_at` مقایسه می‌شود و در صورت گذشته بودن زمان انقضا مقدار `True` بازگردانده می‌شود، در غیر این صورت `False` بازمی‌گردد.
+        @return: True اگر `expires_at` تعیین شده و قبل از زمان فعلی باشد، در غیر این صورت False.
+        """
         if self.expires_at:
             return timezone.now() > self.expires_at
         return False
@@ -917,11 +1039,28 @@ class UserSession(models.Model):
         ]
         
     def __str__(self):
+        """
+        نمایش متنی کوتاه از نشست کاربر شامل نام کامل کاربر و نوع دستگاه.
+        
+        این متد رشته قابل‌خواندی برمی‌گرداند که برای لاگ‌گذاری یا نمایش در رابط‌های مدیریت استفاده می‌شود و به صورت "نشست {نام کامل کاربر} - {نوع دستگاه}" فرمات می‌شود. مقدار نام کامل از متد get_full_name() روی شیٔ کاربر استخراج می‌شود.
+        
+        Returns:
+            str: رشته نمایشی نشست (به فارسی).
+        """
         return f"نشست {self.user.get_full_name()} - {self.device_type}"
         
     @property
     def is_expired(self) -> bool:
-        """بررسی منقضی شدن نشست"""
+        """
+        بررسی می‌کند آیا نشست منقضی شده است.
+        
+        این متد زمان کنونی (با استفاده از timezone.now()) را با فیلد `expires_at` مقایسه می‌کند و مقدار بولی بازمی‌گرداند:
+        True اگر زمان کنونی بعد از `expires_at` باشد، در غیر این صورت False.
+        توجه: تابع مطابق کد موجود فرض می‌کند `expires_at` مقداردهی شده است و در صورت بودن None ممکن است استثنا ایجاد شود.
+        
+        Returns:
+            bool: True در صورت منقضی بودن نشست، False در غیر این صورت.
+        """
         return timezone.now() > self.expires_at
 
 
@@ -1011,5 +1150,11 @@ class AuthAuditLog(models.Model):
         ordering = ['-created_at']
         
     def __str__(self):
+        """
+        نمایش متنی مختصر از رکورد لاگ احراز هویت.
+        
+        بازمی‌گرداند یک رشته خوانا که شامل متن نمایشِ نوع رویداد (از `get_event_type_display()`)،
+        نام کامل کاربر در صورت وجود یا `'ناشناس'` در غیر این صورت، و زمان ایجاد (`created_at`) است.
+        """
         user_str = self.user.get_full_name() if self.user else 'ناشناس'
         return f"{self.get_event_type_display()} - {user_str} - {self.created_at}"
