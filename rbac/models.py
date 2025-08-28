@@ -290,12 +290,12 @@ class PatientProfile(models.Model):
     """
     
     user = models.OneToOneField(
-        UnifiedUser, 
-        on_delete=models.CASCADE, 
+        UnifiedUser,
+        on_delete=models.CASCADE,
         related_name='patient_profile',
+        limit_choices_to={'user_type': 'patient'},
         verbose_name='کاربر'
     )
-    
     medical_record_number = models.CharField(
         max_length=20, 
         unique=True,
