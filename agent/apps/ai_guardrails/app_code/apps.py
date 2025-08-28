@@ -13,6 +13,6 @@ Lines: 11
 
     verbose_name = 'AI Guardrails'
     
-    def ready(self):
+    def ready(self) -> None:
         """آماده‌سازی اپلیکیشن"""
-        pass
+        ...
