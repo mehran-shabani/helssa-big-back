@@ -43,7 +43,11 @@ class GuardrailPolicy(BaseModel):
         default="both",
         verbose_name="حوزه اعمال"
     )
-    priority = models.IntegerField(default=100, verbose_name="اولویت")
+    priority = models.IntegerField(
+        default=100,
+        validators=[MinValueValidator(0)],
+        verbose_name="اولویت",
+    )
     conditions = models.JSONField(default=dict, blank=True, verbose_name="شرایط")
 
     class Meta:
@@ -80,12 +84,12 @@ class RedFlagRule(BaseModel):
     قوانین رد-فلگ برای شناسایی الگوهای خطرناک (اورژانس، توصیه درمانی، PII و ...)
     """
 
-    PATTERN_CHOICES = [
+    PATTERN_CHOICES: ClassVar[list[tuple[str, str]]] = [
         ("keyword", "کلمه کلیدی"),
         ("regex", "عبارت منظم"),
     ]
 
-    CATEGORY_CHOICES = [
+    CATEGORY_CHOICES: ClassVar[list[tuple[str, str]]] = [
         ("emergency", "اورژانسی"),
         ("medical_advice", "توصیه پزشکی"),
         ("pii", "اطلاعات شناسایی فردی"),
@@ -97,7 +101,11 @@ class RedFlagRule(BaseModel):
     pattern_type = models.CharField(max_length=10, choices=PATTERN_CHOICES, verbose_name="نوع الگو")
     pattern = models.TextField(verbose_name="الگو")
     category = models.CharField(max_length=30, choices=CATEGORY_CHOICES, default="other", verbose_name="دسته‌بندی")
-    severity = models.IntegerField(default=50, verbose_name="شدت (0-100)")
+    severity = models.IntegerField(
+        default=50,
+        validators=[MinValueValidator(0), MaxValueValidator(100)],
+        verbose_name="شدت (0-100)",
+    )
     is_active = models.BooleanField(default=True, verbose_name="فعال")
     metadata = models.JSONField(default=dict, blank=True, verbose_name="متادیتا")
 
@@ -119,7 +127,7 @@ class PolicyViolationLog(BaseModel):
     لاگ نقض سیاست‌ها هنگام ارزیابی ورودی/خروجی
     """
 
-    ACTION_CHOICES = [
+    ACTION_CHOICES: ClassVar[list[tuple[str, str]]] = [
         ("blocked", "مسدود شد"),
         ("warned", "هشدار داده شد"),
         ("logged", "ثبت شد"),

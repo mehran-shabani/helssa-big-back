@@ -6,6 +6,7 @@ Central Orchestrator for Application
 
 from app_standards.four_cores import CentralOrchestrator
 from typing import Dict, Any, List
+import uuid
 from django.db.models import Q
 from ..models import GuardrailPolicy, RedFlagRule, PolicyViolationLog
 import re
@@ -81,19 +82,32 @@ class GuardrailsOrchestrator(CentralOrchestrator):
         if action in ['block', 'warn'] and matches:
             first_matched_rule_name = matches[0]['rule']
             matched_rule = next((r for r in rules if r.name == first_matched_rule_name), None)
+            # ماسک کردن بخش‌های حساس قبل از لاگ: کاراکترهای منطبق را با * جایگزین می‌کنیم
+            masked_snapshot = content[:1000]
+            for m in matches:
+                for start, end in m.get('spans', []):
+                    if 0 <= start < end <= len(masked_snapshot):
+                        masked_snapshot = masked_snapshot[:start] + ('*' * (end - start)) + masked_snapshot[end:]
+
+            # استخراج IP واقعی با درنظر گرفتن X-Forwarded-For
+            client_ip = ''
+            if request:
+                xff = request.META.get('HTTP_X_FORWARDED_FOR', '')
+                client_ip = (xff.split(',')[0].strip() if xff else '') or request.META.get('REMOTE_ADDR', '')
+
             PolicyViolationLog.objects.create(
                 user=user if getattr(user, 'is_authenticated', False) else None,
                 policy=applied_policy,
                 rule=matched_rule,
-                content_snapshot=content[:1000],
+                content_snapshot=masked_snapshot,
                 direction=direction if direction in ['input', 'output'] else 'input',
                 context={'reasons': reasons},
                 action_taken='blocked' if action == 'block' else 'warned',
                 risk_score=risk_score,
                 matched_spans=matches,
-                request_path=getattr(request, 'path', '') if request else '',
-                ip_address=(request.META.get('REMOTE_ADDR') if request else None),
-                user_agent=(request.META.get('HTTP_USER_AGENT') if request else '')
+                request_path=(request.path if request and hasattr(request, 'path') else ''),
+                ip_address=client_ip,
+                user_agent=(request.META.get('HTTP_USER_AGENT', '') if request else '')
             )
 
         return {
@@ -103,6 +117,8 @@ class GuardrailsOrchestrator(CentralOrchestrator):
             'reasons': reasons,
             'matches': matches,
             'applied_policy': applied_policy.name if applied_policy else '',
+            'applied_policy_id': str(applied_policy.id) if applied_policy else None,
+            'decision_id': str(uuid.uuid4()),
         }
 
 
