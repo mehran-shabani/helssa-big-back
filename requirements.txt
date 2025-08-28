@@ -26,7 +26,7 @@ django-minio-storage==0.5.8
 
 # Utils
 python-dotenv==1.0.1
-requests==2.32.3
+requests==2.32.4
 urllib3==2.5.0
 idna==3.10
 certifi==2025.8.3
