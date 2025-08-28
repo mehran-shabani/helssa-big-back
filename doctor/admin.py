@@ -161,7 +161,7 @@ class DoctorScheduleAdmin(admin.ModelAdmin):
         """نمایش نام پزشک"""
         try:
             return obj.doctor.doctor_profile.get_full_name()
-        except:
+        except DoctorProfile.DoesNotExist:
             return obj.doctor.username
     get_doctor_name.short_description = 'پزشک'
 
