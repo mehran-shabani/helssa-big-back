@@ -505,11 +505,9 @@ class UserSessionAdmin(admin.ModelAdmin):
             'fields': ('user',)
         }),
         ('توکن‌ها', {
-            'fields': (
-                'id', 'access_token', 'refresh_token',
-                'token_version'
-            ),
+            'fields': ('id', 'token_version'),
             'classes': ('collapse',)
+        }),
         }),
         ('اطلاعات دستگاه', {
             'fields': (
