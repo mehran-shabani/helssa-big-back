@@ -19,10 +19,12 @@ class AIIntegrationService:
     
     def __init__(self, user_type: str = 'patient'):
         """
-        مقداردهی اولیه
+        یک‌خطی: نمونه‌سازی سرویس یکپارچه‌سازی هوش‌مصنوعی با تعیین نوع کاربر و ساخت ResponseMatcherService مرتبط.
         
-        Args:
-            user_type: نوع کاربر (patient یا doctor)
+        توضیح: سازنده AIIntegrationService را مقداردهی اولیه می‌کند؛ نوع کاربر (پیش‌فرض 'patient') را ذخیره می‌نماید و یک نمونه‌ی ResponseMatcherService را با همان هدف (target_user) می‌سازد تا تحلیل نیت و جستجوی پاسخ‌های از پیش‌تعریف‌شده بر اساس نقش کاربر انجام شود. مقدار user_type تعیین می‌کند که مسیرهای تولید پاسخ و مجموعه پاسخ‌های سریع و منطق مرتبط با patient یا doctor انتخاب شوند.
+        
+        Parameters:
+            user_type (str): نوع کاربر—معمولاً 'patient' یا 'doctor'—که رفتار سرویس (تحلیل نیت، انتخاب پاسخ‌های از پیش‌تعریف‌شده و تولید پاسخ AI) را مشخص می‌کند.
         """
         self.user_type = user_type
         self.response_matcher = ResponseMatcherService(target_user=user_type)
@@ -34,15 +36,20 @@ class AIIntegrationService:
         conversation_history: Optional[List] = None
     ) -> Dict[str, Any]:
         """
-        پردازش پیام با هوش مصنوعی
+        پردازش یک پیام ورودی و تولید پاسخ مناسب با ترکیب جستجوی پاسخ‌های از پیش‌تعریف‌شده و تولید پاسخ مبتنی بر هوش مصنوعی.
         
-        Args:
-            message: پیام کاربر
-            context: زمینه مکالمه
-            conversation_history: تاریخچه مکالمه
-            
-        Returns:
-            Dict: پاسخ پردازش شده
+        این متد ابتدا نیت (intent) پیام را با سرویس ResponseMatcher تحلیل می‌کند و تلاش می‌کند پاسخ متناظر از پیش‌تعریف‌شده را بیابد. در صورت وجود پاسخ از پیش‌تعریف‌شده، آن را به فرمت خروجی استاندارد می‌سازد و سطح اطمینان مدل (`ai_confidence`) را روی 0.9 قرار می‌دهد. اگر پاسخی یافت نشود، تولید پاسخ به روش‌های مخصوص کاربر (patient یا doctor) به `_generate_ai_response` محول می‌شود. در انتها مدت زمان پردازش (`processing_time`) و نتیجه تحلیل نیت (`intent_analysis`) به پاسخ افزوده می‌شود.
+        
+        پارامترها:
+            message: متن پیام ارسالی توسط کاربر — ورودی اصلی برای تحلیل نیت و تولید/جستجوی پاسخ.
+            context: اطلاعات اختیاری مرتبط با زمینه یا متادیتای مکالمه که برای تولید پاسخ AI ممکن است استفاده شود.
+            conversation_history: تاریخچه‌ی اختیاری پیام‌های قبلی در همان گفتگو که می‌تواند به تولید پاسخ‌های زمینه‌محور کمک کند.
+        
+        مقدار بازگشتی:
+            Dict[str, Any] — ساختاری شامل حداقل فیلدهای `content`، `message_type`، `response_data`، `source`، `category`، `ai_confidence` و همچنین `processing_time` و `intent_analysis`. در حالت خطا مقدار بازگشتی از `_get_error_response()` استفاده می‌شود.
+        
+        مدیریت خطا:
+            هر استثنایی که در جریان پردازش رخ دهد ثبت و با بازگشت مقدار جایگزین از `_get_error_response()` بازیابی می‌شود (یعنی متد استثنا را پاس‌نمی‌دهد).
         """
         start_time = time.time()
         
@@ -80,13 +87,22 @@ class AIIntegrationService:
     
     def _format_predefined_response(self, response_obj) -> Dict[str, Any]:
         """
-        فرمت کردن پاسخ از پیش تعریف شده
+        فرمت یک پاسخ از پیش‌تعریف‌شده به ساختار خروجی استاندارد سرویس.
         
-        Args:
-            response_obj: شیء پاسخ
-            
-        Returns:
-            Dict: پاسخ فرمت شده
+        پارامترها:
+            response_obj: شیئی که نشان‌دهنده پاسخ از پیش‌تعریف‌شده است و باید دسترسی‌پذیر بودن این فیلدها را داشته باشد:
+                - response_text: متن اصلی پاسخ (string)
+                - response_data: داده‌های تکمیلی نمایش (مانند quick_replies یا متادیتا)
+                - category: دسته‌بندی/نیت مرتبط با پاسخ (string)
+        
+        بازگشت:
+            Dict[str, Any]: دیکشنری خروجی آماده برای مصرف توسط لایه نمایش که شامل کلیدهای زیر است:
+                - content: متن پاسخ
+                - message_type: نوع پیام (مثلاً 'text')
+                - response_data: داده‌های تکمیلی
+                - source: مشخص‌کننده منبع ('predefined')
+                - category: دسته‌بندی نیت
+                - ai_confidence: مقدار اطمینان مرتبط با این پاسخ (۰.۹)
         """
         return {
             'content': response_obj.response_text,
@@ -105,16 +121,18 @@ class AIIntegrationService:
         intent_analysis: Dict
     ) -> Dict[str, Any]:
         """
-        تولید پاسخ با هوش مصنوعی
+        تولید پاسخ مبتنی بر هوش مصنوعی برای پیام ورودی و مسیردهی به تولیدکننده مناسب بر اساس نوع کاربر.
         
-        Args:
-            message: پیام کاربر
-            context: زمینه
-            conversation_history: تاریخچه
-            intent_analysis: تحلیل هدف
-            
+        این متد پاسخ AI را برای پیام ورودی آماده می‌کند و بسته به مقدار self.user_type مسیر تولید را به یکی از مولدهای اختصاصی منتقل می‌کند: برای 'patient' از _generate_patient_response و برای سایر انواع (مثل 'doctor') از _generate_doctor_response استفاده می‌شود. در نسخهٔ کنونی تولید پاسخ‌ها محلی و مبتنی بر نقشهٔ نیت‌ها است؛ پارامترهای context و conversation_history برای استفاده‌های آتی (مثلاً ارسال به API بیرونی یا حفظ وضعیت گفتگو) پذیرفته شده‌اند اما اکنون مستقیماً به تولیدکننده‌ها پاس داده نمی‌شوند.
+        
+        Parameters:
+            message (str): متن پیام کاربر.
+            context (Optional[Dict]): زمینهٔ مکالمه یا متادیتا (برای یکپارچه‌سازی با سرویس‌های خارجی یا منطق پیشرفتهٔ پاسخ‌دهی).
+            conversation_history (Optional[List]): فهرست پیام‌های قبلی در گفتگو (برای استفاده در تولید پاسخ مبتنی بر زمینه).
+            intent_analysis (Dict): خروجی تحلیل نیت پیام که شامل نیت‌های اصلی و احتمالات مرتبط است؛ مولدهای داخلی از این ساختار برای تعیین محتوای پاسخ استفاده می‌کنند.
+        
         Returns:
-            Dict: پاسخ تولید شده
+            Dict[str, Any]: ساختار استاندارد پاسخ که شامل حداقل کلیدهای content، message_type، source، category و ai_confidence است (فرمت دقیق توسط مولدهای _generate_patient_response و _generate_doctor_response تعیین می‌شود).
         """
         # در حال حاضر از پاسخ‌های ساده استفاده می‌کنیم
         # در آینده می‌توان با API های AI خارجی یکپارچه کرد
@@ -126,14 +144,23 @@ class AIIntegrationService:
     
     def _generate_patient_response(self, message: str, intent_analysis: Dict) -> Dict[str, Any]:
         """
-        تولید پاسخ برای بیمار
+        تولید پاسخ مناسب برای کاربر از نوع "patient" بر اساس تحلیل نیت پیام.
         
-        Args:
-            message: پیام
-            intent_analysis: تحلیل هدف
-            
-        Returns:
-            Dict: پاسخ
+        شرح:
+        این متد برای تولید یک پاسخ متنی هدف‌مند برای بیمار استفاده می‌شود. ابتدا نیت اصلی (primary_intent) از intent_analysis استخراج می‌شود و اگر این نیت در نقشه‌ی پاسخ‌های از پیش تعریف‌شده (مانند 'symptom_inquiry', 'medication_info', 'appointment') وجود داشته باشد، پاسخ متناظر بازگردانده می‌شود با ai_confidence برابر 0.7 و شامل فیلدهای:
+        
+        - content: متن پیشنهادی قابل نمایش به کاربر
+        - response_data: داده‌های کمکی برای رابط کاربری (مثلاً quick_replies)
+        - message_type: نوع پیام ('text')
+        - source: منبع پاسخ ('ai_generated')
+        - category: دسته‌بندی نیت (primary_intent)
+        
+        اگر نیت شناخته‌شده نباشد، یک پاسخ پیش‌فرض راهنمایی‌کننده تولید می‌شود با ai_confidence برابر 0.5 و مجموعه‌ای از پیشنهادهای سریع عمومی.
+        
+        مقدار بازگشتی:
+        یک دیکشنری شامل حداقل کلیدهای فوق (content, response_data, ai_confidence, message_type, source, category) که برای رندر در UI و تصمیم‌گیری‌های بعدی توسط سرویس‌های بالاتر قابل استفاده است.
+        
+        بدون اثرات جانبی خارجی (فقط مقدار بازگشتی تولید می‌شود).
         """
         primary_intent = intent_analysis.get('primary_intent')
         
@@ -197,14 +224,17 @@ class AIIntegrationService:
     
     def _generate_doctor_response(self, message: str, intent_analysis: Dict) -> Dict[str, Any]:
         """
-        تولید پاسخ برای پزشک
+        تولید پاسخ مناسب برای کاربران از نوع «پزشک» بر اساس تحلیل نیت پیام.
         
-        Args:
-            message: پیام
-            intent_analysis: تحلیل هدف
-            
-        Returns:
-            Dict: پاسخ
+        شرح:
+        این متد بر اساس مقدار `primary_intent` استخراج‌شده از `intent_analysis` پاسخی ساخت‌یافته برای پزشک تولید می‌کند. برای نیت‌های شناخته‌شده (مثل `symptom_inquiry` و `medication_info`) یک پاسخ قالبی با محتوای تخصصی، داده‌های کمکی (`response_data`) شامل پیشنهادها و پاسخ‌های سریع و درجه‌ی اعتماد AI (`ai_confidence`) بازمی‌گرداند. در صورت نیت نامشخص یا غیرفعال، یک پاسخ پیش‌فرض راهنمایی‌کننده با اعتماد کمتر تولید می‌شود. خروجی همیشه شامل فیلدهای متاِ‌دیتا زیر است: `message_type` برابر `'text'`, `source` برابر `'ai_generated'` و `category` که از `primary_intent` گرفته می‌شود یا `'general'` در صورت نبود آن.
+        
+        پارامترها:
+            message (str): متن ورودی کاربر — صرفاً برای بافت/ردیابی؛ محتوا مستقیماً در انتخاب قالب پاسخ استفاده نمی‌شود.
+            intent_analysis (Dict): نتیجه تحلیل نیت که حداقل شامل کلید `primary_intent` است؛ مقدار این کلید تعیین‌کننده قالب پاسخ خواهد بود.
+        
+        مقدار بازگشتی:
+            Dict[str, Any]: دیکشنری پاسخ شامل حداقل کلیدهای `content`, `response_data`, `ai_confidence`, `message_type`, `source`, و `category`. ساختار `response_data` ممکن است حاوی `quick_replies` و/یا `suggestions` باشد.
         """
         primary_intent = intent_analysis.get('primary_intent')
         
@@ -262,10 +292,20 @@ class AIIntegrationService:
     
     def _get_error_response(self) -> Dict[str, Any]:
         """
-        دریافت پاسخ خطا
+        یک خطی:
+            بازگردانی پاسخ خطا‌ی مناسب برای ارسال به کاربر.
+        
+        توضیح:
+            ابتدا تلاش می‌کند پاسخ خطای تعریف‌شده در ResponseMatcherService را بگیرد؛ اگر چنین پاسخی وجود داشته باشد، آن را با ساختار پاسخ‌های از پیش تعریف‌شده (_format_predefined_response) قالب‌بندی و برمی‌گرداند. در غیر این صورت یک پاسخ خطای پیش‌فرض سیستمی با محتوای قابل نمایش به کاربر بازمی‌گرداند.
         
         Returns:
-            Dict: پاسخ خطا
+            Dict[str, Any]: یک دیکشنری شامل اطلاعات پاسخ خطا. ساختار ممکن شامل کلیدهای زیر است:
+                - content (str): متن پیام خطا که به کاربر نمایش داده می‌شود.
+                - message_type (str): نوع پیام (معمولاً 'text').
+                - source (str): منبع پاسخ ('predefined' یا 'system').
+                - category (str): دسته‌بندی پاسخ (مثلاً 'error').
+                - ai_confidence (float): نمره اطمینان مرتبط با پاسخ (برای پاسخ پیش‌فرض برابر 1.0).
+            توجه: در حالت وجود پاسخ خطای از پیش تعریف‌شده، خروجی همان ساختار برگشتی _format_predefined_response خواهد بود.
         """
         error_response = self.response_matcher.get_error_response()
         
@@ -282,13 +322,21 @@ class AIIntegrationService:
     
     def get_quick_replies_for_context(self, context: Optional[Dict] = None) -> List[Dict]:
         """
-        دریافت پاسخ‌های سریع بر اساس زمینه
+        بازگرداندن لیستی از پاسخ‌های سریع (quick replies) مناسب برای نوع کاربر و زمینهٔ اختیاری
         
-        Args:
-            context: زمینه فعلی
-            
-        Returns:
-            List[Dict]: فهرست پاسخ‌های سریع
+        این متد فهرستی از گزینه‌های آماده را برای نمایش در رابط گفتگو تولید می‌کند. هر گزینه یک دیکشنری با کلیدهای:
+        - `title`: متن قابل‌نمایش برای کاربر
+        - `payload`: شناسه یا پی‌لودی که هنگام انتخاب گزینه ارسال می‌شود
+        
+        رفتار بر اساس نوع کاربر:
+        - برای `patient` مجموعه‌ای از گزینه‌های مرتبط با بیماران (مانند «علائم من»، «اطلاعات دارو»، «نوبت‌گیری»، «راهنما») بازگردانده می‌شود.
+        - برای سایر نوع‌ها (مثلاً پزشک) مجموعه‌ای از گزینه‌های مرتبط حرفه‌ای (مانند «راهنمای تشخیص»، «پروتکل‌های درمان»، «مراجع علمی»، «ابزارهای تشخیصی») بازگردانده می‌شود.
+        
+        پارامترها:
+        - context (اختیاری): ساختار زمینهٔ فعلی گفتگو که در نسخه‌های آینده یا برای تعدیل پاسخ‌ها بر اساس وضعیت کاربر می‌تواند مورد استفاده قرار گیرد. در پیاده‌سازی فعلی برای انتخاب مجموعهٔ پایه استفاده می‌شود.
+        
+        بازگشتی:
+        - List[Dict]: فهرستی از دیکشنری‌های quick-reply با کلیدهای `title` و `payload`.
         """
         if self.user_type == 'patient':
             return [

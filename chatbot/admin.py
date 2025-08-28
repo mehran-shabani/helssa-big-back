@@ -43,7 +43,9 @@ class ChatbotSessionAdmin(admin.ModelAdmin):
     
     def conversation_count(self, obj):
         """
-        تعداد مکالمات جلسه
+        تعداد مکالمات مرتبط با یک جلسه را برمی‌گرداند.
+        
+        برای شیء جلسه (obj) تعداد مکالمات مرتبط را محاسبه می‌کند و در صورتی که بزرگتر از صفر باشد، یک رشته HTML ایمن شامل لینک به صفحه‌ی لیست مکالمات با فیلتر مربوط به آن جلسه را برمی‌گرداند؛ در غیر اینصورت متن «0 مکالمه» را بازمی‌گرداند. این خروجی برای نمایش در ستون‌های لیست ادمین مناسب است.
         """
         count = obj.conversations.count()
         if count > 0:
@@ -54,7 +56,9 @@ class ChatbotSessionAdmin(admin.ModelAdmin):
     
     def duration_display(self, obj):
         """
-        نمایش مدت زمان جلسه
+        یک خطی: مقدار مدت زمان جلسه را به صورت رشته‌ی فرمت‌شده‌ی `HH:MM:SS` برمی‌گرداند.
+        
+        توضیح بیشتر: این متد از فیلد `duration` شیء ورودی (انتظار می‌رود نوع آن `datetime.timedelta` باشد) مقدار ثانیه‌ها را استخراج کرده و آن را به ساعت، دقیقه و ثانیه تبدیل و به صورت صفرپر شده (مثال: `01:05:09`) بازمی‌گرداند. مناسب برای نمایش در ستون‌های لیست ادمین یا فیلدهای readonly.
         """
         duration = obj.duration
         hours, remainder = divmod(duration.total_seconds(), 3600)
@@ -105,14 +109,32 @@ class ConversationAdmin(admin.ModelAdmin):
     
     def session_user(self, obj):
         """
-        کاربر جلسه
+        یک‌خطی:
+        بازگرداندن کاربر مرتبط با جلسهٔ یک Conversation.
+        
+        توضیحات:
+        این متد کاربر (instance از مدل User یا None) مرتبط با session مربوط به شیٔ Conversation داده‌شده را برمی‌گرداند. برای استفاده در نمایش لیست ادمین (list_display) طراحی شده است تا نام یا شناسه کاربر مربوط به جلسهٔ هر مکالمه را نشان دهد.
+        
+        Parameters:
+            obj (Conversation): نمونهٔ مکالمه که دارای رابطهٔ `session` است.
+        
+        Returns:
+            User | None: شیٔ کاربر مرتبط با آن session یا None در صورتی که session یا user مقدار نداشته باشد.
         """
         return obj.session.user
     session_user.short_description = 'کاربر'
     
     def message_count_display(self, obj):
         """
-        تعداد پیام‌ها
+        یک نمایش‌دهنده برای ستون «تعداد پیام‌ها» در پنل ادمین Conversation.
+        
+        در صورتی که مکالمه دارای پیام باشد، یک لینک HTML امن به لیست پیام‌ها در ادمین باز می‌گرداند که با فیلتر conversation__id__exact به آن مکالمه اشاره می‌کند (مثال: "3 پیام"). در غیر اینصورت رشتهٔ سادهٔ "0 پیام" بازگردانده می‌شود.
+        
+        Parameters:
+            obj (Conversation): نمونهٔ Conversation که شمار پیام‌های مربوط به آن در صفت `message_count` قرار دارد.
+        
+        Returns:
+            str: متن یا HTML ایمن‌شده (با format_html) حاوی شمار پیام‌ها؛ در صورت وجود پیام، مقدار به صورت لینک قابل کلیک بازگردانده می‌شود.
         """
         count = obj.message_count
         if count > 0:
@@ -135,6 +157,11 @@ class MessageInline(admin.TabularInline):
     ]
     
     def has_add_permission(self, request, obj=None):
+        """
+        همیشه اجازه افزودن آیتم جدید را غیرفعال می‌کند (برای استفاده در MessageInline).
+        
+        این متد به‌طور صریح افزودن ردیف‌های جدید از طریق بخش inline در پنل ادمین را ممنوع می‌کند و در نتیجه در صفحات add/change مربوط به مدل اصلی دکمه یا فرم افزودن عنصر inline نمایش داده نخواهد شد. پارامتر `obj` در تصمیم‌گیری نادیده گرفته می‌شود؛ همیشه مقدار بولی False برگردانده می‌شود.
+        """
         return False
 
 
@@ -183,14 +210,30 @@ class MessageAdmin(admin.ModelAdmin):
     
     def conversation_title(self, obj):
         """
-        عنوان مکالمه
+        بازگرداندن عنوان قابل نمایش یک پیام بر اساس مکالمه مرتبط.
+        
+        اگر پیام به یک Conversation مرتبط باشد، عنوان آن Conversation را برمی‌گرداند؛ در غیر این صورت یک عنوان جایگزین به‌صورت "مکالمه <conversation_type>" بازمی‌گرداند.
+        
+        Parameters:
+            obj (Message): نمونه‌ی پیام (انتظار می‌رود صفت `conversation` روی آن تنظیم شده باشد).
+        
+        Returns:
+            str: عنوان نمایش‌شده برای ستون لیست در پنل ادمین.
         """
         return obj.conversation.title or f"مکالمه {obj.conversation.conversation_type}"
     conversation_title.short_description = 'مکالمه'
     
     def content_preview(self, obj):
         """
-        پیش‌نمایش محتوا
+        پیش‌نمایش کوتاه و امن محتوای یک پیام برای نمایش در لیست ادمین.
+        
+        این متد محتوای پیام را تا ۵۰ کاراکتر کوتاه می‌کند و در صورت بیشتر بودن، انتهای آن را با "..." علامت‌گذاری می‌کند. اگر پیام حساس (is_sensitive) علامت‌گذاری شده باشد، متن به‌صورت HTML امن با رنگ قرمز برگردانده می‌شود تا در نمای لیست ادمین برجسته شود.
+        
+        Parameters:
+            obj: نمونهٔ Message که دارای فیلدهای `content` و `is_sensitive` است؛ متد روی این نمونه عمل می‌کند.
+        
+        Returns:
+            str: رشتهٔ پیش‌نمایش؛ در حالت حساس، یک مقدار HTML امن (تولیدشده توسط `format_html`) برگردانده می‌شود، در غیر این صورت متن سادهٔ کوتاه‌شده.
         """
         content = obj.content
         if len(content) > 50:
@@ -237,7 +280,15 @@ class ChatbotResponseAdmin(admin.ModelAdmin):
     
     def response_preview(self, obj):
         """
-        پیش‌نمایش پاسخ
+        خلاصه: پیش‌نمایش متنی از فیلد `response_text` برای نمایش در لیست ادمین.
+        
+        توضیح: متن پاسخ را تا حداکثر ۵۰ کاراکتر برش می‌دهد و در صورت کوتاه‌سازی، انتهای آن را با "..." مشخص می‌کند.
+        
+        Parameters:
+            obj (ChatbotResponse): شیء مدل پاسخ که دارای صفت `response_text` است.
+        
+        Returns:
+            str: رشته‌ی پیش‌نمایش (حداکثر ۵۰ کاراکتر، با "..." در صورت کوتاه‌شدن).
         """
         text = obj.response_text
         if len(text) > 50:

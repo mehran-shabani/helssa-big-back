@@ -47,14 +47,26 @@ class ChatbotRateLimitMiddleware(MiddlewareMixin):
     
     def __init__(self, get_response):
         """
-        مقداردهی اولیه middleware
+        یک‌خطی:
+        مقداردهی اولیهٔ middleware و ذخیرهٔ callable اصلی پردازش درخواست.
+        
+        توضیح:
+        این سازنده، callable که پردازش کنندهٔ درخواست (get_response) را فراهم می‌کند در نمونه ذخیره می‌کند و مقداردهی اولیهٔ کلاس پایه را انجام می‌دهد تا middleware آمادهٔ استفاده در چرخهٔ درخواست/پاسخ Django شود.
         """
         self.get_response = get_response
         super().__init__(get_response)
     
     def process_request(self, request):
         """
-        پردازش درخواست برای بررسی rate limit
+        بررسی و اعمال محدودیت نرخ درخواست برای مسیرهای API چت‌بات.
+        
+        این متد تنها درخواست‌هایی را که مسیرشان متعلق به API چت‌بات تشخیص داده شود بررسی می‌کند. برای درخواست‌های ناشناس محدودیت مبتنی بر آدرس IP اعمال می‌شود و برای درخواست‌های احراز هویت‌شده محدودیت‌های مرتبط با کاربر و نوع endpoint بررسی می‌شوند. در صورتی که درخواست تحت محدودیت قرار گیرد یک JsonResponse با وضعیت HTTP 429 و جزئیات محدودیت بازگردانده می‌شود، در غیر این صورت None بازگردانده و پردازش ادامه پیدا می‌کند.
+        
+        Parameters:
+            request (django.http.HttpRequest): آبجکت درخواست Django که شامل اطلاعات مسیر، کاربر و بدنه درخواست است.
+        
+        Returns:
+            django.http.HttpResponse or None: در صورت نقض محدودیت نرخ، یک JsonResponse (status=429) با اطلاعات خطا بازمی‌گردد؛ در غیر این صورت None.
         """
         # فقط API های چت‌بات را بررسی کن
         if not self._is_chatbot_api(request.path):
@@ -69,7 +81,16 @@ class ChatbotRateLimitMiddleware(MiddlewareMixin):
     
     def _is_chatbot_api(self, path: str) -> bool:
         """
-        بررسی اینکه آیا path مربوط به API چت‌بات است
+        بررسی می‌کند آیا مسیر درخواست به یکی از نقاط انتهایی (endpoints) مربوط به API چت‌بات تعلق دارد.
+        
+        پارامترها:
+            path (str): مسیر درخواست HTTP (به صورت رشته). تابع با بررسی پیشوند مسیر تعیین می‌کند که آیا این مسیر متعلق به API چت‌بات است.
+        
+        مقدار بازگشتی:
+            bool: True اگر مسیر با یکی از پیشوندهای شناخته‌شدهٔ API چت‌بات (مثلاً '/chatbot/api/' یا '/api/chatbot/') شروع شود، در غیر این صورت False.
+        
+        توضیحات اضافی:
+            این تابع فقط بر مبنای مقایسهٔ پیشوندی (prefix matching) کار می‌کند و برای تصمیم‌گیری در میانجی‌ها (middleware) استفاده می‌شود تا پردازش‌های مرتبط با چت‌بات فقط روی درخواست‌های مربوط اعمال شوند.
         """
         chatbot_paths = [
             '/chatbot/api/',
@@ -79,7 +100,9 @@ class ChatbotRateLimitMiddleware(MiddlewareMixin):
     
     def _check_ip_rate_limit(self, request) -> Optional[JsonResponse]:
         """
-        بررسی محدودیت بر اساس IP
+        اعمال محدودیت نرخ بر اساس آدرس IP برای درخواست‌های چت‌بات (برای کاربران ناشناس).
+        
+        این متد آدرس کلاینت را از request گرفته، کلید کش به‌صورت `rate_limit:ip:{ip}` می‌سازد و یک محدودیت سخت‌گیرانه برای کاربران بدون احراز هویت اعمال می‌کند: حداکثر 10 درخواست در بازهٔ 300 ثانیه. در صورت رسیدن به حد، یک JsonResponse با وضعیت HTTP 429 و اطلاعات مربوط به زمان تلاش مجدد بازمی‌گرداند؛ در غیر این صورت None بازمی‌گردد تا پردازش ادامه پیدا کند.
         """
         client_ip = self._get_client_ip(request)
         cache_key = f"rate_limit:ip:{client_ip}"
@@ -95,7 +118,9 @@ class ChatbotRateLimitMiddleware(MiddlewareMixin):
     
     def _check_user_rate_limit(self, request) -> Optional[JsonResponse]:
         """
-        بررسی محدودیت بر اساس کاربر
+        بررسی و اعمال محدودیت نرخ درخواست برای کاربر احراز شده بر اساس نوع endpoint.
+        
+        این متد نوع endpoint را از مسیر درخواست استخراج می‌کند، کلید کش مخصوص کاربر و endpoint را می‌سازد و تنظیمات محدودیت را از DEFAULT_LIMITS واکشی می‌کند. اگر نوع endpoint یا تنظیمات محدودیت موجود نباشند، اجازهٔ عبور درخواست داده می‌شود (None بازگردانده می‌شود). در غیر این‌صورت، بررسی نرخ واقعی توسط متد داخلی `_check_rate_limit` انجام شده و نتیجهٔ آن (None برای اجازه یا یک `JsonResponse` با وضعیت و اطلاعات نرخ‌محدودیت در صورت عبور از حد) بازگردانده می‌شود.
         """
         user_id = request.user.id
         endpoint_type = self._get_endpoint_type(request.path)
@@ -113,7 +138,19 @@ class ChatbotRateLimitMiddleware(MiddlewareMixin):
     
     def _get_endpoint_type(self, path: str) -> Optional[str]:
         """
-        تشخیص نوع endpoint بر اساس path
+        نوع endpoint را از مسیر (path) تعیین می‌کند.
+        
+        این تابع با جستجوی زیررشته‌های مشخص در مسیر، نوع منطقیِ endpoint را برمی‌گرداند که برای انتخاب قواعد محدودسازی نرخ (DEFAULT_LIMITS) استفاده می‌شود. نگاشت فعلی:
+        - 'send-message' → 'chatbot_message'
+        - 'start-session' → 'chatbot_session'
+        - 'diagnosis-support' → 'diagnosis_support'
+        - 'medication-info' → 'medication_info'
+        
+        پارامترها:
+            path (str): مسیر درخواست HTTP (string کامل یا بخشی از آن). توجه: جستجو به‌صورت حساس به حروف (case-sensitive) انجام می‌شود.
+        
+        مقدار بازگشتی:
+            Optional[str]: کلید نوع endpoint مطابق نگاشت فوق یا None اگر هیچ یک از الگوها در مسیر یافت نشود.
         """
         endpoint_mappings = {
             'send-message': 'chatbot_message',
@@ -135,7 +172,20 @@ class ChatbotRateLimitMiddleware(MiddlewareMixin):
         request
     ) -> Optional[JsonResponse]:
         """
-        بررسی اصلی rate limit
+        بررسی و اعمال محدودیت نرخ (rate limit) برای یک کلید کش مشخص با استفاده از پنجره زمانی لغزان.
+        
+        این متد:
+        - تعداد درخواست‌های اخیر مربوط به cache_key را بازیابی می‌کند، فقط رکوردهایی را نگه می‌دارد که داخل پنجره زمانی (window) قرار دارند و بر اساس limit_config تصمیم می‌گیرد آیا درخواست فعلی مجاز است یا خیر.
+        - در صورت رسیدن تعداد درخواست‌های داخل پنجره به حداکثر مجاز (limit_config['requests'])، یک JsonResponse با وضعیت HTTP 429 از طریق _create_rate_limit_response برمی‌گرداند.
+        - در غیر این صورت، زمان حال را به لیست درخواست‌های اخیر اضافه و آن را دوباره در cache با TTL برابر window + 60 ثانیه ذخیره می‌کند (اثر جانبی: به‌روز‌رسانی کش).
+        
+        پارامترها:
+        - cache_key (str): کلید استفاده‌شده در کش برای نگهداری فهرست timestampهای درخواست‌ها.
+        - limit_config (Dict): پیکربندی محدودیت که باید حداقل حاوی کلیدهای 'requests' (حداکثر تعداد مجاز) و 'window' (طول پنجره به ثانیه) و 'description' (متن توصیفی) باشد.
+        - request: شیء درخواست Django (برای زمینه و احتمالا گزارش‌گیری) — محتوای خود درخواست در تصمیم‌گیری مستقیم استفاده نمی‌شود اما برای تولید پاسخ و لاگ می‌تواند مفید باشد.
+        
+        مقدار بازگشتی:
+        - Optional[JsonResponse]: در صورتی که محدودیت عبور شده باشد یک JsonResponse با کد 429 بازمی‌گردد، در غیر این صورت None برگشت می‌دهد (اجازه ادامه پردازش).
         """
         current_time = int(time.time())
         window_start = current_time - limit_config['window']
@@ -172,7 +222,27 @@ class ChatbotRateLimitMiddleware(MiddlewareMixin):
         recent_requests: list
     ) -> JsonResponse:
         """
-        ایجاد پاسخ محدودیت نرخ
+        یک پاسخ JSON با کد وضعیت 429 (Too Many Requests) ساخته و بازمی‌گرداند که نشان‌دهندهٔ عبور از محدودیت نرخ است.
+        
+        این متد زمان باقیمانده تا پایان پنجرهٔ نرخ را با استفاده از قدیمی‌ترین تایم‌استمپ موجود در recent_requests محاسبه می‌کند و یک پاسخ شامل پیام خطا و جزئیات محدودیت (تعداد مجاز، طول پنجره، ثانیه‌ها و دقیقه‌های قابل‌انتظار برای تلاش مجدد) تولید می‌کند. مقدار بازگردانده‌شده برای فیلدهای retry_after_seconds و retry_after_minutes هرگز منفی نیست.
+        
+        Parameters:
+            limit_config (Dict): پیکربندی محدودیت شامل کلیدهای 'requests' (حداکثر درخواست‌ها)، 'window' (اندازه پنجره به ثانیه) و 'description' (شرح نوع درخواست).
+            recent_requests (list): لیستی از timestampهای یونیکس (به ثانیه) که نشان‌دهندهٔ زمان‌های درخواست‌های اخیر در پنجرهٔ لغزان است؛ باید حداقل یک مقدار داشته باشد.
+        
+        Returns:
+            JsonResponse: پاسخ JSON با ساختار:
+              {
+                "error": "محدودیت تعداد درخواست",
+                "message": "...",
+                "details": {
+                  "limit": <int>,
+                  "window_seconds": <int>,
+                  "retry_after_seconds": <int>,
+                  "retry_after_minutes": <int>
+                }
+              }
+            و کد وضعیت HTTP برابر 429.
         """
         # محاسبه زمان باقی‌مانده
         oldest_request = min(recent_requests)
@@ -191,7 +261,9 @@ class ChatbotRateLimitMiddleware(MiddlewareMixin):
     
     def _get_client_ip(self, request) -> str:
         """
-        دریافت IP کلاینت
+        آی‌پی کلاینت را از هدرهای درخواست استخراج می‌کند.
+        
+        این تابع ابتدا هدر HTTP_X_FORWARDED_FOR را بررسی می‌کند و در صورت وجود از اولین آی‌پی لیست (معمولاً آی‌پی اصلی کلاینت در مقابل پراکسی‌ها) استفاده می‌کند. در غیر این صورت مقدار REMOTE_ADDR را بازمی‌گرداند. مقدار بازگشتی همیشه رشته است و در صورت نبود هرگونه مقدار معتبر، 'unknown' بازگردانده می‌شود.
         """
         x_forwarded_for = request.META.get('HTTP_X_FORWARDED_FOR')
         if x_forwarded_for:
@@ -216,14 +288,26 @@ class ChatbotSecurityMiddleware(MiddlewareMixin):
     
     def __init__(self, get_response):
         """
-        مقداردهی اولیه
+        یک‌خطی:
+        سازنده‌ی میان‌افزار؛ callable بعدی (next middleware یا view) را ذخیره و مقداردهی اولیهٔ کلاس والد را انجام می‌دهد.
+        
+        توضیحات:
+        این متد get_response را که یک callable است (تابعی که درخواست را به میان‌افزار بعدی یا به view هدایت می‌کند) در نمونه ذخیره می‌کند تا در هنگام پردازش درخواست از آن استفاده شود. سپس سازندهٔ کلاس والد را فراخوانی می‌کند تا هر مقداردهی‌اولیهٔ لازم توسط MiddlewareMixin یا والد انجام شود.
         """
         self.get_response = get_response
         super().__init__(get_response)
     
     def process_request(self, request):
         """
-        پردازش درخواست برای بررسی امنیت
+        بررسی محتوای ورودی درخواست‌های API چت‌بات و مسدودسازی پیام‌های حاوی داده‌های حساس.
+        
+        این متد فقط برای مسیرهای مربوط به API چت‌بات اجرا می‌شود. اگر درخواست از نوع POST باشد و بدنه (body) قابل خواندن به‌عنوان UTF‑8 باشد، متن بدنه را به حروف کوچک تبدیل کرده و در برابر فهرست کلیدواژه‌های حساس بررسی می‌کند. در صورت یافتن محتوای حساس، یک هشدار در لاگ ثبت می‌کند (شناسهٔ کاربر در صورت احراز هویت یا 'anonymous') و یک پاسخ JSON با کد وضعیت 400 و کد خطای "SENSITIVE_CONTENT_DETECTED" بازمی‌گرداند. خطاهای مربوط به رمزگشایی یا فقدان بدنه نادیده گرفته می‌شوند و پردازش اجازه می‌یابد ادامه یابد.
+        
+        Parameters:
+            request (django.http.HttpRequest): شیء درخواست Django؛ مورد انتظار است که دارای صفات `path`, `method`, `body` و `user` باشد.
+        
+        Returns:
+            django.http.HttpResponse or None: در صورت شناسایی محتوای حساس، یک JsonResponse با وضعیت 400 بازگردانده می‌شود، در غیر این صورت None تا پردازش ادامه یابد.
         """
         if not self._is_chatbot_api(request.path):
             return None
@@ -249,7 +333,16 @@ class ChatbotSecurityMiddleware(MiddlewareMixin):
     
     def _is_chatbot_api(self, path: str) -> bool:
         """
-        بررسی اینکه آیا path مربوط به API چت‌بات است
+        بررسی می‌کند آیا مسیر درخواست به یکی از نقاط انتهایی (endpoints) مربوط به API چت‌بات تعلق دارد.
+        
+        پارامترها:
+            path (str): مسیر درخواست HTTP (به صورت رشته). تابع با بررسی پیشوند مسیر تعیین می‌کند که آیا این مسیر متعلق به API چت‌بات است.
+        
+        مقدار بازگشتی:
+            bool: True اگر مسیر با یکی از پیشوندهای شناخته‌شدهٔ API چت‌بات (مثلاً '/chatbot/api/' یا '/api/chatbot/') شروع شود، در غیر این صورت False.
+        
+        توضیحات اضافی:
+            این تابع فقط بر مبنای مقایسهٔ پیشوندی (prefix matching) کار می‌کند و برای تصمیم‌گیری در میانجی‌ها (middleware) استفاده می‌شود تا پردازش‌های مرتبط با چت‌بات فقط روی درخواست‌های مربوط اعمال شوند.
         """
         chatbot_paths = [
             '/chatbot/api/',
@@ -259,7 +352,15 @@ class ChatbotSecurityMiddleware(MiddlewareMixin):
     
     def _contains_sensitive_content(self, content: str) -> bool:
         """
-        بررسی محتوای حساس
+        بررسی وجود محتوای حساس در یک رشته
+        
+        این متد بررسی می‌کند که آیا هر یک از کلیدواژه‌های حساس شناخته‌شده (تعریف‌شده در SENSITIVE_KEYWORDS) در متن ورودی وجود دارد یا خیر. مقایسه به‌صورت غیرقابل‌تفاوت بین حروف (case-insensitive) انجام می‌شود — کلیدواژه‌ها به‌صورت `lower()` گرفته می‌شوند و در متن جستجو می‌شوند. اگر هر کلیدواژه‌ای یافت شود، مقدار True برگردانده می‌شود، در غیر این صورت False.
+        
+        Parameters:
+            content (str): متن ورودی که باید برای یافتن کلیدواژه‌های حساس بررسی شود.
+        
+        Returns:
+            bool: True در صورتی که حداقل یکی از کلیدواژه‌های حساس در متن وجود داشته باشد، در غیر این صورت False.
         """
         for keyword in self.SENSITIVE_KEYWORDS:
             if keyword.lower() in content:
