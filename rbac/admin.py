@@ -566,7 +566,6 @@ class UserSessionAdmin(admin.ModelAdmin):
             'fields': ('id', 'token_version'),
             'classes': ('collapse',)
         }),
-        }),
         ('اطلاعات دستگاه', {
             'fields': (
                 'device_type', 'device_id', 'ip_address',
