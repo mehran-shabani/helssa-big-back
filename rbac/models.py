@@ -240,10 +240,9 @@ class UnifiedUser(AbstractBaseUser, PermissionsMixin):
         verbose_name='آخرین فعالیت'
     )
     
-    # تنظیمات احراز هویت
-    USERNAME_FIELD = 'phone_number'
-    REQUIRED_FIELDS = ['first_name', 'last_name']
-    
+# In helssa/settings.py (or your main settings file)
+# Ensure Django uses the new UnifiedUser instead of the default User model
+AUTH_USER_MODEL = 'rbac.UnifiedUser'
     objects = UnifiedUserManager()
     
     class Meta:
