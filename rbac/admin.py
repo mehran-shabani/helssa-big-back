@@ -592,14 +592,10 @@ class UserSessionAdmin(admin.ModelAdmin):
     get_user_name.short_description = 'کاربر'
     
     def is_expired(self, obj):
-        """بررسی انقضا"""
-        if obj.is_expired:
-            return format_html(
-                '<span style="color: red;">✗ منقضی</span>'
-            )
-        return format_html(
-            '<span style="color: green;">✓ فعال</span>'
-        )
+        """وضعیت نشست"""
+        if (not obj.is_active) or obj.is_expired:
+            return format_html('<span style="color: red;">✗ منقضی/غیرفعال</span>')
+        return format_html('<span style="color: green;">✓ فعال</span>')
     is_expired.short_description = 'وضعیت'
     
     actions = ['terminate_sessions']
