@@ -5,4 +5,6 @@ Speech Processing Core for Application
 
 from app_standards.four_cores import SpeechProcessorCore
 
+__all__ = ["SpeechProcessorCore"]
+
 # پیاده‌سازی خاص اپلیکیشن را اینجا اضافه کنید
