@@ -36,6 +36,16 @@ class RedFlagRuleSerializer(BaseModelSerializer):
         ]
         read_only_fields = ['id', 'created_at', 'updated_at', 'created_by']
 
+    def validate(self, attrs):
+        pattern_type = attrs.get('pattern_type')
+        pattern = attrs.get('pattern')
+        if pattern_type == 'regex' and pattern:
+            import re
+            try:
+                re.compile(pattern)
+            except re.error as e:
+                raise serializers.ValidationError({'pattern': f'الگوی regex نامعتبر: {e}'})
+        return attrs
 
 class PolicyViolationLogSerializer(BaseModelSerializer):
     """
