@@ -21,9 +21,9 @@ class GuardrailsOrchestrator(CentralOrchestrator):
         ارزیابی محتوای ورودی/خروجی و بازگرداندن نتیجه تصمیم‌گیری
         """
         active_policies = GuardrailPolicy.objects.filter(is_active=True).order_by('priority')
+        direction = direction if direction in {"input", "output", "both"} else "both"
         if direction in ['input', 'output']:
             active_policies = active_policies.filter(Q(applies_to=direction) | Q(applies_to='both'))
-
         matches: list[dict[str, Any]] = []
         reasons: list[str] = []
         max_severity = 0
