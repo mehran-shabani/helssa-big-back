@@ -829,19 +829,19 @@ class UserSession(models.Model):
     )
     
     # اطلاعات توکن
-    access_token = models.TextField(
-        verbose_name='توکن دسترسی'
+    access_token_hash = models.CharField(
+        max_length=128,
+        verbose_name='هش توکن دسترسی'
     )
-    
-    refresh_token = models.TextField(
-        verbose_name='توکن تازه‌سازی'
+    refresh_token_hash = models.CharField(
+        max_length=128,
+        verbose_name='هش توکن تازه‌سازی'
     )
     
     token_version = models.IntegerField(
         default=1,
         verbose_name='نسخه توکن'
     )
-    
     # اطلاعات نشست
     ip_address = models.GenericIPAddressField(
         verbose_name='آدرس IP'
