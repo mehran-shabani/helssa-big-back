@@ -25,6 +25,8 @@ UNIFIED_USER_SETTINGS = {
     # تنظیمات نشست
     'SESSION_TIMEOUT': getattr(settings, 'SESSION_TIMEOUT', 7200),  # 2 hours inactivity
     'MAX_SESSIONS_PER_USER': getattr(settings, 'MAX_SESSIONS_PER_USER', 5),
+    # aliasهای سازگاری
+    'ALLOW_CONCURRENT_SESSIONS': getattr(settings, 'ALLOW_CONCURRENT_SESSIONS', True),
     'CONCURRENT_SESSIONS': getattr(settings, 'ALLOW_CONCURRENT_SESSIONS', True),
     
     # تنظیمات امنیتی
