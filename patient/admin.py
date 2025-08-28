@@ -7,15 +7,107 @@ from django.contrib import admin
 from django.utils.html import format_html
 from django.urls import reverse
 from django.utils.safestring import mark_safe
+from django.contrib.auth import get_user_model
+from django.core.exceptions import PermissionDenied
+from django.http import HttpResponseForbidden
 import logging
 
 from .models import PatientProfile, MedicalRecord, PrescriptionHistory, MedicalConsent
+from .permissions import has_patient_access
 
 logger = logging.getLogger(__name__)
 
+User = get_user_model()
+
+
+class BasePatientAdmin(admin.ModelAdmin):
+    """
+    کلاس پایه ادمین با permission checks
+    Base admin class with permission checks
+    """
+    
+    def has_view_permission(self, request, obj=None):
+        """بررسی مجوز مشاهده"""
+        if not super().has_view_permission(request, obj):
+            return False
+            
+        # ادمین‌ها همیشه دسترسی دارند
+        if request.user.is_superuser or request.user.user_type == 'admin':
+            return True
+            
+        # اگر object خاص است، بررسی دسترسی
+        if obj and hasattr(obj, 'patient'):
+            if request.user.user_type == 'doctor':
+                return has_patient_access(request.user, obj.patient)
+            elif request.user.user_type == 'patient':
+                return obj.patient.user == request.user
+                
+        return False
+    
+    def has_change_permission(self, request, obj=None):
+        """بررسی مجوز تغییر"""
+        if not super().has_change_permission(request, obj):
+            return False
+            
+        # ادمین‌ها همیشه دسترسی دارند
+        if request.user.is_superuser or request.user.user_type == 'admin':
+            return True
+            
+        # پزشکان فقط می‌توانند سوابق و نسخه‌هایی که خودشان ایجاد کرده‌اند را تغییر دهند
+        if obj and request.user.user_type == 'doctor':
+            if hasattr(obj, 'doctor') and obj.doctor == request.user:
+                return True
+            return has_patient_access(request.user, obj.patient) if hasattr(obj, 'patient') else False
+            
+        # بیماران فقط اطلاعات خودشان را می‌توانند تغییر دهند
+        if obj and request.user.user_type == 'patient':
+            if hasattr(obj, 'patient'):
+                return obj.patient.user == request.user
+            elif hasattr(obj, 'user'):
+                return obj.user == request.user
+                
+        return False
+    
+    def has_delete_permission(self, request, obj=None):
+        """بررسی مجوز حذف"""
+        # فقط ادمین‌ها می‌توانند حذف کنند
+        return request.user.is_superuser or request.user.user_type == 'admin'
+    
+    def get_queryset(self, request):
+        """فیلتر کردن queryset بر اساس دسترسی کاربر"""
+        qs = super().get_queryset(request)
+        
+        # ادمین‌ها همه چیز را می‌بینند
+        if request.user.is_superuser or request.user.user_type == 'admin':
+            return qs
+            
+        # پزشکان فقط بیماران تحت نظر خود را می‌بینند
+        elif request.user.user_type == 'doctor':
+            # این باید با unified_access پیاده‌سازی شود
+            # در حالت فعلی فقط رکوردهایی که خودشان ایجاد کرده‌اند
+            if hasattr(qs.model, 'doctor'):
+                return qs.filter(doctor=request.user)
+            elif hasattr(qs.model, 'prescribed_by'):
+                return qs.filter(prescribed_by=request.user)
+            return qs.none()
+            
+        # بیماران فقط اطلاعات خودشان را می‌بینند
+        elif request.user.user_type == 'patient':
+            try:
+                patient_profile = PatientProfile.objects.get(user=request.user)
+                if hasattr(qs.model, 'patient'):
+                    return qs.filter(patient=patient_profile)
+                elif qs.model == PatientProfile:
+                    return qs.filter(user=request.user)
+            except PatientProfile.DoesNotExist:
+                pass
+            return qs.none()
+            
+        return qs.none()
+
 
 @admin.register(PatientProfile)
-class PatientProfileAdmin(admin.ModelAdmin):
+class PatientProfileAdmin(BasePatientAdmin):
     """
     پنل ادمین پروفایل بیماران
     Patient Profile Admin Panel
@@ -136,7 +228,7 @@ class PatientProfileAdmin(admin.ModelAdmin):
 
 
 @admin.register(MedicalRecord)
-class MedicalRecordAdmin(admin.ModelAdmin):
+class MedicalRecordAdmin(BasePatientAdmin):
     """
     پنل ادمین سوابق پزشکی
     Medical Records Admin Panel
@@ -234,7 +326,7 @@ class MedicalRecordAdmin(admin.ModelAdmin):
 
 
 @admin.register(PrescriptionHistory)
-class PrescriptionHistoryAdmin(admin.ModelAdmin):
+class PrescriptionHistoryAdmin(BasePatientAdmin):
     """
     پنل ادمین تاریخچه نسخه‌ها
     Prescription History Admin Panel
@@ -367,7 +459,7 @@ class PrescriptionHistoryAdmin(admin.ModelAdmin):
 
 
 @admin.register(MedicalConsent)
-class MedicalConsentAdmin(admin.ModelAdmin):
+class MedicalConsentAdmin(BasePatientAdmin):
     """
     پنل ادمین رضایت‌نامه‌های پزشکی
     Medical Consent Admin Panel

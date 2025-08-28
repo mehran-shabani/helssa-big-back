@@ -12,6 +12,14 @@ from django.contrib.auth import get_user_model
 
 from .cores.orchestrator import PatientOrchestrator
 from .cores.api_ingress import PatientAPIIngress
+from .permissions import (
+    PatientOnlyPermission,
+    DoctorOnlyPermission,
+    PatientOrDoctorPermission,
+    MedicalRecordPermission,
+    PrescriptionPermission,
+    ConsentPermission
+)
 from .services import (
     PatientService,
     MedicalRecordService,
@@ -33,7 +41,7 @@ consent_service = ConsentService()
 
 
 @api_view(['POST'])
-@permission_classes([IsAuthenticated])
+@permission_classes([PatientOnlyPermission])
 async def create_patient_profile(request):
     """
     ایجاد پروفایل بیمار جدید
@@ -112,7 +120,7 @@ async def create_patient_profile(request):
 
 
 @api_view(['GET'])
-@permission_classes([IsAuthenticated])
+@permission_classes([PatientOrDoctorPermission])
 async def get_patient_profile(request, patient_id):
     """
     دریافت پروفایل بیمار
@@ -183,7 +191,7 @@ async def get_patient_profile(request, patient_id):
 
 
 @api_view(['PUT', 'PATCH'])
-@permission_classes([IsAuthenticated])
+@permission_classes([PatientOrDoctorPermission])
 async def update_patient_profile(request, patient_id):
     """
     بروزرسانی پروفایل بیمار
@@ -254,7 +262,7 @@ async def update_patient_profile(request, patient_id):
 
 
 @api_view(['POST'])
-@permission_classes([IsAuthenticated])
+@permission_classes([DoctorOnlyPermission])
 async def search_patients(request):
     """
     جستجوی بیماران
@@ -307,7 +315,7 @@ async def search_patients(request):
 # Medical Records Views
 
 @api_view(['POST'])
-@permission_classes([IsAuthenticated])
+@permission_classes([DoctorOnlyPermission])
 async def create_medical_record(request):
     """
     ایجاد سابقه پزشکی جدید
@@ -368,7 +376,7 @@ async def create_medical_record(request):
 
 
 @api_view(['GET'])
-@permission_classes([IsAuthenticated])
+@permission_classes([MedicalRecordPermission])
 async def get_patient_medical_records(request, patient_id):
     """
     دریافت سوابق پزشکی بیمار
@@ -428,7 +436,7 @@ async def get_patient_medical_records(request, patient_id):
 # Prescription Views
 
 @api_view(['POST'])
-@permission_classes([IsAuthenticated])
+@permission_classes([DoctorOnlyPermission])
 async def create_prescription(request):
     """
     ایجاد نسخه جدید
@@ -489,7 +497,7 @@ async def create_prescription(request):
 
 
 @api_view(['GET'])
-@permission_classes([IsAuthenticated])
+@permission_classes([PrescriptionPermission])
 async def get_patient_prescriptions(request, patient_id):
     """
     دریافت نسخه‌های بیمار
@@ -549,7 +557,7 @@ async def get_patient_prescriptions(request, patient_id):
 
 
 @api_view(['POST'])
-@permission_classes([IsAuthenticated])
+@permission_classes([DoctorOnlyPermission])
 async def repeat_prescription(request, prescription_id):
     """
     تکرار نسخه
@@ -593,7 +601,7 @@ async def repeat_prescription(request, prescription_id):
 # Consent Management Views
 
 @api_view(['POST'])
-@permission_classes([IsAuthenticated])
+@permission_classes([DoctorOnlyPermission])
 async def create_consent(request):
     """
     ایجاد رضایت‌نامه جدید
@@ -643,7 +651,7 @@ async def create_consent(request):
 
 
 @api_view(['POST'])
-@permission_classes([IsAuthenticated])
+@permission_classes([PatientOnlyPermission])
 async def grant_consent(request, consent_id):
     """
     ثبت رضایت
@@ -693,7 +701,7 @@ async def grant_consent(request, consent_id):
 # Audio Transcription Views
 
 @api_view(['POST'])
-@permission_classes([IsAuthenticated])
+@permission_classes([DoctorOnlyPermission])
 async def transcribe_audio(request):
     """
     رونویسی فایل صوتی
@@ -764,7 +772,7 @@ async def transcribe_audio(request):
 # Statistics and Analytics Views
 
 @api_view(['GET'])
-@permission_classes([IsAuthenticated])
+@permission_classes([PatientOrDoctorPermission])
 async def get_patient_statistics(request, patient_id):
     """
     دریافت آمار بیمار
@@ -819,7 +827,7 @@ async def get_patient_statistics(request, patient_id):
 
 
 @api_view(['POST'])
-@permission_classes([IsAuthenticated])
+@permission_classes([DoctorOnlyPermission])
 async def analyze_data(request):
     """
     تحلیل داده‌ها
