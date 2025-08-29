@@ -23,6 +23,9 @@ django-redis==6.0.0
 # Cloud & Storage
 django-minio-storage==0.5.8
 
+# Messaging
+kavenegar==1.1.2
+
 
 # Utils
 python-dotenv==1.0.1
@@ -58,6 +61,9 @@ pyphen==0.17.2
 pydyf==0.11.0
 webencodings==0.5.1
 zopfli
+
+# QR Codes
+qrcode==7.4.2
 
 # OpenAI
 openai==1.102.0
