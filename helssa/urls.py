@@ -10,4 +10,6 @@ urlpatterns = [
     # API endpoints
     # path('api/auth/', include('auth_otp.urls')),  # موقتاً کامنت شده
     path('api/privacy/', include('privacy.urls')),
+    path('api/patient/', include('patient.urls')),
+
 ]
