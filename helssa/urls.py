@@ -32,7 +32,7 @@ urlpatterns = [
     path('api/', include('api_gateway.urls')),  # مسیر کوتاه
     # App URLs
     path('api/feedback/', include('feedback.urls')),
-    
+    path('chatbot/', include('chatbot.urls')),
     # API Root (for browsable API)
     path('api/', include('rest_framework.urls')),
 
@@ -53,4 +53,10 @@ urlpatterns = [
     path('api/privacy/', include('privacy.urls')),
     path('api/patient/', include('patient.urls')),
 
+
 ]
+
+# در حالت development فایل‌های media و static را سرو کن
+if settings.DEBUG:
+    urlpatterns += static(settings.MEDIA_URL, document_root=settings.MEDIA_ROOT)
+    urlpatterns += static(settings.STATIC_URL, document_root=settings.STATIC_ROOT)

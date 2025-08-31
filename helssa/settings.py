@@ -51,8 +51,8 @@ INSTALLED_APPS = [
     'rest_framework_simplejwt',
     'corsheaders',
     'rest_framework_simplejwt',
-    
     # Local apps
+    'chatbot',
     'api_gateway',
     'agent',
     'feedback',
@@ -67,17 +67,21 @@ INSTALLED_APPS = [
     'devops',
     'privacy',
     'adminportal',
-
 ]
 
 MIDDLEWARE = [
     'django.middleware.security.SecurityMiddleware',
+    'corsheaders.middleware.CorsMiddleware',
     'django.contrib.sessions.middleware.SessionMiddleware',
     'django.middleware.common.CommonMiddleware',
     'django.middleware.csrf.CsrfViewMiddleware',
     'django.contrib.auth.middleware.AuthenticationMiddleware',
     'django.contrib.messages.middleware.MessageMiddleware',
     'django.middleware.clickjacking.XFrameOptionsMiddleware',
+    
+    # Chatbot middlewares
+    'chatbot.middleware.rate_limiting.ChatbotRateLimitMiddleware',
+    'chatbot.middleware.rate_limiting.ChatbotSecurityMiddleware',
 ]
 
 ROOT_URLCONF = 'helssa.urls'
@@ -151,6 +155,9 @@ STATIC_URL = 'static/'
 # https://docs.djangoproject.com/en/5.2/ref/settings/#default-auto-field
 
 DEFAULT_AUTO_FIELD = 'django.db.models.BigAutoField'
+
+
+
 
 
 # استفاده از کاربر سفارشی
@@ -227,6 +234,32 @@ REST_FRAMEWORK = {
     'DEFAULT_PERMISSION_CLASSES': [
         'rest_framework.permissions.IsAuthenticated',
     ],
+
+    'DEFAULT_PAGINATION_CLASS': 'rest_framework.pagination.PageNumberPagination',
+    'PAGE_SIZE': 20,
+    'DEFAULT_SCHEMA_CLASS': 'drf_spectacular.openapi.AutoSchema',
+}
+
+# CORS Settings
+CORS_ALLOWED_ORIGINS = [
+    "http://localhost:3000",
+    "http://127.0.0.1:3000",
+    "http://localhost:8080",
+    "http://127.0.0.1:8080",
+]
+
+CORS_ALLOW_CREDENTIALS = True
+
+# Caching
+CACHES = {
+    'default': {
+        'BACKEND': 'django.core.cache.backends.locmem.LocMemCache',
+        'LOCATION': 'chatbot-cache',
+    }
+}
+
+# Logging
+
 
     'DEFAULT_PAGINATION_CLASS': 'rest_framework.pagination.PageNumberPagination',
     'PAGE_SIZE': 20,
@@ -319,6 +352,13 @@ LOGGING = {
             'level': 'INFO',
             'class': 'logging.FileHandler',
 
+            'filename': 'chatbot.log',
+            'formatter': 'verbose',
+        },
+        'console': {
+            'level': 'INFO',
+
+
             'filename': 'logs/feedback.log',
 
 
@@ -332,11 +372,18 @@ LOGGING = {
         },
         'console': {
             'level': 'DEBUG',
+
             'class': 'logging.StreamHandler',
             'formatter': 'simple',
         },
     },
     'loggers': {
+
+      
+        'chatbot': {
+            'handlers': ['file', 'console'],
+            'level': 'INFO',
+
 
         'feedback': {
             'handlers': ['file', 'console'],
@@ -355,10 +402,41 @@ LOGGING = {
             'handlers': ['file', 'console'],
             'level': 'INFO',
 
+
             'propagate': True,
         },
     },
 }
+
+
+# Chatbot Settings
+CHATBOT_SETTINGS = {
+    # تنظیمات عمومی
+    'DEFAULT_SESSION_TIMEOUT': 3600,  # 1 ساعت
+    'MAX_MESSAGE_LENGTH': 4000,
+    'ENABLE_RATE_LIMITING': True,
+    'AI_CONFIDENCE_THRESHOLD': 0.7,
+    
+    # تنظیمات چت‌بات بیمار
+    'PATIENT_CHATBOT': {
+        'ENABLE_SYMPTOM_ASSESSMENT': True,
+        'ENABLE_APPOINTMENT_BOOKING': True,
+        'MAX_DAILY_SESSIONS': 10,
+        'SESSION_TIMEOUT': 1800,  # 30 دقیقه
+        'GREETING_MESSAGE': 'سلام! من دستیار هوشمند هلسا هستم. چطور می‌توانم کمکتان کنم؟',
+    },
+    
+    # تنظیمات چت‌بات پزشک
+    'DOCTOR_CHATBOT': {
+        'ENABLE_DIAGNOSIS_SUPPORT': True,
+        'ENABLE_TREATMENT_PROTOCOLS': True,
+        'ENABLE_DRUG_INTERACTIONS': True,
+        'MAX_DAILY_SESSIONS': 50,
+        'SESSION_TIMEOUT': 3600,  # 1 ساعت
+        'GREETING_MESSAGE': 'سلام دکتر! من دستیار هوشمند پزشکی هلسا هستم.',
+    },
+}
+
 
 
 
@@ -380,3 +458,4 @@ PATIENT_SETTINGS = {
 
 # Custom User Model
 AUTH_USER_MODEL = 'rbac.UnifiedUser'
+
