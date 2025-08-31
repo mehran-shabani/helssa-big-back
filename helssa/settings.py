@@ -22,10 +22,10 @@ load_dotenv()
 # See https://docs.djangoproject.com/en/5.2/howto/deployment/checklist/
 
 # SECURITY WARNING: keep the secret key used in production secret!
-SECRET_KEY = os.getenv("SECRET_KEY", "")
+SECRET_KEY = os.getenv("SECRET_KEY", "django-insecure-test-key-for-development-only")
 
 # SECURITY WARNING: don't run with debug turned on in production!
-DEBUG = os.getenv("DEBUG", True)
+DEBUG = True
 
 ALLOWED_HOSTS = []
 
@@ -39,15 +39,32 @@ INSTALLED_APPS = [
     'django.contrib.sessions',
     'django.contrib.messages',
     'django.contrib.staticfiles',
+
+   
     
+
     # Third party apps
     'rest_framework',
+    'django_ratelimit',
+    'encrypted_model_fields',
     'rest_framework_simplejwt',
+    'corsheaders',
+    'rest_framework_simplejwt',
+ 
+    
     
     # Local apps
+    'unified_auth',
     'auth_otp',
+    'billing',
+    'triage',
+    'auth_otp',
+    'doctor',
+    'patient',
+    'rbac',
+    'devops',
+    'privacy',
     'adminportal',
-    
 ]
 
 MIDDLEWARE = [
@@ -132,15 +149,19 @@ STATIC_URL = 'static/'
 
 DEFAULT_AUTO_FIELD = 'django.db.models.BigAutoField'
 
+
 # REST Framework settings
 REST_FRAMEWORK = {
     'DEFAULT_AUTHENTICATION_CLASSES': [
         'rest_framework_simplejwt.authentication.JWTAuthentication',
         'rest_framework.authentication.SessionAuthentication',
+        'rest_framework_simplejwt.authentication.JWTAuthentication',
+
     ],
     'DEFAULT_PERMISSION_CLASSES': [
         'rest_framework.permissions.IsAuthenticated',
     ],
+
     'DEFAULT_PAGINATION_CLASS': 'rest_framework.pagination.PageNumberPagination',
     'PAGE_SIZE': 20,
     'DEFAULT_FILTER_BACKENDS': [
@@ -152,7 +173,8 @@ REST_FRAMEWORK = {
     ],
 }
 
-# JWT settings
+
+
 from datetime import timedelta
 
 SIMPLE_JWT = {
@@ -160,6 +182,7 @@ SIMPLE_JWT = {
     'REFRESH_TOKEN_LIFETIME': timedelta(days=7),
     'ROTATE_REFRESH_TOKENS': True,
     'BLACKLIST_AFTER_ROTATION': True,
+
     'UPDATE_LAST_LOGIN': False,
     
     'ALGORITHM': 'HS256',
@@ -191,15 +214,20 @@ TIME_ZONE = 'Asia/Tehran'
 USE_I18N = True
 USE_TZ = True
 
-# Cache settings
+    
+
+
+
+
+# Cache Configuration
 CACHES = {
     'default': {
         'BACKEND': 'django.core.cache.backends.locmem.LocMemCache',
-        'LOCATION': 'adminportal-cache',
+        'LOCATION': 'unique-snowflake',
     }
 }
 
-# Logging configuration
+# Logging Configuration
 LOGGING = {
     'version': 1,
     'disable_existing_loggers': False,
@@ -217,7 +245,12 @@ LOGGING = {
         'file': {
             'level': 'INFO',
             'class': 'logging.FileHandler',
+
             'filename': 'logs/adminportal.log',
+
+            'filename': 'logs/patient.log',
+          
+        
             'formatter': 'verbose',
         },
         'console': {
@@ -227,15 +260,39 @@ LOGGING = {
         },
     },
     'loggers': {
+
         'adminportal': {
             'handlers': ['file', 'console'],
             'level': 'INFO',
             'propagate': False,
         },
         'django': {
+
+        'patient': {
+
             'handlers': ['file', 'console'],
             'level': 'INFO',
             'propagate': True,
         },
     },
 }
+
+
+
+# Patient App Specific Settings
+PATIENT_SETTINGS = {
+    'AUTO_GENERATE_MEDICAL_RECORD_NUMBER': True,
+    'ENABLE_MEDICAL_TEXT_PROCESSING': True,
+    'ENABLE_SPEECH_PROCESSING': True,
+    'MAX_AUDIO_FILE_SIZE_MB': 50,
+    'CACHE_TIMEOUT_SECONDS': 300,
+}
+
+# STT Configuration (Optional)
+# OPENAI_API_KEY = 'your-openai-api-key'
+# LOCAL_STT_URL = 'http://localhost:8000'
+
+# Custom User Model
+AUTH_USER_MODEL = 'rbac.UnifiedUser'
+
+
