@@ -40,29 +40,20 @@ INSTALLED_APPS = [
     'django.contrib.messages',
     'django.contrib.staticfiles',
 
-    
-    # Third party apps
-    'rest_framework',
-    'rest_framework_simplejwt',
+   
     
 
     # Third party apps
     'rest_framework',
     'django_ratelimit',
     'encrypted_model_fields',
-    
-
-    
-    
-
-
-    # Third party apps
-    'rest_framework',
-    
-    # Third party apps
-    'rest_framework',
+    'rest_framework_simplejwt',
+    'corsheaders',
     
     # Local apps
+    'unified_auth',
+    'auth_otp',
+    'billing',
     'triage',
     'auth_otp',
     'doctor',
@@ -70,9 +61,6 @@ INSTALLED_APPS = [
     'rbac',
     'devops',
     'privacy',
-
-
-
 ]
 
 MIDDLEWARE = [
