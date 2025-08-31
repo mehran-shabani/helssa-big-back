@@ -48,11 +48,16 @@ INSTALLED_APPS = [
 
     # Third party apps
     'rest_framework',
+    'django_ratelimit',
+    'encrypted_model_fields',
     
-    # Local apps
 
-    # 'auth_otp',  # موقتاً کامنت شده
-    'privacy',
+    
+    
+
+
+    # Third party apps
+    'rest_framework',
     
     # Third party apps
     'rest_framework',
@@ -62,7 +67,10 @@ INSTALLED_APPS = [
     'auth_otp',
     'doctor',
     'patient',
-    'rbac',  
+    'rbac',
+    'devops',
+    'privacy',
+
 
 
 ]
