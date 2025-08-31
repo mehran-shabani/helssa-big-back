@@ -1,0 +1,418 @@
+<!DOCTYPE html>
+<html lang="fa" dir="rtl">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>سیستم مدیریت وظایف AI Agents</title>
+    <script src="https://cdn.tailwindcss.com"></script>
+    <script src="https://unpkg.com/alpinejs@3.x.x/dist/cdn.min.js" defer></script>
+    <style>
+        @import url('https://fonts.googleapis.com/css2?family=Vazirmatn:wght@300;400;500;700&display=swap');
+        body {
+            font-family: 'Vazirmatn', sans-serif;
+        }
+        .gradient-bg {
+            background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+        }
+        .card-shadow {
+            box-shadow: 0 10px 25px rgba(0, 0, 0, 0.1);
+        }
+        .status-badge {
+            animation: pulse 2s cubic-bezier(0.4, 0, 0.6, 1) infinite;
+        }
+        @keyframes pulse {
+            0%, 100% { opacity: 1; }
+            50% { opacity: .5; }
+        }
+    </style>
+</head>
+<body class="bg-gray-50" x-data="taskManager()">
+    <!-- Header -->
+    <header class="gradient-bg text-white shadow-lg">
+        <div class="container mx-auto px-6 py-6">
+            <h1 class="text-3xl font-bold">سیستم مدیریت وظایف AI Agents</h1>
+            <p class="mt-2 text-purple-100">تقسیم هوشمند کار بین عامل‌های هوش مصنوعی</p>
+        </div>
+    </header>
+
+    <!-- Main Content -->
+    <main class="container mx-auto px-6 py-8">
+        <!-- Problem Input Section -->
+        <div class="mb-8 bg-white rounded-xl card-shadow p-6" x-show="!currentBatch">
+            <h2 class="text-2xl font-bold mb-4 text-gray-800">تعریف مشکل</h2>
+            <textarea
+                x-model="problemDescription"
+                placeholder="مشکل یا پروژه خود را توضیح دهید..."
+                class="w-full p-4 border-2 border-gray-200 rounded-lg focus:border-purple-500 focus:outline-none transition-colors"
+                rows="4"
+            ></textarea>
+            <button
+                @click="analyzeProblem()"
+                :disabled="!problemDescription || isLoading"
+                class="mt-4 px-6 py-3 gradient-bg text-white rounded-lg font-medium hover:opacity-90 transition-opacity disabled:opacity-50 disabled:cursor-not-allowed"
+            >
+                <span x-show="!isLoading">تحلیل و تقسیم وظایف</span>
+                <span x-show="isLoading">در حال پردازش...</span>
+            </button>
+        </div>
+
+        <!-- Progress Overview -->
+        <div class="mb-8 bg-white rounded-xl card-shadow p-6" x-show="currentBatch">
+            <h2 class="text-2xl font-bold mb-4 text-gray-800">پیشرفت کلی</h2>
+            <div class="mb-4">
+                <div class="flex justify-between text-sm text-gray-600 mb-2">
+                    <span>پیشرفت</span>
+                    <span x-text="`${Math.round(progress.progress_percentage || 0)}%`"></span>
+                </div>
+                <div class="w-full bg-gray-200 rounded-full h-3">
+                    <div 
+                        class="gradient-bg h-3 rounded-full transition-all duration-500"
+                        :style="`width: ${progress.progress_percentage || 0}%`"
+                    ></div>
+                </div>
+            </div>
+            <div class="grid grid-cols-2 md:grid-cols-4 gap-4 text-center">
+                <div class="p-4 bg-gray-50 rounded-lg">
+                    <div class="text-2xl font-bold text-gray-700" x-text="progress.total_tasks || 0"></div>
+                    <div class="text-sm text-gray-500">کل وظایف</div>
+                </div>
+                <div class="p-4 bg-green-50 rounded-lg">
+                    <div class="text-2xl font-bold text-green-600" x-text="progress.completed || 0"></div>
+                    <div class="text-sm text-gray-500">تکمیل شده</div>
+                </div>
+                <div class="p-4 bg-blue-50 rounded-lg">
+                    <div class="text-2xl font-bold text-blue-600" x-text="progress.in_progress || 0"></div>
+                    <div class="text-sm text-gray-500">در حال انجام</div>
+                </div>
+                <div class="p-4 bg-red-50 rounded-lg">
+                    <div class="text-2xl font-bold text-red-600" x-text="progress.failed || 0"></div>
+                    <div class="text-sm text-gray-500">شکست خورده</div>
+                </div>
+            </div>
+        </div>
+
+        <!-- Task Assignment Section -->
+        <div class="mb-8 bg-white rounded-xl card-shadow p-6" x-show="readyTasks.length > 0">
+            <h2 class="text-2xl font-bold mb-4 text-gray-800">وظایف آماده برای تخصیص</h2>
+            <div class="space-y-4">
+                <template x-for="task in readyTasks" :key="task.id">
+                    <div class="border-2 border-gray-200 rounded-lg p-4 hover:border-purple-300 transition-colors">
+                        <div class="flex justify-between items-start mb-3">
+                            <div class="flex-1">
+                                <h3 class="font-bold text-lg text-gray-800" x-text="task.title"></h3>
+                                <p class="text-gray-600 text-sm mt-1" x-text="task.description"></p>
+                            </div>
+                            <div class="flex items-center gap-2 mr-4">
+                                <span class="px-3 py-1 bg-purple-100 text-purple-700 rounded-full text-xs font-medium" x-text="task.type"></span>
+                                <span class="px-3 py-1 bg-orange-100 text-orange-700 rounded-full text-xs font-medium" x-text="`پیچیدگی: ${task.complexity}`"></span>
+                            </div>
+                        </div>
+                        
+                        <div class="flex items-center gap-4">
+                            <select
+                                :id="`agent-select-${task.id}`"
+                                class="flex-1 p-2 border border-gray-300 rounded-lg focus:border-purple-500 focus:outline-none"
+                            >
+                                <option value="">انتخاب Agent...</option>
+                                <template x-for="agent in availableAgents" :key="agent.id">
+                                    <option 
+                                        :value="agent.id" 
+                                        x-text="`${agent.name} (${agent.type})`"
+                                        :selected="task.suggested_agent && task.suggested_agent.id === agent.id"
+                                    ></option>
+                                </template>
+                            </select>
+                            <button
+                                @click="assignTask(task.id)"
+                                class="px-4 py-2 bg-green-600 text-white rounded-lg hover:bg-green-700 transition-colors"
+                            >
+                                تخصیص دادن
+                            </button>
+                        </div>
+                        
+                        <div x-show="task.suggested_agent" class="mt-2 text-sm text-green-600">
+                            <span>پیشنهاد سیستم: </span>
+                            <span x-text="task.suggested_agent?.name" class="font-medium"></span>
+                        </div>
+                    </div>
+                </template>
+            </div>
+        </div>
+
+        <!-- All Tasks View -->
+        <div class="bg-white rounded-xl card-shadow p-6" x-show="currentBatch">
+            <h2 class="text-2xl font-bold mb-4 text-gray-800">همه وظایف</h2>
+            <div class="overflow-x-auto">
+                <table class="w-full">
+                    <thead>
+                        <tr class="border-b-2 border-gray-200">
+                            <th class="text-right py-3 px-4">عنوان</th>
+                            <th class="text-right py-3 px-4">نوع</th>
+                            <th class="text-right py-3 px-4">وضعیت</th>
+                            <th class="text-right py-3 px-4">Agent</th>
+                            <th class="text-right py-3 px-4">نتیجه</th>
+                        </tr>
+                    </thead>
+                    <tbody>
+                        <template x-for="task in allTasks" :key="task.id">
+                            <tr class="border-b border-gray-100 hover:bg-gray-50">
+                                <td class="py-3 px-4">
+                                    <div class="font-medium text-gray-800" x-text="task.title"></div>
+                                    <div class="text-sm text-gray-500" x-text="task.description"></div>
+                                </td>
+                                <td class="py-3 px-4">
+                                    <span class="px-2 py-1 bg-blue-100 text-blue-700 rounded text-xs" x-text="task.type"></span>
+                                </td>
+                                <td class="py-3 px-4">
+                                    <span 
+                                        class="px-3 py-1 rounded-full text-xs font-medium"
+                                        :class="{
+                                            'bg-gray-100 text-gray-700': task.status === 'pending',
+                                            'bg-yellow-100 text-yellow-700': task.status === 'assigned',
+                                            'bg-blue-100 text-blue-700 status-badge': task.status === 'in_progress',
+                                            'bg-green-100 text-green-700': task.status === 'completed',
+                                            'bg-red-100 text-red-700': task.status === 'failed'
+                                        }"
+                                        x-text="getStatusText(task.status)"
+                                    ></span>
+                                </td>
+                                <td class="py-3 px-4">
+                                    <div x-show="task.assigned_agent" class="text-sm">
+                                        <div class="font-medium" x-text="task.assigned_agent?.name"></div>
+                                        <div class="text-gray-500" x-text="task.assigned_agent?.type"></div>
+                                    </div>
+                                    <span x-show="!task.assigned_agent" class="text-gray-400">-</span>
+                                </td>
+                                <td class="py-3 px-4">
+                                    <button 
+                                        x-show="task.result"
+                                        @click="showResult(task)"
+                                        class="text-purple-600 hover:text-purple-800 text-sm font-medium"
+                                    >
+                                        مشاهده نتیجه
+                                    </button>
+                                    <span x-show="task.error_message" class="text-red-600 text-sm" x-text="task.error_message"></span>
+                                </td>
+                            </tr>
+                        </template>
+                    </tbody>
+                </table>
+            </div>
+        </div>
+
+        <!-- Agents List -->
+        <div class="mt-8 bg-white rounded-xl card-shadow p-6">
+            <h2 class="text-2xl font-bold mb-4 text-gray-800">Agent های موجود</h2>
+            <div class="grid md:grid-cols-2 lg:grid-cols-4 gap-4">
+                <template x-for="agent in agents" :key="agent.id">
+                    <div class="border-2 border-gray-200 rounded-lg p-4 hover:border-purple-300 transition-colors">
+                        <h3 class="font-bold text-lg text-gray-800" x-text="agent.name"></h3>
+                        <div class="mt-2">
+                            <span class="px-2 py-1 bg-purple-100 text-purple-700 rounded text-xs" x-text="agent.type"></span>
+                            <span 
+                                class="px-2 py-1 rounded text-xs mr-2"
+                                :class="{
+                                    'bg-green-100 text-green-700': agent.status === 'idle',
+                                    'bg-blue-100 text-blue-700': agent.status === 'working',
+                                    'bg-red-100 text-red-700': agent.status === 'error'
+                                }"
+                                x-text="getAgentStatusText(agent.status)"
+                            ></span>
+                        </div>
+                        <div class="mt-3 space-y-1">
+                            <template x-for="cap in agent.capabilities" :key="cap.name">
+                                <div class="text-sm text-gray-600">
+                                    • <span x-text="cap.description"></span>
+                                </div>
+                            </template>
+                        </div>
+                    </div>
+                </template>
+            </div>
+        </div>
+    </main>
+
+    <!-- Result Modal -->
+    <div 
+        x-show="showResultModal" 
+        x-transition
+        class="fixed inset-0 bg-black bg-opacity-50 flex items-center justify-center z-50"
+        @click.self="showResultModal = false"
+    >
+        <div class="bg-white rounded-xl p-6 max-w-2xl max-h-[80vh] overflow-y-auto m-4">
+            <h3 class="text-xl font-bold mb-4">نتیجه وظیفه</h3>
+            <pre class="bg-gray-100 p-4 rounded-lg text-sm" x-text="JSON.stringify(selectedResult, null, 2)"></pre>
+            <button 
+                @click="showResultModal = false"
+                class="mt-4 px-4 py-2 bg-gray-600 text-white rounded-lg hover:bg-gray-700"
+            >
+                بستن
+            </button>
+        </div>
+    </div>
+
+    <script>
+        function taskManager() {
+            return {
+                problemDescription: '',
+                isLoading: false,
+                currentBatch: null,
+                agents: [],
+                readyTasks: [],
+                allTasks: [],
+                progress: {},
+                availableAgents: [],
+                showResultModal: false,
+                selectedResult: null,
+                
+                async init() {
+                    await this.loadAgents();
+                    // بروزرسانی خودکار هر 3 ثانیه
+                    setInterval(() => {
+                        if (this.currentBatch) {
+                            this.updateProgress();
+                            this.loadReadyTasks();
+                            this.loadAllTasks();
+                        }
+                    }, 3000);
+                },
+                
+                async loadAgents() {
+                    try {
+                        const response = await fetch('/api/agents');
+                        const data = await response.json();
+                        this.agents = data.agents;
+                        this.availableAgents = data.agents.filter(a => a.status === 'idle');
+                    } catch (error) {
+                        console.error('Error loading agents:', error);
+                    }
+                },
+                
+                async analyzeProblem() {
+                    if (!this.problemDescription) return;
+                    
+                    this.isLoading = true;
+                    try {
+                        const response = await fetch('/api/analyze-problem', {
+                            method: 'POST',
+                            headers: {
+                                'Content-Type': 'application/json',
+                            },
+                            body: JSON.stringify({
+                                description: this.problemDescription
+                            })
+                        });
+                        
+                        const data = await response.json();
+                        this.currentBatch = data;
+                        await this.loadReadyTasks();
+                        await this.updateProgress();
+                        await this.loadAllTasks();
+                    } catch (error) {
+                        console.error('Error analyzing problem:', error);
+                    } finally {
+                        this.isLoading = false;
+                    }
+                },
+                
+                async loadReadyTasks() {
+                    if (!this.currentBatch) return;
+                    
+                    try {
+                        const response = await fetch(`/api/batches/${this.currentBatch.batch_id}/ready-tasks`);
+                        const data = await response.json();
+                        this.readyTasks = data.ready_tasks;
+                    } catch (error) {
+                        console.error('Error loading ready tasks:', error);
+                    }
+                },
+                
+                async loadAllTasks() {
+                    if (!this.currentBatch) return;
+                    
+                    try {
+                        const response = await fetch(`/api/batches/${this.currentBatch.batch_id}/tasks`);
+                        const data = await response.json();
+                        this.allTasks = data.tasks;
+                    } catch (error) {
+                        console.error('Error loading all tasks:', error);
+                    }
+                },
+                
+                async updateProgress() {
+                    if (!this.currentBatch) return;
+                    
+                    try {
+                        const response = await fetch(`/api/batches/${this.currentBatch.batch_id}/progress`);
+                        this.progress = await response.json();
+                    } catch (error) {
+                        console.error('Error updating progress:', error);
+                    }
+                },
+                
+                async assignTask(taskId) {
+                    const selectElement = document.getElementById(`agent-select-${taskId}`);
+                    const agentId = selectElement.value;
+                    
+                    if (!agentId) {
+                        alert('لطفا یک Agent انتخاب کنید');
+                        return;
+                    }
+                    
+                    try {
+                        const response = await fetch('/api/assign-task', {
+                            method: 'POST',
+                            headers: {
+                                'Content-Type': 'application/json',
+                            },
+                            body: JSON.stringify({
+                                task_id: taskId,
+                                agent_id: agentId
+                            })
+                        });
+                        
+                        if (response.ok) {
+                            await this.loadReadyTasks();
+                            await this.loadAgents();
+                            await this.loadAllTasks();
+                        } else {
+                            const error = await response.json();
+                            alert(error.detail);
+                        }
+                    } catch (error) {
+                        console.error('Error assigning task:', error);
+                    }
+                },
+                
+                getStatusText(status) {
+                    const statusMap = {
+                        'pending': 'در انتظار',
+                        'assigned': 'تخصیص یافته',
+                        'in_progress': 'در حال انجام',
+                        'completed': 'تکمیل شده',
+                        'failed': 'شکست خورده',
+                        'blocked': 'مسدود',
+                        'cancelled': 'لغو شده'
+                    };
+                    return statusMap[status] || status;
+                },
+                
+                getAgentStatusText(status) {
+                    const statusMap = {
+                        'idle': 'آماده',
+                        'working': 'مشغول',
+                        'waiting': 'منتظر',
+                        'error': 'خطا'
+                    };
+                    return statusMap[status] || status;
+                },
+                
+                showResult(task) {
+                    this.selectedResult = task.result;
+                    this.showResultModal = true;
+                }
+            }
+        }
+    </script>
+</body>
+</html>
