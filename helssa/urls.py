@@ -3,6 +3,8 @@ URL configuration for helssa project.
 """
 from django.contrib import admin
 from django.urls import path, include
+from django.conf import settings
+from django.conf.urls.static import static
 
 
 
@@ -15,7 +17,7 @@ def api_root(request):
         'message': 'Welcome to Helssa API',
         'version': '1.0.0',
         'available_services': {
-            'auth_otp': '/api/auth/'
+            'auth_otp': '/api/auth/',
             'adminportal': '/adminportal/',
             'admin_panel': '/admin/'
         },

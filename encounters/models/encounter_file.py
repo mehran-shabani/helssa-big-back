@@ -1,4 +1,5 @@
 from django.db import models
+from django.conf import settings
 import uuid
 
 
@@ -52,7 +53,7 @@ class EncounterFile(models.Model):
     
     # آپلود کننده
     uploaded_by = models.ForeignKey(
-        'unified_auth.UnifiedUser',
+        settings.AUTH_USER_MODEL,
         on_delete=models.SET_NULL,
         null=True,
         related_name='uploaded_encounter_files',

@@ -42,21 +42,19 @@ INSTALLED_APPS = [
     'django.contrib.staticfiles',
     # Third party apps
     'rest_framework',
+    'corsheaders',
     'django_ratelimit',
     'encrypted_model_fields',
     'rest_framework_simplejwt',
-    'corsheaders',
-    'rest_framework_simplejwt',
+    'drf_spectacular',
     # Local apps
     'chatbot',
     'api_gateway',
     'agent',
     'feedback',
-    'unified_auth',
     'auth_otp',
     'billing',
     'triage',
-    'auth_otp',
     'doctor',
     'patient',
     'rbac',
@@ -197,8 +195,8 @@ ANALYTICS_PERFORMANCE_RETENTION_DAYS = 30
 
 
 
-# استفاده از کاربر سفارشی
-AUTH_USER_MODEL = 'api_gateway.UnifiedUser'
+# استفاده از کاربر سفارشی (تنها یکبار و منسجم)
+AUTH_USER_MODEL = 'rbac.UnifiedUser'
 
 
 # ===================================================
@@ -297,9 +295,8 @@ CACHES = {
 
 # Logging
 
-
-    'DEFAULT_PAGINATION_CLASS': 'rest_framework.pagination.PageNumberPagination',
-    'PAGE_SIZE': 20,
+# Extend REST_FRAMEWORK with filters/renderers safely
+REST_FRAMEWORK.update({
     'DEFAULT_FILTER_BACKENDS': [
         'rest_framework.filters.SearchFilter',
         'rest_framework.filters.OrderingFilter',
@@ -307,15 +304,10 @@ CACHES = {
     'DEFAULT_RENDERER_CLASSES': [
         'rest_framework.renderers.JSONRenderer',
     ],
-
     'EXCEPTION_HANDLER': 'rest_framework.views.exception_handler',
-}
+})
 
 # تنظیمات Logging
-
-
-
-
 
 from datetime import timedelta
 
@@ -493,5 +485,4 @@ PATIENT_SETTINGS = {
 # OPENAI_API_KEY = 'your-openai-api-key'
 # LOCAL_STT_URL = 'http://localhost:8000'
 
-# Custom User Model
-AUTH_USER_MODEL = 'rbac.UnifiedUser'
+# Custom User Model (already defined above)
