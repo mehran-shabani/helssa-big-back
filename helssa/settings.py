@@ -49,6 +49,9 @@ INSTALLED_APPS = [
     'encrypted_model_fields',
     'rest_framework_simplejwt',
     'corsheaders',
+    'rest_framework_simplejwt',
+ 
+    
     
     # Local apps
     'unified_auth',
@@ -61,6 +64,7 @@ INSTALLED_APPS = [
     'rbac',
     'devops',
     'privacy',
+    'adminportal',
 ]
 
 MIDDLEWARE = [
@@ -146,22 +150,31 @@ STATIC_URL = 'static/'
 DEFAULT_AUTO_FIELD = 'django.db.models.BigAutoField'
 
 
-# REST Framework Configuration
+# REST Framework settings
 REST_FRAMEWORK = {
     'DEFAULT_AUTHENTICATION_CLASSES': [
         'rest_framework_simplejwt.authentication.JWTAuthentication',
+        'rest_framework.authentication.SessionAuthentication',
+        'rest_framework_simplejwt.authentication.JWTAuthentication',
+
     ],
     'DEFAULT_PERMISSION_CLASSES': [
         'rest_framework.permissions.IsAuthenticated',
     ],
+
+    'DEFAULT_PAGINATION_CLASS': 'rest_framework.pagination.PageNumberPagination',
+    'PAGE_SIZE': 20,
+    'DEFAULT_FILTER_BACKENDS': [
+        'rest_framework.filters.SearchFilter',
+        'rest_framework.filters.OrderingFilter',
+    ],
     'DEFAULT_RENDERER_CLASSES': [
         'rest_framework.renderers.JSONRenderer',
     ],
-    'DEFAULT_PAGINATION_CLASS': 'rest_framework.pagination.PageNumberPagination',
-    'PAGE_SIZE': 20,
 }
 
-# JWT Configuration
+
+
 from datetime import timedelta
 
 SIMPLE_JWT = {
@@ -169,7 +182,42 @@ SIMPLE_JWT = {
     'REFRESH_TOKEN_LIFETIME': timedelta(days=7),
     'ROTATE_REFRESH_TOKENS': True,
     'BLACKLIST_AFTER_ROTATION': True,
+
+    'UPDATE_LAST_LOGIN': False,
+    
+    'ALGORITHM': 'HS256',
+    'SIGNING_KEY': SECRET_KEY,
+    'VERIFYING_KEY': None,
+    'AUDIENCE': None,
+    'ISSUER': None,
+    
+    'AUTH_HEADER_TYPES': ('Bearer',),
+    'AUTH_HEADER_NAME': 'HTTP_AUTHORIZATION',
+    'USER_ID_FIELD': 'id',
+    'USER_ID_CLAIM': 'user_id',
+    
+    'AUTH_TOKEN_CLASSES': ('rest_framework_simplejwt.tokens.AccessToken',),
+    'TOKEN_TYPE_CLAIM': 'token_type',
+    
+    'JTI_CLAIM': 'jti',
 }
+
+# AdminPortal specific settings
+ADMINPORTAL_ENABLED = os.getenv("ADMINPORTAL_ENABLED", True)
+ADMINPORTAL_DEBUG = os.getenv("ADMINPORTAL_DEBUG", DEBUG)
+ADMINPORTAL_LOG_LEVEL = os.getenv("ADMINPORTAL_LOG_LEVEL", "INFO")
+ADMINPORTAL_REQUIRE_HTTPS = os.getenv("ADMINPORTAL_REQUIRE_HTTPS", False)
+
+# Internationalization for Persian
+LANGUAGE_CODE = 'fa-ir'
+TIME_ZONE = 'Asia/Tehran'
+USE_I18N = True
+USE_TZ = True
+
+    
+
+
+
 
 # Cache Configuration
 CACHES = {
@@ -197,7 +245,12 @@ LOGGING = {
         'file': {
             'level': 'INFO',
             'class': 'logging.FileHandler',
+
+            'filename': 'logs/adminportal.log',
+
             'filename': 'logs/patient.log',
+          
+        
             'formatter': 'verbose',
         },
         'console': {
@@ -207,13 +260,24 @@ LOGGING = {
         },
     },
     'loggers': {
+
+        'adminportal': {
+            'handlers': ['file', 'console'],
+            'level': 'INFO',
+            'propagate': False,
+        },
+        'django': {
+
         'patient': {
+
             'handlers': ['file', 'console'],
             'level': 'INFO',
             'propagate': True,
         },
     },
 }
+
+
 
 # Patient App Specific Settings
 PATIENT_SETTINGS = {
@@ -230,4 +294,5 @@ PATIENT_SETTINGS = {
 
 # Custom User Model
 AUTH_USER_MODEL = 'rbac.UnifiedUser'
+
 
