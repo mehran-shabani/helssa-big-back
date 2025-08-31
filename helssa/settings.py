@@ -65,8 +65,7 @@ INSTALLED_APPS = [
     'adminportal',
     'analytics',
     'audit',
-
-
+    'fhir_adapter',
 ]
 
 MIDDLEWARE = [
@@ -155,6 +154,34 @@ STATIC_URL = 'static/'
 # https://docs.djangoproject.com/en/5.2/ref/settings/#default-auto-field
 
 DEFAULT_AUTO_FIELD = 'django.db.models.BigAutoField'
+
+
+# FHIR Adapter Settings
+FHIR_BASE_URL = os.getenv('FHIR_BASE_URL', 'http://localhost:8000/api/fhir/')
+FHIR_VERSION = 'R4'
+FHIR_VALIDATION_ENABLED = True
+FHIR_STRICT_VALIDATION = False
+FHIR_BUNDLE_MAX_SIZE = 100
+FHIR_DEFAULT_PAGE_SIZE = 20
+FHIR_MAX_PAGE_SIZE = 100
+FHIR_LOG_RETENTION_DAYS = 30
+FHIR_REQUIRE_AUTHENTICATION = True
+
+# FHIR Code Systems
+FHIR_CODE_SYSTEMS = {
+    'condition': 'http://snomed.info/sct',
+    'medication': 'http://www.nlm.nih.gov/research/umls/rxnorm',
+    'procedure': 'http://www.ama-assn.org/go/cpt',
+    'observation': 'http://loinc.org',
+}
+
+# FHIR Identifier Systems  
+FHIR_IDENTIFIER_SYSTEMS = {
+    'national_id': 'http://example.ir/nationalid',
+    'medical_id': 'http://example.ir/medicalid',
+    'phone': 'http://example.ir/phone',
+    'email': 'http://example.ir/email'
+}
 
 
 # Analytics settings

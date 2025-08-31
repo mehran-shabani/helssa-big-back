@@ -4,6 +4,9 @@ URL configuration for helssa project.
 from django.contrib import admin
 from django.urls import path, include
 
+
+
+
 from django.http import JsonResponse
 
 def api_root(request):
@@ -34,6 +37,7 @@ urlpatterns = [
     path('chatbot/', include('chatbot.urls')),
     # API Root (for browsable API)
     path('api/', include('rest_framework.urls')),
+    path('api/fhir/', include('fhir_adapter.urls')),
 
   
 
