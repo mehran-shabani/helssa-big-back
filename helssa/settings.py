@@ -22,10 +22,10 @@ load_dotenv()
 # See https://docs.djangoproject.com/en/5.2/howto/deployment/checklist/
 
 # SECURITY WARNING: keep the secret key used in production secret!
-SECRET_KEY = os.getenv("SECRET_KEY", "")
+SECRET_KEY = os.getenv("SECRET_KEY", "django-insecure-test-key-for-development-only")
 
 # SECURITY WARNING: don't run with debug turned on in production!
-DEBUG = os.getenv("DEBUG", True)
+DEBUG = True
 
 ALLOWED_HOSTS = []
 
@@ -50,6 +50,15 @@ INSTALLED_APPS = [
     'rest_framework',
     
     # Local apps
+
+    # 'auth_otp',  # موقتاً کامنت شده
+    'privacy',
+    
+    # Third party apps
+    'rest_framework',
+    
+    # Local apps
+    'triage',
     'auth_otp',
     'doctor',
     'patient',
