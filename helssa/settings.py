@@ -11,11 +11,11 @@ https://docs.djangoproject.com/en/5.2/ref/settings/
 """
 import os
 from pathlib import Path
-from dotenv import load_dotenv
+# from dotenv import load_dotenv
 
 # Build paths inside the project like this: BASE_DIR / 'subdir'.
 BASE_DIR = Path(__file__).resolve().parent.parent
-load_dotenv()
+# load_dotenv()
 
 
 # Quick-start development settings - unsuitable for production
@@ -53,6 +53,7 @@ INSTALLED_APPS = [
     'rest_framework_simplejwt',
     
     # Local apps
+    'api_gateway',
     'agent',
     'feedback',
     'unified_auth',
@@ -66,6 +67,7 @@ INSTALLED_APPS = [
     'devops',
     'privacy',
     'adminportal',
+
 ]
 
 MIDDLEWARE = [
@@ -149,6 +151,10 @@ STATIC_URL = 'static/'
 # https://docs.djangoproject.com/en/5.2/ref/settings/#default-auto-field
 
 DEFAULT_AUTO_FIELD = 'django.db.models.BigAutoField'
+
+
+# استفاده از کاربر سفارشی
+AUTH_USER_MODEL = 'api_gateway.UnifiedUser'
 
 
 # ===================================================
@@ -374,4 +380,3 @@ PATIENT_SETTINGS = {
 
 # Custom User Model
 AUTH_USER_MODEL = 'rbac.UnifiedUser'
-

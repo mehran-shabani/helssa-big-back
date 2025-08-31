@@ -24,12 +24,12 @@ def api_root(request):
 
 
 
+
 urlpatterns = [
     # Django Admin
-    path('admin/', admin.site.urls),
-
-  
-    
+    path('admin/', admin.site.urls),    
+    path('api/v1/', include('api_gateway.urls')),
+    path('api/', include('api_gateway.urls')),  # مسیر کوتاه
     # App URLs
     path('api/feedback/', include('feedback.urls')),
     
