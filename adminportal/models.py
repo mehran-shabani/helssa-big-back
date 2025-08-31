@@ -177,9 +177,9 @@ class SystemOperation(BaseModel):
         verbose_name_plural = 'عملیات سیستمی'
         ordering = ['-priority', '-created_at']
         indexes = [
-            models.Index(fields=['status', '-priority']),
-            models.Index(fields=['operation_type', '-created_at']),
-            models.Index(fields=['operator', '-created_at']),
+            models.Index(fields=['status', 'priority']),
+            models.Index(fields=['operation_type', 'created_at']),
+            models.Index(fields=['operator', 'created_at']),
         ]
     
     def __str__(self):
@@ -297,9 +297,9 @@ class SupportTicket(BaseModel):
         verbose_name_plural = 'تیکت‌های پشتیبانی'
         ordering = ['-priority', '-created_at']
         indexes = [
-            models.Index(fields=['status', '-created_at']),
+            models.Index(fields=['status', 'created_at']),
             models.Index(fields=['assigned_to', 'status']),
-            models.Index(fields=['user', '-created_at']),
+            models.Index(fields=['user', 'created_at']),
         ]
     
     def __str__(self):
@@ -426,11 +426,11 @@ class AdminAuditLog(AuditLogModel if 'AuditLogModel' in locals() else BaseModel)
     class Meta:
         verbose_name = 'لاگ حسابرسی ادمین'
         verbose_name_plural = 'لاگ‌های حسابرسی ادمین'
-        ordering = ['-created_at']
+        ordering = ['-timestamp']
         indexes = [
-            models.Index(fields=['admin_user', '-created_at']),
+            models.Index(fields=['admin_user', 'timestamp']),
             models.Index(fields=['resource_type', 'resource_id']),
-            models.Index(fields=['action_performed', '-created_at']),
+            models.Index(fields=['action_performed', 'timestamp']),
         ]
     
     def __str__(self):
@@ -489,8 +489,8 @@ class AdminSession(BaseModel):
         verbose_name_plural = 'نشست‌های ادمین'
         ordering = ['-started_at']
         indexes = [
-            models.Index(fields=['admin_user', '-started_at']),
-            models.Index(fields=['is_active', '-last_activity']),
+            models.Index(fields=['admin_user', 'started_at']),
+            models.Index(fields=['is_active', 'last_activity']),
         ]
     
     def __str__(self):

@@ -5,7 +5,6 @@
 """
 from django.db import models
 from django.contrib.auth import get_user_model
-from django.contrib.postgres.fields import ArrayField
 from django.core.validators import MinValueValidator, MaxValueValidator
 
 User = get_user_model()
@@ -81,10 +80,9 @@ class ChecklistCatalog(BaseModel):
         default='medium',
         verbose_name='اولویت'
     )
-    keywords = ArrayField(
-        models.CharField(max_length=100),
-        blank=True,
+    keywords = models.JSONField(
         default=list,
+        blank=True,
         verbose_name='کلمات کلیدی',
         help_text='کلماتی که برای تشخیص این آیتم در متن استفاده می‌شوند'
     )

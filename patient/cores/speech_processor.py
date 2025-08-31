@@ -11,7 +11,6 @@ from django.core.cache import cache
 from django.conf import settings
 import aiohttp
 import io
-from pydub import AudioSegment
 
 logger = logging.getLogger(__name__)
 
@@ -230,6 +229,7 @@ class PatientSpeechProcessor:
         
         # بررسی محتوای فایل
         try:
+            from pydub import AudioSegment  # lazy import to avoid audioop dependency at import time
             audio_segment = AudioSegment.from_file(
                 io.BytesIO(audio_file),
                 format=audio_format
@@ -271,6 +271,7 @@ class PatientSpeechProcessor:
         """
         try:
             # بارگذاری فایل صوتی
+            from pydub import AudioSegment  # lazy import
             audio_segment = AudioSegment.from_file(
                 io.BytesIO(audio_file),
                 format=audio_format
@@ -289,11 +290,13 @@ class PatientSpeechProcessor:
             audio_segment = audio_segment.normalize()
             
             # حذف سکوت از ابتدا و انتها
-            audio_segment = audio_segment.strip_silence(
-                silence_thresh=-40,  # dB
-                silence_len=1000,    # ms
-                padding=500          # ms
-            )
+            # Note: strip_silence may not exist in all pydub versions; safe-guard
+            if hasattr(audio_segment, 'strip_silence'):
+                audio_segment = audio_segment.strip_silence(
+                    silence_thresh=-40,
+                    silence_len=1000,
+                    padding=500
+                )
             
             # تبدیل به فرمت مناسب STT (معمولاً WAV)
             output_buffer = io.BytesIO()
@@ -330,6 +333,7 @@ class PatientSpeechProcessor:
         audio_data = preprocessed_audio['audio_data']
         
         try:
+            from pydub import AudioSegment  # lazy import
             audio_segment = AudioSegment.from_file(
                 io.BytesIO(audio_data),
                 format='wav'
@@ -501,21 +505,22 @@ class PatientSpeechProcessor:
             # اتصال به سرویس STT محلی (Whisper self-hosted)
             local_stt_url = getattr(settings, 'LOCAL_STT_URL', 'http://localhost:8000')
             
-            files = {
-                'audio': ('audio.wav', audio_data, 'audio/wav')
-            }
-            
             data = {
                 'language': config.get('language', 'fa'),
                 'model': config.get('model', 'base'),
                 'task': 'transcribe'
             }
             
+            form = aiohttp.FormData()
+            for key, value in data.items():
+                form.add_field(key, str(value))
+            # file field
+            form.add_field('audio', audio_data, filename='audio.wav', content_type='audio/wav')
+
             async with aiohttp.ClientSession() as session:
                 async with session.post(
                     f"{local_stt_url}/transcribe",
-                    data=data,
-                    data=files
+                    data=form
                 ) as response:
                     if response.status == 200:
                         result = await response.json()

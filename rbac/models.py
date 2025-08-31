@@ -264,6 +264,10 @@ class UnifiedUser(AbstractBaseUser, PermissionsMixin):
     )
     
     objects = UnifiedUserManager()
+
+    # Django auth required attributes
+    USERNAME_FIELD = 'phone_number'
+    REQUIRED_FIELDS = ['first_name', 'last_name']
     
     class Meta:
         db_table = 'unified_users'

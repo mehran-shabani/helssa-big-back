@@ -75,3 +75,6 @@ qrcode==7.4.2
 
 # OpenAI
 openai==1.102.0
+
+# Async HTTP (for STT streaming)
+aiohttp==3.10.10

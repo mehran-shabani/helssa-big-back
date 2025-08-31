@@ -24,6 +24,11 @@ BASE_DIR = Path(__file__).resolve().parent.parent
 # SECURITY WARNING: keep the secret key used in production secret!
 
 SECRET_KEY = os.getenv("SECRET_KEY", "django-insecure-test-key-for-development-only")
+# کلید پیش‌فرض رمزنگاری فیلدها برای توسعه (Fernet 32-byte base64)
+FIELD_ENCRYPTION_KEY = os.getenv(
+    'FIELD_ENCRYPTION_KEY',
+    'YWFhYWFhYWFhYWFhYWFhYWFhYWFhYWFhYWFhYWFhYWE='
+)
 
 # SECURITY WARNING: don't run with debug turned on in production!
 DEBUG = True
@@ -380,58 +385,39 @@ LOGGING = {
         'file': {
             'level': 'INFO',
             'class': 'logging.FileHandler',
-
-            'filename': 'chatbot.log',
-            'formatter': 'verbose',
-        },
-        'console': {
-            'level': 'INFO',
-
-
-            'filename': 'logs/feedback.log',
-
-
-            'filename': 'logs/adminportal.log',
-
-            'filename': 'logs/patient.log',
-          
-        
-
+            'filename': 'app.log',
             'formatter': 'verbose',
         },
         'console': {
             'level': 'DEBUG',
-
             'class': 'logging.StreamHandler',
             'formatter': 'simple',
         },
     },
     'loggers': {
-
-      
         'chatbot': {
             'handlers': ['file', 'console'],
             'level': 'INFO',
-
-
+            'propagate': False,
+        },
         'feedback': {
             'handlers': ['file', 'console'],
             'level': 'DEBUG',
-
-
+            'propagate': False,
+        },
         'adminportal': {
             'handlers': ['file', 'console'],
             'level': 'INFO',
             'propagate': False,
         },
-        'django': {
-
         'patient': {
-
             'handlers': ['file', 'console'],
             'level': 'INFO',
-
-
+            'propagate': True,
+        },
+        'django': {
+            'handlers': ['console'],
+            'level': 'INFO',
             'propagate': True,
         },
     },
