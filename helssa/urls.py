@@ -4,7 +4,6 @@ URL configuration for helssa project.
 from django.contrib import admin
 from django.urls import path, include
 
-
 from django.http import JsonResponse
 
 def api_root(request):
@@ -45,6 +44,7 @@ urlpatterns = [
     # App URLs
     path('api/auth/', include('auth_otp.urls')),
     path('adminportal/', include('adminportal.urls')),
+    path('api/analytics/', include('analytics.urls')),
 
     path('devops/', include('devops.urls')),
     path('api/doctor/', include('doctor.urls')),
@@ -52,7 +52,6 @@ urlpatterns = [
     path('api/triage/', include('triage.urls')),
     path('api/privacy/', include('privacy.urls')),
     path('api/patient/', include('patient.urls')),
-
 
 ]
 

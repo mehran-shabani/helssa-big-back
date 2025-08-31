@@ -44,6 +44,7 @@ INSTALLED_APPS = [
    
     
 
+   
     # Third party apps
     'rest_framework',
     'django_ratelimit',
@@ -67,6 +68,9 @@ INSTALLED_APPS = [
     'devops',
     'privacy',
     'adminportal',
+    'analytics',
+
+  
 ]
 
 MIDDLEWARE = [
@@ -155,6 +159,16 @@ STATIC_URL = 'static/'
 # https://docs.djangoproject.com/en/5.2/ref/settings/#default-auto-field
 
 DEFAULT_AUTO_FIELD = 'django.db.models.BigAutoField'
+
+
+# Analytics settings
+ANALYTICS_ENABLED = True
+ANALYTICS_PERFORMANCE_TRACKING_ENABLED = True
+ANALYTICS_USER_ACTIVITY_TRACKING_ENABLED = True
+ANALYTICS_ALERTS_ENABLED = True
+ANALYTICS_METRICS_RETENTION_DAYS = 30
+ANALYTICS_USER_ACTIVITY_RETENTION_DAYS = 90
+ANALYTICS_PERFORMANCE_RETENTION_DAYS = 30
 
 
 
@@ -458,4 +472,3 @@ PATIENT_SETTINGS = {
 
 # Custom User Model
 AUTH_USER_MODEL = 'rbac.UnifiedUser'
-
