@@ -3,6 +3,8 @@ URL configuration for helssa project.
 """
 from django.contrib import admin
 from django.urls import path, include
+
+
 from django.http import JsonResponse
 
 def api_root(request):
@@ -21,9 +23,20 @@ def api_root(request):
     })
 
 
+
 urlpatterns = [
     # Django Admin
     path('admin/', admin.site.urls),
+
+  
+    
+    # App URLs
+    path('api/feedback/', include('feedback.urls')),
+    
+    # API Root (for browsable API)
+    path('api/', include('rest_framework.urls')),
+
+  
 
     
     # API Root
@@ -39,4 +52,5 @@ urlpatterns = [
     path('api/triage/', include('triage.urls')),
     path('api/privacy/', include('privacy.urls')),
     path('api/patient/', include('patient.urls')),
+
 ]

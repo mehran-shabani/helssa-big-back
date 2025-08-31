@@ -22,6 +22,7 @@ load_dotenv()
 # See https://docs.djangoproject.com/en/5.2/howto/deployment/checklist/
 
 # SECURITY WARNING: keep the secret key used in production secret!
+
 SECRET_KEY = os.getenv("SECRET_KEY", "django-insecure-test-key-for-development-only")
 
 # SECURITY WARNING: don't run with debug turned on in production!
@@ -50,10 +51,10 @@ INSTALLED_APPS = [
     'rest_framework_simplejwt',
     'corsheaders',
     'rest_framework_simplejwt',
- 
-    
     
     # Local apps
+    'agent',
+    'feedback',
     'unified_auth',
     'auth_otp',
     'billing',
@@ -150,12 +151,71 @@ STATIC_URL = 'static/'
 DEFAULT_AUTO_FIELD = 'django.db.models.BigAutoField'
 
 
+# ===================================================
+# FEEDBACK APP SETTINGS
+# ===================================================
+
+# تنظیمات امتیازدهی
+FEEDBACK_RATING_SETTINGS = {
+    'ENABLED': True,
+    'SCALE_MAX': 5,
+    'REQUIRED_FIELDS': ['overall_rating'],
+    'ALLOW_EDIT': True,
+    'EDIT_TIME_LIMIT': 24 * 60,  # 24 ساعت بر حسب دقیقه
+}
+
+# تنظیمات بازخورد پیام
+FEEDBACK_MESSAGE_SETTINGS = {
+    'ENABLED': True,
+    'VOICE_FEEDBACK_ENABLED': True,
+    'MAX_TEXT_LENGTH': 500,
+    'SENTIMENT_ANALYSIS_ENABLED': True,
+    'AUTO_FOLLOWUP_ENABLED': True,
+}
+
+# تنظیمات نظرسنجی
+FEEDBACK_SURVEY_SETTINGS = {
+    'ENABLED': True,
+    'ANONYMOUS_ALLOWED': False,
+    'MAX_QUESTIONS': 20,
+    'AUTO_ACTIVATION': True,
+    'COMPLETION_TRACKING': True,
+}
+
+# تنظیمات اعلان‌ها
+FEEDBACK_NOTIFICATION_SETTINGS = {
+    'ENABLED': True,
+    'EMAIL_NOTIFICATIONS': False,
+    'SMS_NOTIFICATIONS': True,
+    'ADMIN_NOTIFICATIONS': True,
+    'LOW_RATING_THRESHOLD': 2,  # امتیاز پایین که نیاز به اعلان دارد
+}
+
+# تنظیمات آنالیتیک
+FEEDBACK_ANALYTICS_SETTINGS = {
+    'ENABLED': True,
+    'REAL_TIME_STATS': True,
+    'EXPORT_ENABLED': True,
+    'RETENTION_DAYS': 365,  # نگهداری داده‌ها
+}
+
+# تنظیمات فایل‌های صوتی
+FEEDBACK_AUDIO_SETTINGS = {
+    'SUPPORTED_FORMATS': ['wav', 'mp3', 'webm', 'ogg'],
+    'MAX_FILE_SIZE': 10 * 1024 * 1024,  # 10MB
+    'MAX_DURATION': 300,  # 5 دقیقه
+    'AUTO_TRANSCRIPTION': True,
+}
+
+
+
 # REST Framework settings
 REST_FRAMEWORK = {
     'DEFAULT_AUTHENTICATION_CLASSES': [
         'rest_framework_simplejwt.authentication.JWTAuthentication',
         'rest_framework.authentication.SessionAuthentication',
         'rest_framework_simplejwt.authentication.JWTAuthentication',
+
 
     ],
     'DEFAULT_PERMISSION_CLASSES': [
@@ -171,7 +231,13 @@ REST_FRAMEWORK = {
     'DEFAULT_RENDERER_CLASSES': [
         'rest_framework.renderers.JSONRenderer',
     ],
+
+    'EXCEPTION_HANDLER': 'rest_framework.views.exception_handler',
 }
+
+# تنظیمات Logging
+
+
 
 
 
@@ -228,6 +294,7 @@ CACHES = {
 }
 
 # Logging Configuration
+
 LOGGING = {
     'version': 1,
     'disable_existing_loggers': False,
@@ -246,11 +313,15 @@ LOGGING = {
             'level': 'INFO',
             'class': 'logging.FileHandler',
 
+            'filename': 'logs/feedback.log',
+
+
             'filename': 'logs/adminportal.log',
 
             'filename': 'logs/patient.log',
           
         
+
             'formatter': 'verbose',
         },
         'console': {
@@ -260,6 +331,11 @@ LOGGING = {
         },
     },
     'loggers': {
+
+        'feedback': {
+            'handlers': ['file', 'console'],
+            'level': 'DEBUG',
+
 
         'adminportal': {
             'handlers': ['file', 'console'],
@@ -272,10 +348,14 @@ LOGGING = {
 
             'handlers': ['file', 'console'],
             'level': 'INFO',
+
             'propagate': True,
         },
     },
 }
+
+
+
 
 
 
@@ -294,5 +374,4 @@ PATIENT_SETTINGS = {
 
 # Custom User Model
 AUTH_USER_MODEL = 'rbac.UnifiedUser'
-
 
