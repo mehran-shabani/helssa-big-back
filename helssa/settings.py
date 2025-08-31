@@ -11,21 +11,22 @@ https://docs.djangoproject.com/en/5.2/ref/settings/
 """
 import os
 from pathlib import Path
-from dotenv import load_dotenv
+# from dotenv import load_dotenv
 
 # Build paths inside the project like this: BASE_DIR / 'subdir'.
 BASE_DIR = Path(__file__).resolve().parent.parent
-load_dotenv()
+# load_dotenv()
 
 
 # Quick-start development settings - unsuitable for production
 # See https://docs.djangoproject.com/en/5.2/howto/deployment/checklist/
 
 # SECURITY WARNING: keep the secret key used in production secret!
-SECRET_KEY = os.getenv("SECRET_KEY", "")
+
+SECRET_KEY = os.getenv("SECRET_KEY", "django-insecure-test-key-for-development-only")
 
 # SECURITY WARNING: don't run with debug turned on in production!
-DEBUG = os.getenv("DEBUG", True)
+DEBUG = True
 
 ALLOWED_HOSTS = []
 
@@ -39,14 +40,33 @@ INSTALLED_APPS = [
     'django.contrib.sessions',
     'django.contrib.messages',
     'django.contrib.staticfiles',
+
+   
     
+
     # Third party apps
     'rest_framework',
+    'django_ratelimit',
+    'encrypted_model_fields',
+    'rest_framework_simplejwt',
     'corsheaders',
-    
+    'rest_framework_simplejwt',
     # Local apps
-    'auth_otp',
     'chatbot',
+    'api_gateway',
+    'agent',
+    'feedback',
+    'unified_auth',
+    'auth_otp',
+    'billing',
+    'triage',
+    'auth_otp',
+    'doctor',
+    'patient',
+    'rbac',
+    'devops',
+    'privacy',
+    'adminportal',
 ]
 
 MIDDLEWARE = [
@@ -136,19 +156,85 @@ STATIC_URL = 'static/'
 
 DEFAULT_AUTO_FIELD = 'django.db.models.BigAutoField'
 
-# Internationalization Settings
-LANGUAGE_CODE = 'fa-ir'
-TIME_ZONE = 'Asia/Tehran'
 
-# REST Framework Settings
+
+
+
+# استفاده از کاربر سفارشی
+AUTH_USER_MODEL = 'api_gateway.UnifiedUser'
+
+
+# ===================================================
+# FEEDBACK APP SETTINGS
+# ===================================================
+
+# تنظیمات امتیازدهی
+FEEDBACK_RATING_SETTINGS = {
+    'ENABLED': True,
+    'SCALE_MAX': 5,
+    'REQUIRED_FIELDS': ['overall_rating'],
+    'ALLOW_EDIT': True,
+    'EDIT_TIME_LIMIT': 24 * 60,  # 24 ساعت بر حسب دقیقه
+}
+
+# تنظیمات بازخورد پیام
+FEEDBACK_MESSAGE_SETTINGS = {
+    'ENABLED': True,
+    'VOICE_FEEDBACK_ENABLED': True,
+    'MAX_TEXT_LENGTH': 500,
+    'SENTIMENT_ANALYSIS_ENABLED': True,
+    'AUTO_FOLLOWUP_ENABLED': True,
+}
+
+# تنظیمات نظرسنجی
+FEEDBACK_SURVEY_SETTINGS = {
+    'ENABLED': True,
+    'ANONYMOUS_ALLOWED': False,
+    'MAX_QUESTIONS': 20,
+    'AUTO_ACTIVATION': True,
+    'COMPLETION_TRACKING': True,
+}
+
+# تنظیمات اعلان‌ها
+FEEDBACK_NOTIFICATION_SETTINGS = {
+    'ENABLED': True,
+    'EMAIL_NOTIFICATIONS': False,
+    'SMS_NOTIFICATIONS': True,
+    'ADMIN_NOTIFICATIONS': True,
+    'LOW_RATING_THRESHOLD': 2,  # امتیاز پایین که نیاز به اعلان دارد
+}
+
+# تنظیمات آنالیتیک
+FEEDBACK_ANALYTICS_SETTINGS = {
+    'ENABLED': True,
+    'REAL_TIME_STATS': True,
+    'EXPORT_ENABLED': True,
+    'RETENTION_DAYS': 365,  # نگهداری داده‌ها
+}
+
+# تنظیمات فایل‌های صوتی
+FEEDBACK_AUDIO_SETTINGS = {
+    'SUPPORTED_FORMATS': ['wav', 'mp3', 'webm', 'ogg'],
+    'MAX_FILE_SIZE': 10 * 1024 * 1024,  # 10MB
+    'MAX_DURATION': 300,  # 5 دقیقه
+    'AUTO_TRANSCRIPTION': True,
+}
+
+
+
+# REST Framework settings
 REST_FRAMEWORK = {
     'DEFAULT_AUTHENTICATION_CLASSES': [
+        'rest_framework_simplejwt.authentication.JWTAuthentication',
         'rest_framework.authentication.SessionAuthentication',
-        'rest_framework.authentication.TokenAuthentication',
+        'rest_framework_simplejwt.authentication.JWTAuthentication',
+
+
     ],
     'DEFAULT_PERMISSION_CLASSES': [
         'rest_framework.permissions.IsAuthenticated',
     ],
+
     'DEFAULT_PAGINATION_CLASS': 'rest_framework.pagination.PageNumberPagination',
     'PAGE_SIZE': 20,
     'DEFAULT_SCHEMA_CLASS': 'drf_spectacular.openapi.AutoSchema',
@@ -173,6 +259,81 @@ CACHES = {
 }
 
 # Logging
+
+
+    'DEFAULT_PAGINATION_CLASS': 'rest_framework.pagination.PageNumberPagination',
+    'PAGE_SIZE': 20,
+    'DEFAULT_FILTER_BACKENDS': [
+        'rest_framework.filters.SearchFilter',
+        'rest_framework.filters.OrderingFilter',
+    ],
+    'DEFAULT_RENDERER_CLASSES': [
+        'rest_framework.renderers.JSONRenderer',
+    ],
+
+    'EXCEPTION_HANDLER': 'rest_framework.views.exception_handler',
+}
+
+# تنظیمات Logging
+
+
+
+
+
+from datetime import timedelta
+
+SIMPLE_JWT = {
+    'ACCESS_TOKEN_LIFETIME': timedelta(minutes=60),
+    'REFRESH_TOKEN_LIFETIME': timedelta(days=7),
+    'ROTATE_REFRESH_TOKENS': True,
+    'BLACKLIST_AFTER_ROTATION': True,
+
+    'UPDATE_LAST_LOGIN': False,
+    
+    'ALGORITHM': 'HS256',
+    'SIGNING_KEY': SECRET_KEY,
+    'VERIFYING_KEY': None,
+    'AUDIENCE': None,
+    'ISSUER': None,
+    
+    'AUTH_HEADER_TYPES': ('Bearer',),
+    'AUTH_HEADER_NAME': 'HTTP_AUTHORIZATION',
+    'USER_ID_FIELD': 'id',
+    'USER_ID_CLAIM': 'user_id',
+    
+    'AUTH_TOKEN_CLASSES': ('rest_framework_simplejwt.tokens.AccessToken',),
+    'TOKEN_TYPE_CLAIM': 'token_type',
+    
+    'JTI_CLAIM': 'jti',
+}
+
+# AdminPortal specific settings
+ADMINPORTAL_ENABLED = os.getenv("ADMINPORTAL_ENABLED", True)
+ADMINPORTAL_DEBUG = os.getenv("ADMINPORTAL_DEBUG", DEBUG)
+ADMINPORTAL_LOG_LEVEL = os.getenv("ADMINPORTAL_LOG_LEVEL", "INFO")
+ADMINPORTAL_REQUIRE_HTTPS = os.getenv("ADMINPORTAL_REQUIRE_HTTPS", False)
+
+# Internationalization for Persian
+LANGUAGE_CODE = 'fa-ir'
+TIME_ZONE = 'Asia/Tehran'
+USE_I18N = True
+USE_TZ = True
+
+    
+
+
+
+
+# Cache Configuration
+CACHES = {
+    'default': {
+        'BACKEND': 'django.core.cache.backends.locmem.LocMemCache',
+        'LOCATION': 'unique-snowflake',
+    }
+}
+
+# Logging Configuration
+
 LOGGING = {
     'version': 1,
     'disable_existing_loggers': False,
@@ -190,23 +351,63 @@ LOGGING = {
         'file': {
             'level': 'INFO',
             'class': 'logging.FileHandler',
+
             'filename': 'chatbot.log',
             'formatter': 'verbose',
         },
         'console': {
             'level': 'INFO',
+
+
+            'filename': 'logs/feedback.log',
+
+
+            'filename': 'logs/adminportal.log',
+
+            'filename': 'logs/patient.log',
+          
+        
+
+            'formatter': 'verbose',
+        },
+        'console': {
+            'level': 'DEBUG',
+
             'class': 'logging.StreamHandler',
             'formatter': 'simple',
         },
     },
     'loggers': {
+
+      
         'chatbot': {
             'handlers': ['file', 'console'],
             'level': 'INFO',
+
+
+        'feedback': {
+            'handlers': ['file', 'console'],
+            'level': 'DEBUG',
+
+
+        'adminportal': {
+            'handlers': ['file', 'console'],
+            'level': 'INFO',
+            'propagate': False,
+        },
+        'django': {
+
+        'patient': {
+
+            'handlers': ['file', 'console'],
+            'level': 'INFO',
+
+
             'propagate': True,
         },
     },
 }
+
 
 # Chatbot Settings
 CHATBOT_SETTINGS = {
@@ -235,3 +436,26 @@ CHATBOT_SETTINGS = {
         'GREETING_MESSAGE': 'سلام دکتر! من دستیار هوشمند پزشکی هلسا هستم.',
     },
 }
+
+
+
+
+
+
+
+# Patient App Specific Settings
+PATIENT_SETTINGS = {
+    'AUTO_GENERATE_MEDICAL_RECORD_NUMBER': True,
+    'ENABLE_MEDICAL_TEXT_PROCESSING': True,
+    'ENABLE_SPEECH_PROCESSING': True,
+    'MAX_AUDIO_FILE_SIZE_MB': 50,
+    'CACHE_TIMEOUT_SECONDS': 300,
+}
+
+# STT Configuration (Optional)
+# OPENAI_API_KEY = 'your-openai-api-key'
+# LOCAL_STT_URL = 'http://localhost:8000'
+
+# Custom User Model
+AUTH_USER_MODEL = 'rbac.UnifiedUser'
+
