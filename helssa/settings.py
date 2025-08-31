@@ -45,6 +45,10 @@ INSTALLED_APPS = [
     'rest_framework',
     'rest_framework_simplejwt',
     
+
+    # Third party apps
+    'rest_framework',
+    
     # Local apps
 
     # 'auth_otp',  # موقتاً کامنت شده
@@ -56,6 +60,7 @@ INSTALLED_APPS = [
     # Local apps
     'triage',
     'auth_otp',
+    'doctor',
     'patient',
     'rbac',  
 
