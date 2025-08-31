@@ -1,4 +1,5 @@
 from django.db import models
+from django.conf import settings
 from django.utils import timezone
 import uuid
 from datetime import timedelta
@@ -28,13 +29,13 @@ class Encounter(models.Model):
     
     # شرکت‌کنندگان
     patient = models.ForeignKey(
-        'unified_auth.UnifiedUser',
+        settings.AUTH_USER_MODEL,
         on_delete=models.PROTECT,
         related_name='patient_encounters',
         verbose_name='بیمار'
     )
     doctor = models.ForeignKey(
-        'unified_auth.UnifiedUser',
+        settings.AUTH_USER_MODEL,
         on_delete=models.PROTECT,
         related_name='doctor_encounters',
         verbose_name='پزشک'

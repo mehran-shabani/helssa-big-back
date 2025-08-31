@@ -320,9 +320,6 @@ class DoctorProfileAdmin(admin.ModelAdmin):
 class RoleAdmin(admin.ModelAdmin):
     """مدیریت نقش‌ها"""
     
-# --- in rbac/admin.py ---
-
-class RoleAdmin(admin.ModelAdmin):
     list_display = [
         'display_name', 'name', 'priority',
         'is_system', 'is_active', 'get_permissions_count',
@@ -345,11 +342,6 @@ class RoleAdmin(admin.ModelAdmin):
             int: تعداد آیتم‌های مرتبط در relation `permissions`.
         """
         count = obj.permissions.count()
--        return format_html(
--            '<a href="{}?role__id={}">{}</a>',
--            reverse('admin:rbac_permission_changelist'),
--            obj.id,
--            count
         return format_html(
             '<a href="{}?roles__id__exact={}">{}</a>',
             reverse('admin:rbac_permission_changelist'),
@@ -371,11 +363,6 @@ class PermissionAdmin(admin.ModelAdmin):
 
     def get_roles_count(self, obj):
         count = obj.roles.count()
--        return format_html(
--            '<a href="{}?permissions__id={}">{}</a>',
--            reverse('admin:rbac_role_changelist'),
--            obj.id,
--            count
         return format_html(
             '<a href="{}?permissions__id__exact={}">{}</a>',
             reverse('admin:rbac_role_changelist'),

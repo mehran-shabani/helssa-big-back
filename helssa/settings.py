@@ -24,6 +24,11 @@ BASE_DIR = Path(__file__).resolve().parent.parent
 # SECURITY WARNING: keep the secret key used in production secret!
 
 SECRET_KEY = os.getenv("SECRET_KEY", "django-insecure-test-key-for-development-only")
+# کلید پیش‌فرض رمزنگاری فیلدها برای توسعه (Fernet 32-byte base64)
+FIELD_ENCRYPTION_KEY = os.getenv(
+    'FIELD_ENCRYPTION_KEY',
+    'YWFhYWFhYWFhYWFhYWFhYWFhYWFhYWFhYWFhYWFhYWE='
+)
 
 # SECURITY WARNING: don't run with debug turned on in production!
 DEBUG = True
@@ -42,21 +47,19 @@ INSTALLED_APPS = [
     'django.contrib.staticfiles',
     # Third party apps
     'rest_framework',
+    'corsheaders',
     'django_ratelimit',
     'encrypted_model_fields',
     'rest_framework_simplejwt',
-    'corsheaders',
-    'rest_framework_simplejwt',
+    'drf_spectacular',
     # Local apps
     'chatbot',
     'api_gateway',
     'agent',
     'feedback',
-    'unified_auth',
     'auth_otp',
     'billing',
     'triage',
-    'auth_otp',
     'doctor',
     'patient',
     'rbac',
@@ -197,8 +200,8 @@ ANALYTICS_PERFORMANCE_RETENTION_DAYS = 30
 
 
 
-# استفاده از کاربر سفارشی
-AUTH_USER_MODEL = 'api_gateway.UnifiedUser'
+# استفاده از کاربر سفارشی (تنها یکبار و منسجم)
+AUTH_USER_MODEL = 'rbac.UnifiedUser'
 
 
 # ===================================================
@@ -297,9 +300,8 @@ CACHES = {
 
 # Logging
 
-
-    'DEFAULT_PAGINATION_CLASS': 'rest_framework.pagination.PageNumberPagination',
-    'PAGE_SIZE': 20,
+# Extend REST_FRAMEWORK with filters/renderers safely
+REST_FRAMEWORK.update({
     'DEFAULT_FILTER_BACKENDS': [
         'rest_framework.filters.SearchFilter',
         'rest_framework.filters.OrderingFilter',
@@ -307,15 +309,10 @@ CACHES = {
     'DEFAULT_RENDERER_CLASSES': [
         'rest_framework.renderers.JSONRenderer',
     ],
-
     'EXCEPTION_HANDLER': 'rest_framework.views.exception_handler',
-}
+})
 
 # تنظیمات Logging
-
-
-
-
 
 from datetime import timedelta
 
@@ -388,58 +385,39 @@ LOGGING = {
         'file': {
             'level': 'INFO',
             'class': 'logging.FileHandler',
-
-            'filename': 'chatbot.log',
-            'formatter': 'verbose',
-        },
-        'console': {
-            'level': 'INFO',
-
-
-            'filename': 'logs/feedback.log',
-
-
-            'filename': 'logs/adminportal.log',
-
-            'filename': 'logs/patient.log',
-          
-        
-
+            'filename': 'app.log',
             'formatter': 'verbose',
         },
         'console': {
             'level': 'DEBUG',
-
             'class': 'logging.StreamHandler',
             'formatter': 'simple',
         },
     },
     'loggers': {
-
-      
         'chatbot': {
             'handlers': ['file', 'console'],
             'level': 'INFO',
-
-
+            'propagate': False,
+        },
         'feedback': {
             'handlers': ['file', 'console'],
             'level': 'DEBUG',
-
-
+            'propagate': False,
+        },
         'adminportal': {
             'handlers': ['file', 'console'],
             'level': 'INFO',
             'propagate': False,
         },
-        'django': {
-
         'patient': {
-
             'handlers': ['file', 'console'],
             'level': 'INFO',
-
-
+            'propagate': True,
+        },
+        'django': {
+            'handlers': ['console'],
+            'level': 'INFO',
             'propagate': True,
         },
     },
@@ -493,5 +471,4 @@ PATIENT_SETTINGS = {
 # OPENAI_API_KEY = 'your-openai-api-key'
 # LOCAL_STT_URL = 'http://localhost:8000'
 
-# Custom User Model
-AUTH_USER_MODEL = 'rbac.UnifiedUser'
+# Custom User Model (already defined above)
